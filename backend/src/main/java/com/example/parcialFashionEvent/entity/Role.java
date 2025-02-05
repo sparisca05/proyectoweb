@@ -1,13 +1,14 @@
 package com.example.parcialFashionEvent.entity;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Role {
@@ -16,14 +17,7 @@ public enum Role {
                     Permission.ADMIN_READ,
                     Permission.ADMIN_WRITE,
                     Permission.ADMIN_UPDATE,
-                    Permission.ADMIN_DELETE,
-                    Permission.ORGANIZADOR_READ,
-                    Permission.ORGANIZADOR_WRITE,
-                    Permission.ORGANIZADOR_UPDATE,
-                    Permission.ORGANIZADOR_DELETE
-            )
-    ),
-    EXTERNO(Collections.emptySet()),
+                    Permission.ADMIN_DELETE)),
     PARTICIPANTE(Collections.emptySet());
 
     @Getter

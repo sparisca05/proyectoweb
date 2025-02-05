@@ -1,6 +1,5 @@
 package com.example.parcialFashionEvent.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,10 +32,6 @@ public class Usuario implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     Role rol;
-
-    @OneToOne(mappedBy = "usuario")
-    @JsonManagedReference
-    private Portafolio portafolio;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

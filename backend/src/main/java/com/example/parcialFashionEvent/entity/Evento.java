@@ -23,46 +23,77 @@ public class Evento {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
 
-    private double precio;
+    @Column(name = "tipo_evento", nullable = false)
+    private String tipo;
 
-    // Tabla de invitados al evento
+    @Column(name = "clave_evento")
+    private String clave = GenerarClave();
+
+    // Método para generar una clave aleatoria
+    public String GenerarClave() {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String clave = "";
+        for (int i = 0; i < 10; i++) {
+            clave += caracteres.charAt((int) (Math.random() * caracteres.length()));
+        }
+        return clave;
+    }
+
+    @Column(name = "empresa_patrocinadora")
+    private Empresa empresaPatrocinadora;
+
+    // Tabla de participantes del evento
     @ManyToMany()
-    @JoinTable(
-            name = "evento_usuario",
-            joinColumns = @JoinColumn(name = "evento_id"),
-            inverseJoinColumns = @JoinColumn(name = "usuario_id")
-    )
-    private List<Usuario> invitados = new ArrayList<>();;
-
-    public List<String> getInvitados() {
-        List<String> usernames = this.invitados.stream().map(Usuario::getUsername).toList();
-        return usernames;
-    }
-    public void addInvitado(Usuario usuario){
-        this.invitados.add(usuario);
-    }
-    public void removeInvitado(Usuario usuario){
-        this.invitados.remove(usuario);
-    }
-
-    // Tabla de modelos participantes en el evento
-    @ManyToMany()
-    @JoinTable(
-            name = "evento_modelo",
-            joinColumns = @JoinColumn(name = "evento_id"),
-            inverseJoinColumns = @JoinColumn(name = "modelo_id")
-    )
-    private List<Usuario> participantes = new ArrayList<>();
+    @JoinTable(name = "evento_usuario", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+    private List<Usuario> participantes = new ArrayList<>();;
 
     public List<String> getParticipantes() {
         List<String> usernames = this.participantes.stream().map(Usuario::getUsername).toList();
         return usernames;
     }
-    public void addParticipante(Usuario usuario){
+
+    public void addParticipante(Usuario usuario) {
         this.participantes.add(usuario);
     }
-    public void removeParticipante(Usuario usuario){
+
+    public void removeParticipante(Usuario usuario) {
         this.participantes.remove(usuario);
+    }
+
+    // Tabla de invitados externos en el evento
+    @ManyToMany()
+    @JoinTable(name = "evento_invitado", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "invitado_id"))
+    private List<InvitadoExterno> invitados = new ArrayList<>();
+
+    public List<String> getInvitados() {
+        List<String> nombres = this.invitados.stream().map(InvitadoExterno::getNombre).toList();
+        return nombres;
+    }
+
+    public void addInvitado(InvitadoExterno invitado) {
+        this.invitados.add(invitado);
+    }
+
+    public void removeInvitado(InvitadoExterno invitado) {
+        this.invitados.remove(invitado);
+    }
+
+    // Tabla de Organizaciones participantes en el evento
+    @ManyToMany()
+    @JoinTable(name = "evento_organizacion", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "organizacion_id"))
+    private List<OrganizacionExterna> organizaciones = new ArrayList<>();
+
+    public List<String> getOrganizaciones() {
+        List<String> nombres = this.organizaciones.stream().map(OrganizacionExterna::getNombre).toList();
+        return nombres;
+    }
+
+    public void addOrganizacion(OrganizacionExterna organizacion) {
+        this.organizaciones.add(organizacion);
+    }
+
+    public void removeOrganizacion(OrganizacionExterna organizacion) {
+        this.organizaciones.remove(organizacion);
     }
 
 }

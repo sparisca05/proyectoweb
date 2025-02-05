@@ -1,11 +1,9 @@
 package com.example.parcialFashionEvent.services;
 
 import com.example.parcialFashionEvent.entity.Evento;
-import com.example.parcialFashionEvent.entity.Portafolio;
 import com.example.parcialFashionEvent.entity.Usuario;
 import com.example.parcialFashionEvent.entity.UsuarioInfo;
 import com.example.parcialFashionEvent.repositories.IEventoRepository;
-import com.example.parcialFashionEvent.repositories.IPortafolioRepository;
 import com.example.parcialFashionEvent.repositories.IUsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private IUsuarioRepository userRepository;
-    private final IPortafolioRepository portafolioRepository;
     private final IEventoRepository eventoRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -43,7 +40,6 @@ public class UsuarioService implements UserDetailsService {
         userInfo.setNombre(user.getNombre());
         userInfo.setApellido(user.getApellido());
         userInfo.setUsername(user.getUsername());
-        userInfo.setPortafolio(user.getPortafolio());
         return userInfo;
     }
 
@@ -56,19 +52,17 @@ public class UsuarioService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Usuario> userDetail = userRepository.findByUsername(username);
 
-        return userDetail.map(user ->
-                new org.springframework.security.core.userdetails.User(
-                        user.getCorreo(),
-                        user.getPassword(),
-                        user.getAuthorities()
-                )).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return userDetail.map(user -> new org.springframework.security.core.userdetails.User(
+                user.getCorreo(),
+                user.getPassword(),
+                user.getAuthorities())).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     public List<Evento> getMyEvents(Long userId) {
         return eventoRepository.getEventosByUsuario(userId);
     }
 
-    public Usuario updateUserById(Usuario request, Long userId){
+    public Usuario updateUserById(Usuario request, Long userId) {
         Usuario user = userRepository.findById(userId).get();
 
         user.setNombre(request.getNombre());
@@ -81,17 +75,6 @@ public class UsuarioService implements UserDetailsService {
         return user;
     }
 
-    public Usuario updatePortafolioByUserId(Portafolio portafolio, Long userId) {
-        Usuario user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        portafolio.setUsuario(user);
-        portafolioRepository.save(portafolio);
-        user.setPortafolio(portafolio);
-        userRepository.save(user);
-        return user;
-    }
-
     public String deleteUser(Long userId) {
         Usuario user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -100,4 +83,3 @@ public class UsuarioService implements UserDetailsService {
     }
 
 }
-

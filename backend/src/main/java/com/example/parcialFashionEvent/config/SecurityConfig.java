@@ -1,11 +1,15 @@
 package com.example.parcialFashionEvent.config;
 
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 import org.springframework.security.authentication.AuthenticationProvider;
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,10 +19,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static com.example.parcialFashionEvent.entity.Permission.*;
-import static com.example.parcialFashionEvent.entity.Role.*;
-import static org.springframework.http.HttpMethod.*;
-import static org.springframework.security.config.Customizer.withDefaults;
+import static com.example.parcialFashionEvent.entity.Permission.ADMIN_DELETE;
+import static com.example.parcialFashionEvent.entity.Permission.ADMIN_READ;
+import static com.example.parcialFashionEvent.entity.Permission.ADMIN_UPDATE;
+import static com.example.parcialFashionEvent.entity.Permission.ADMIN_WRITE;
+import static com.example.parcialFashionEvent.entity.Permission.ORGANIZADOR_DELETE;
+import static com.example.parcialFashionEvent.entity.Permission.ORGANIZADOR_READ;
+import static com.example.parcialFashionEvent.entity.Permission.ORGANIZADOR_UPDATE;
+import static com.example.parcialFashionEvent.entity.Permission.ORGANIZADOR_WRITE;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -40,13 +50,11 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 .requestMatchers("/auth/**", "/process_payment").permitAll() // Permitir acceso sin autenticación
                                 .requestMatchers(GET, "api/v1/eventos", "api/v1/eventos/**").permitAll() // Permitir ver eventos sin autenticación
 
-                                .requestMatchers("/api/v1/organizador/**").hasAnyRole(ADMIN.name(), ORGANIZADOR.name())
                                 .requestMatchers(GET, "/api/v1/organizador/**").hasAnyAuthority(ADMIN_READ.name(), ORGANIZADOR_READ.name())
                                 .requestMatchers(POST, "/api/v1/organizador/**").hasAnyAuthority(ADMIN_WRITE.name(), ORGANIZADOR_WRITE.name())
                                 .requestMatchers(PUT, "/api/v1/organizador/**").hasAnyAuthority(ADMIN_UPDATE.name(), ORGANIZADOR_UPDATE.name())
                                 .requestMatchers(DELETE, "/api/v1/organizador/**").hasAnyAuthority(ADMIN_DELETE.name(), ORGANIZADOR_DELETE.name())
 
-                                .requestMatchers("/api/v1/modelo/**").hasRole(MODELO.name())
 
                                 .anyRequest().authenticated()
                 )
