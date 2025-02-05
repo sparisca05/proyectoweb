@@ -21,7 +21,8 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest request) throws RuntimeException {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         String token = jwtService.getToken(user);
         return AuthResponse.builder()
@@ -31,25 +32,15 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         Usuario user;
-        if (request.isModelo()){
-            user = Usuario.builder()
-                    .correo(request.getCorreo())
-                    .nombre(request.getNombre())
-                    .apellido(request.getApellido())
-                    .username(request.getUsername())
-                    .password(request.getPassword())
-                    .rol(Role.EXTERNO)
-                    .build();
-        } else {
-            user = Usuario.builder()
-                    .correo(request.getCorreo())
-                    .nombre(request.getNombre())
-                    .apellido(request.getApellido())
-                    .username(request.getUsername())
-                    .password(request.getPassword())
-                    .rol(Role.PARTICIPANTE)
-                    .build();
-        }
+        user = Usuario.builder()
+                .correo(request.getCorreo())
+                .nombre(request.getNombre())
+                .apellido(request.getApellido())
+                .username(request.getUsername())
+                .password(request.getPassword())
+                .rol(Role.PARTICIPANTE)
+                .build();
+
         usuarioService.saveUser(user);
 
         return AuthResponse.builder()
