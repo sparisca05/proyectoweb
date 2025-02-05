@@ -23,16 +23,8 @@ public enum Role {
                     Permission.ORGANIZADOR_DELETE
             )
     ),
-    ORGANIZADOR(
-            Set.of(
-                    Permission.ORGANIZADOR_READ,
-                    Permission.ORGANIZADOR_WRITE,
-                    Permission.ORGANIZADOR_UPDATE,
-                    Permission.ORGANIZADOR_DELETE
-            )
-    ),
-    MODELO(Collections.emptySet()),
-    INVITADO(Collections.emptySet());
+    EXTERNO(Collections.emptySet()),
+    PARTICIPANTE(Collections.emptySet());
 
     @Getter
     private final Set<Permission> permissions;

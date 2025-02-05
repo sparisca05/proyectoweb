@@ -38,7 +38,7 @@ public class AuthService {
                     .apellido(request.getApellido())
                     .username(request.getUsername())
                     .password(request.getPassword())
-                    .rol(Role.MODELO)
+                    .rol(Role.EXTERNO)
                     .build();
         } else {
             user = Usuario.builder()
@@ -47,7 +47,7 @@ public class AuthService {
                     .apellido(request.getApellido())
                     .username(request.getUsername())
                     .password(request.getPassword())
-                    .rol(Role.INVITADO)
+                    .rol(Role.PARTICIPANTE)
                     .build();
         }
         usuarioService.saveUser(user);
