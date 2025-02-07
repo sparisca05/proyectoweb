@@ -22,5 +22,6 @@ public class Empresa {
     @Column(nullable = false)
     private String descripcion;
 
+    private String logo;
 
 }
