@@ -33,6 +33,9 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     Role rol;
 
+    @ManyToMany(mappedBy = "usuarios")
+    private Collection<Evento> eventos;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return rol.getAuthorities();

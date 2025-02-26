@@ -14,7 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -44,15 +44,15 @@ public class Evento {
     // Método para generar una clave aleatoria
     public String GenerarClave() {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        String clave = "";
+        String c = "";
         for (int i = 0; i < 10; i++) {
-            clave += caracteres.charAt((int) (Math.random() * caracteres.length()));
+            c += caracteres.charAt((int) (Math.random() * caracteres.length()));
         }
-        return clave;
+        return c;
     }
 
-    @OneToOne
-    @JoinColumn(name = "empresa_patrocinadora")
+    @ManyToOne
+    @JoinColumn(name = "empresa_patrocinadora_id", nullable = false)
     private Empresa empresaPatrocinadora;
 
     // Tabla de participantes del evento
