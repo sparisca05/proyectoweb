@@ -17,5 +17,4 @@ public class InvitadoExterno {
     private String nombre;
     private String apellido;
     private String descripcionRol;
-
 }

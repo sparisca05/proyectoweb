@@ -2,6 +2,7 @@ package com.example.proyectoweb.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,9 +33,6 @@ public class Usuario implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     Role rol;
-
-    @ManyToMany(mappedBy = "usuarios")
-    private Collection<Evento> eventos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

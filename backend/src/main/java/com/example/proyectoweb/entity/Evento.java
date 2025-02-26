@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
@@ -53,14 +54,19 @@ public class Evento {
 
     @ManyToOne
     @JoinColumn(name = "empresa_patrocinadora_id", nullable = false)
+    @JsonBackReference
     private Empresa empresaPatrocinadora;
 
     // Tabla de participantes del evento
     @ManyToMany()
-    @JoinTable(name = "evento_usuario", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
-    private List<Usuario> participantes = new ArrayList<>();;
+    @JoinTable(
+        name = "evento_usuario",
+        joinColumns = @JoinColumn(name = "evento_id"),
+        inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
+    private List<Usuario> participantes = new ArrayList<>();
 
-    public List<String> getParticipantes() {
+    public List<String> getUsernamesParticipantes() {
         List<String> usernames = this.participantes.stream().map(Usuario::getUsername).toList();
         return usernames;
     }
@@ -75,10 +81,14 @@ public class Evento {
 
     // Tabla de invitados externos en el evento
     @ManyToMany()
-    @JoinTable(name = "evento_invitado", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "invitado_id"))
+    @JoinTable(
+        name = "evento_invitado",
+        joinColumns = @JoinColumn(name = "evento_id"),
+        inverseJoinColumns = @JoinColumn(name = "invitado_id")
+    )
     private List<InvitadoExterno> invitados = new ArrayList<>();
 
-    public List<String> getInvitados() {
+    public List<String> getNombresInvitados() {
         List<String> nombres = this.invitados.stream().map(InvitadoExterno::getNombre).toList();
         return nombres;
     }
@@ -93,10 +103,14 @@ public class Evento {
 
     // Tabla de Organizaciones participantes en el evento
     @ManyToMany()
-    @JoinTable(name = "evento_organizacion", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "organizacion_id"))
+    @JoinTable(
+        name = "evento_organizacion",
+        joinColumns = @JoinColumn(name = "evento_id"),
+        inverseJoinColumns = @JoinColumn(name = "organizacion_id")
+    )
     private List<OrganizacionExterna> organizaciones = new ArrayList<>();
 
-    public List<String> getOrganizaciones() {
+    public List<String> getNombresOrganizaciones() {
         List<String> nombres = this.organizaciones.stream().map(OrganizacionExterna::getNombre).toList();
         return nombres;
     }
