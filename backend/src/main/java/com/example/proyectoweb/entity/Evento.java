@@ -39,20 +39,18 @@ public class Evento {
     @Column(name = "tipo_evento", nullable = false)
     private String tipo;
 
-    @Column(name = "clave_evento", nullable = false, length = 20)
-    private String clave=generarClave();
-    
-    
-    
-    private String generarClave() {
+    @Column(name = "clave_evento")
+    private String clave = GenerarClave();
+
+    // Método para generar una clave aleatoria
+    public String GenerarClave() {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder c = new StringBuilder();
+        String c = "";
         for (int i = 0; i < 10; i++) {
-            c.append(caracteres.charAt((int) (Math.random() * caracteres.length())));
+            c += caracteres.charAt((int) (Math.random() * caracteres.length()));
         }
-        return c.toString();
+        return c;
     }
-    
 
     @ManyToOne
     @JoinColumn(name = "empresa_patrocinadora_id", nullable = false)
