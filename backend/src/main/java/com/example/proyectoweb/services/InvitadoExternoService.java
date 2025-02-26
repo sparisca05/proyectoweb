@@ -1,5 +1,7 @@
 package com.example.proyectoweb.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,10 @@ public class InvitadoExternoService {
 
     public void saveInvitadoExterno(InvitadoExterno invitadoExterno) {
         invitadoExternoRepository.save(invitadoExterno);
+    }
+
+    public List<InvitadoExterno> getAllInvitadosExternos() {
+        return invitadoExternoRepository.findAll();
     }
 
     public InvitadoExterno getInvitadoExternoById(Long invitadoExternoId) {

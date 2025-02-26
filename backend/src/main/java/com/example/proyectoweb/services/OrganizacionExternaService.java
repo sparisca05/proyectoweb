@@ -1,12 +1,14 @@
 package com.example.proyectoweb.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-
-import com.example.proyectoweb.repositories.IOrganizacionExternaRepository;
 import com.example.proyectoweb.entity.OrganizacionExterna;
+import com.example.proyectoweb.repositories.IOrganizacionExternaRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +19,10 @@ public class OrganizacionExternaService {
 
     public void saveOrganizacionExterna(OrganizacionExterna organizacionExterna) {
         organizacionExternaRepository.save(organizacionExterna);
+    }
+
+    public List<OrganizacionExterna> getAllOrganizacionesExternas() {
+        return organizacionExternaRepository.findAll();
     }
 
     public OrganizacionExterna getOrganizacionExternaById(Long organizacionExternaId) {

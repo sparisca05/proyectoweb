@@ -1,5 +1,7 @@
 package com.example.proyectoweb.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,10 @@ public class EmpresaService {
     public Empresa getEmpresaById(Long empresaId) {
         return empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new RuntimeException("Empresa no encontrada"));
+    }
+
+    public List<Empresa> getAllEmpresas() {
+        return empresaRepository.findAll();
     }
 /* 
     public Empresa getEmpresaByNombre(String nombre) {
