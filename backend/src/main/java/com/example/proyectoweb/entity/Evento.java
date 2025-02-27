@@ -32,18 +32,15 @@ public class Evento {
     @Column(nullable = false, unique = true)
     private String nombre;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyy")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
 
     @Column(name = "tipo_evento", nullable = false)
     private String tipo;
 
-    @Column(name = "clave_evento")
-    private String clave = GenerarClave();
-
     // Método para generar una clave aleatoria
-    public String GenerarClave() {
+    public String generarClave() {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         String c = "";
         for (int i = 0; i < 10; i++) {
@@ -51,6 +48,10 @@ public class Evento {
         }
         return c;
     }
+    
+    @Column(name = "clave_evento")
+    private String clave = generarClave();
+
 
     @ManyToOne
     @JoinColumn(name = "empresa_patrocinadora_id", nullable = false)

@@ -1,7 +1,7 @@
 package com.example.proyectoweb.services;
 
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,8 @@ import com.example.proyectoweb.entity.InvitadoExterno;
 import com.example.proyectoweb.entity.Usuario;
 import com.example.proyectoweb.repositories.IEventoRepository;
 
-import java.util.List;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +58,7 @@ public class EventoService {
     public String addParticipante(String username, Long eventoId) throws RuntimeException {
         Evento evento = getEventoById(eventoId);
         Usuario usuario = usuarioService.getUserByUsername(username);
-        if (!evento.getParticipantes().contains(username)) {
+        if (!evento.getParticipantes().contains(usuario)) {
             evento.addParticipante(usuario);
             eventoRepository.save(evento);
             return username + " se agregó con éxito al evento: " + evento.getNombre();
@@ -69,7 +70,7 @@ public class EventoService {
     public String removeParticipante(String username, Long eventoId) throws RuntimeException {
         Evento evento = getEventoById(eventoId);
         Usuario usuario = usuarioService.getUserByUsername(username);
-        if (evento.getParticipantes().contains(username)) {
+        if (evento.getParticipantes().contains(usuario)) {
             evento.removeParticipante(usuario);
             eventoRepository.save(evento);
             return username + " se eliminó con éxito del evento: " + evento.getNombre();
@@ -82,7 +83,7 @@ public class EventoService {
     public String addInvitado(String nombre, Long eventoId) throws RuntimeException {
         Evento evento = getEventoById(eventoId);
         InvitadoExterno invitadoExterno = invitadoService.getInvitadoExternoByNombre(nombre);
-        if (!evento.getInvitados().contains(nombre)) {
+        if (!evento.getInvitados().contains(invitadoExterno)) {
             evento.addInvitado(invitadoExterno);
             eventoRepository.save(evento);
         } else {
@@ -93,9 +94,9 @@ public class EventoService {
 
     public String removeInvitado(String nombre, Long eventoId) throws RuntimeException {
         Evento evento = getEventoById(eventoId);
-        InvitadoExterno usuario = invitadoService.getInvitadoExternoByNombre(nombre);
-        if (evento.getInvitados().contains(nombre)) {
-            evento.removeInvitado(usuario);
+        InvitadoExterno invitadoExterno = invitadoService.getInvitadoExternoByNombre(nombre);
+        if (evento.getInvitados().contains(invitadoExterno)) {
+            evento.removeInvitado(invitadoExterno);
             eventoRepository.save(evento);
             return nombre + " se eliminó con éxito del evento: " + evento.getNombre();
         } else {

@@ -1,10 +1,10 @@
-package com.example.parcialFashionEvent;
+package com.example.proyectoWeb;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ParcialFashionEventApplicationTests {
+class ProyectoWebApplicationTests {
 
 	@Test
 	void contextLoads() {
