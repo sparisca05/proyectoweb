@@ -4,6 +4,8 @@ package com.example.proyectoweb.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,12 +14,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-    @Data
-    @Entity
-    @Table(name = "hito")
+@Data
+@Entity
+@Table(name = "hito")
 public class Hito {
     
     @Id
@@ -29,11 +32,13 @@ public class Hito {
 
     @Column(name = "categoria", nullable = false)
     private String categoria;
-    
-    @Column(name="evento_relevante",nullable = false)
-    private Evento evento;
 
-     @ManyToMany()
+    @ManyToOne
+    @JoinColumn(name = "evento_relevante_id")
+    @JsonBackReference
+    private Evento eventoRelevante;
+
+    @ManyToMany()
     @JoinTable(name = "ganadores", joinColumns = @JoinColumn(name = "hito_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
     private List<Usuario> ganadores = new ArrayList<>();;
 
