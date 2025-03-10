@@ -1,6 +1,5 @@
 package com.example.proyectoweb.auth;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +10,8 @@ import com.example.proyectoweb.entity.Role;
 import com.example.proyectoweb.entity.Usuario;
 import com.example.proyectoweb.repositories.IUsuarioRepository;
 import com.example.proyectoweb.services.UsuarioService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class AuthService {
                 .apellido(request.getApellido())
                 .username(request.getUsername())
                 .password(request.getPassword())
-                .rol(Role.PARTICIPANTE)
+                .rol(Role.ADMIN)
                 .build();
 
         usuarioService.saveUser(user);

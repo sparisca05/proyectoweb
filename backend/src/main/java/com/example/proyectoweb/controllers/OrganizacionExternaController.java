@@ -16,7 +16,7 @@ import com.example.proyectoweb.services.OrganizacionExternaService;
 
 @RestController
 @RequestMapping("api/v1/org-externa")
-public class OrganizazionExternaController {
+public class OrganizacionExternaController {
 
     @Autowired
     private OrganizacionExternaService organizacionExternaService;
