@@ -1,12 +1,16 @@
-/*import { StrictMode } from 'react'*/
+import { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+    createBrowserRouter,
+    RouterProvider,
+    useNavigate,
+} from "react-router-dom";
 
 import EventosList from "./screens/Eventos.tsx";
 import Profile from "./screens/Profile.tsx";
-import Home from "./screens/Home.tsx";
+import Home, { getToken, handleLogout } from "./screens/Home.tsx";
 import Login from "./screens/Login.tsx";
 import Register from "./screens/Register.tsx";
 import EventoView from "./screens/EventoView.tsx";
@@ -30,11 +34,24 @@ const router = createBrowserRouter([
     { path: "/perfil", element: <Profile /> },
 ]);
 
+const App = ({ router }: { router: any }) => {
+    /*
+    useEffect(() => {
+        const navigate = useNavigate();
+        const token = getToken();
+        if (!token) {
+            handleLogout(navigate);
+        }
+    }, []);
+*/
+    return <RouterProvider router={router} />;
+};
+
 createRoot(document.getElementById("root")!).render(
     /*
   <StrictMode>
     <App />
   </StrictMode>,
   */
-    <RouterProvider router={router} />
+    <App router={router} />
 );

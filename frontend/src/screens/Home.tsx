@@ -1,26 +1,39 @@
 // import React from 'react';
 
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar.tsx";
 
 export const getToken: () => string | null = () => {
-    return localStorage.getItem('authToken');
-}
+    return localStorage.getItem("authToken");
+};
 
 export const isLoggedIn = () => {
     const token = getToken();
     return token !== null;
-}
+};
+
+export const handleLogout = (navigate: any) => {
+    navigate("/login");
+    localStorage.removeItem("authToken");
+};
 
 function Home() {
     return (
-            <div className="main-container">
-                <Navbar />
-                <div className={"welcome"}>
-                    <h3>Disfruta de espectáculos de talla mundial en cualquiera de los escenarios que ofrecemos</h3>
-                    <Link to={"/eventos"} className={"btn btn-light"}>¡Conoce todos nuestros eventos!</Link>
+        <div className="main-container">
+            <div className={"welcome"}>
+                <h3>Bienvenido a Eventos EIA</h3>
+                <div style={{ display: "flex", columnGap: "10px" }}>
+                    <Link to={"/login"} className={"btn btn-outline-primary"}>
+                        Iniciar sesión
+                    </Link>
+                    <Link to={"/register"} className={"btn btn-primary"}>
+                        Registrarse
+                    </Link>
                 </div>
+                <Link to={"/eventos"} className={"btn btn-secondary"}>
+                    Ver todos los eventos
+                </Link>
             </div>
+        </div>
     );
 }
 
