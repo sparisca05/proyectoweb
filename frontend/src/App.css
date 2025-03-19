@@ -29,6 +29,13 @@ button {
     align-items: center;
     column-gap: 10px;
 }
+.back-btn {
+    display: flex;
+    column-gap: 10px;
+    font-size: 1.5em;
+    font-weight: 500;
+    cursor: pointer;
+}
 .container {
     display: flex;
     flex-direction: column;
@@ -71,11 +78,11 @@ button {
     background-color: rgba(197, 197, 197, 0.82);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    row-gap: 20px;
-    padding: 50px;
+    align-items: flex-start;
+    row-gap: 15px;
+    padding: 30px;
     border-radius: 10px;
+    min-width: 25%;
 }
 .btn-back {
     display: flex;
@@ -96,18 +103,24 @@ button {
 .evento {
     background-color: white;
     display: flex;
-    width: 200px;
-    height: 250px;
+    width: 400px;
+    height: 350px;
     text-decoration: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 15px;
     margin: 10px;
     row-gap: 10px;
     border-radius: 10px;
     border: 1px solid rgba(186,186,186,0.78);
     color: black;
+    h4 {
+        text-align: center;
+    }
+    h5 {
+        color: #0c55c6;
+    }
 }
 .evento:hover {
     background-color: #f0f0f0;
@@ -122,15 +135,43 @@ button {
     display: contents;
     font-weight: 500;
 }
-.nuevo-evento {
-    background-color: var(--bs-primary);
-    color: white;
-    font-weight: 500;
-    font-size: xxx-large;
+.add {
+    background-color: transparent !important;
+    border: none;
 }
-.nuevo-evento:hover {
-    background-color: #0c55c6;
-    color: white;
+.add-icon {
+    color: var(--bs-primary);
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.add-icon:hover {
+    color: black;
+}
+.clave-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.clave-input div {
+    position: absolute;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.3);
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    p {
+        margin-top: 10px;
+    }
+    button {
+        margin-top: 20px;
+    }
 }
 .list-container {
     background-color: transparent;

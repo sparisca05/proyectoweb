@@ -1,6 +1,6 @@
 // import React from 'react';
 
-import { Link } from "react-router-dom";
+import { Link, NavigateFunction } from "react-router-dom";
 
 export const getToken: () => string | null = () => {
     return localStorage.getItem("authToken");
@@ -11,7 +11,7 @@ export const isLoggedIn = () => {
     return token !== null;
 };
 
-export const handleLogout = (navigate: any) => {
+export const handleLogout = (navigate: NavigateFunction) => {
     navigate("/login");
     localStorage.removeItem("authToken");
 };

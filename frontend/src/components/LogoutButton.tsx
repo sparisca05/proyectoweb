@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { handleLogout } from "../screens/Home";
 
 const LogoutButton = () => {
+    const navigate = useNavigate();
+
     return (
         <Link
             to={""}
             className="btn btn-outline-primary"
-            onClick={handleLogout}
+            onClick={() => handleLogout(navigate)}
         >
             Cerrar sesión
         </Link>

@@ -1,220 +1,344 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from "react";
 import axios from "axios";
-import {useParams} from "react-router-dom";
-import { FaTrash, FaPencilAlt } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
+import { FaTrash } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
 
 import Navbar from "../components/Navbar.tsx";
-import {getToken} from "./Home.tsx";
-import { API_URL } from '../main.tsx';
-import {UsuarioRol} from "./Eventos.tsx";
-import PaymentForm from "../components/PaymentForm.tsx";
-
-interface Evento {
-    id: number;
-    nombre: string;
-    fecha: string;
-    precio: number;
-    invitados: string[];
-    participantes: string[];
-}
+import { getToken } from "./Home.tsx";
+import { API_URL } from "../main.tsx";
+import { UsuarioRol } from "./Eventos.tsx";
+import PasskeyInput from "../components/PasskeyInput.tsx";
+import { Evento } from "./Eventos.tsx";
+import AddInvitadoInput from "../components/AddInvitadoInput.tsx";
 
 function EventoView() {
     const token = getToken();
     const { id } = useParams<{ id: string }>();
     const [evento, setEvento] = useState<Evento>(); // Estado para almacenar la lista de eventos
     const [usuario, setUsuario] = useState<UsuarioRol | null>(null);
-    const [displayInvitados, setDisplayInvitados] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true); // Estado para mostrar una carga
-    const [displayPayment, setDisplayPayment] = useState<boolean>(false);
+    const [displayPasskey, setDisplayPasskey] = useState<boolean>(false);
+    const [displayInvitado, setDisplayInvitado] = useState<boolean>(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${API_URL}/api/v1/eventos/${id}`)
+        axios
+            .get(`${API_URL}/api/v1/eventos/${id}`)
             .then((response) => {
                 setEvento(response.data);
                 setLoading(false);
             })
-            .catch(error => {
-                console.error('Error:', error);
+            .catch((error) => {
+                console.error("Error:", error);
                 setLoading(false);
             });
 
-        axios.get(`${API_URL}/api/v1/usuario/perfil`, {
-            headers: {
-                'Authorization': 'Bearer ' + token,
-            }
-        })
+        axios
+            .get(`${API_URL}/api/v1/usuario/perfil`, {
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+            })
             .then((response) => {
                 setUsuario(response.data);
             })
-            .catch(error => {
-                console.error('Error: ', error);
+            .catch((error) => {
+                console.error("Error: ", error);
             });
     }, [id, token]);
 
-    const handleRegisterEvent = async () => {
-        if (!token) {
-            alert("Debes iniciar sesión como modelo para inscribirte en un evento.");
-            return;
-        }
-        await axios.put(`${API_URL}/api/v1/eventos/${id}/inscribirse`,{}, {
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                alert(response.data);
+    const handleRemoveInvitado = async (invitadoId: number) => {
+        await axios
+            .delete(`${API_URL}/api/v1/eventos/${id}/eliminar-invitado`, {
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+                params: {
+                    invitadoId: invitadoId,
+                },
+            })
+            .then((response) => response.data)
+            .then((message) => {
+                alert(message);
+                window.location.reload();
             })
             .catch((error) => {
-                alert('Error al inscribirse en el evento.');
-                console.error(error);
+                alert("Error al eliminar el invitado.");
+                console.error("Error:", error);
             });
-    }
+    };
 
-    const handleBuyTickets = async () => {
-        if (!token) {
-            alert("Debes iniciar sesión para comprar entradas.");
-            return;
-        }
-        setDisplayPayment(true);
-    }
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
 
-    const handleRemoveInvitado = async (invitado: string) => {
-        await axios.delete(`${API_URL}/api/v1/eventos/${id}/eliminar-invitado`, {
+    const handleSaveClick = async () => {
+        await fetch(`${API_URL}/api/v1/eventos/${id}`, {
+            method: "PUT",
             headers: {
-                'Authorization': 'Bearer ' + token,
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
             },
-            params: {
-                username: invitado,
+            body: JSON.stringify(evento),
+        }).then((response) => {
+            if (response.ok) {
+                alert("Evento actualizado");
+                setIsEditing(false);
+            } else {
+                alert("Error al actualizar el evento");
             }
-        })
-            .then((response) => {
-                alert(response.data);
-            })
-            .catch(error => {
-                alert('Error al eliminar el invitado.');
-                console.error('Error:', error);
-            });
-    }
-    const handleRemoveParticipante = async (participante: string) => {
-        await axios.delete(`${API_URL}/api/v1/eventos/${id}/eliminar-participante`, {
-            headers: {
-                'Authorization': 'Bearer ' + token,
-            },
-            params: {
-                username: participante,
-            }
-        })
-            .then((response) => {
-                alert(response.data);
-            })
-            .catch(error => {
-                alert('Error al eliminar el invitado.');
-                console.error('Error:', error);
-            });
-    }
-    const handleTokenGenerated = (token: string) => {
-        console.log("Token recibido:", token);
-        // Aquí envías el token a tu backend para procesar el pago
+        });
     };
 
     return (
         <div className={"main-container"}>
-            <Navbar />
-            {displayPayment &&
-                <PaymentForm
-                    publicKey="TEST-04ca89c7-dbd4-4cea-a530-836c81d44796"
-                    onTokenGenerated={handleTokenGenerated}
+            {displayPasskey && (
+                <PasskeyInput
+                    evento={evento}
+                    setDisplayPasskey={setDisplayPasskey}
                 />
-            }
+            )}
+            {displayInvitado && (
+                <AddInvitadoInput
+                    evento={evento}
+                    setDisplayInvitado={setDisplayInvitado}
+                />
+            )}
+            <Navbar />
             <div className={"welcome"}>
                 <div className={"auth-container"}>
-                    {loading ? <h4>Cargando evento...</h4>
-                    : (
+                    <div
+                        style={{
+                            display: "flex",
+                            width: "100%",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        {isEditing ? (
+                            <button
+                                className="btn btn-outline-secondary"
+                                onClick={() => setIsEditing(false)}
+                            >
+                                Cancelar
+                            </button>
+                        ) : (
+                            <IoMdClose
+                                className="back-btn"
+                                onClick={() => navigate("/eventos")}
+                            />
+                        )}
+                        {usuario?.rol === "ADMIN" && evento && (
+                            <>
+                                {!isEditing ? (
+                                    <button
+                                        className="btn btn-outline-primary"
+                                        onClick={handleEditClick}
+                                    >
+                                        Editar
+                                    </button>
+                                ) : (
+                                    <button
+                                        className={"btn btn-success"}
+                                        onClick={handleSaveClick}
+                                    >
+                                        Guardar
+                                    </button>
+                                )}
+                            </>
+                        )}
+                    </div>
+                    {loading ? (
+                        <h4>Cargando evento...</h4>
+                    ) : (
                         <>
-                        {!evento ? <div>Evento no encontrado</div>
-                        : (
+                            {!evento ? (
+                                <div>Evento no encontrado</div>
+                            ) : (
                                 <>
-                                    {usuario?.rol === 'ADMIN' && (
-                                        <button style={{alignSelf: 'flex-end'}}>
-                                            <FaPencilAlt/>
-                                        </button>
-                                    )}
-                                    <h2>{evento.nombre}</h2>
-                                    <p>Fecha: {evento.fecha}</p>
-                                    <p>Precio: {evento.precio}</p>
-
-                                    {usuario && usuario.rol === 'MODELO' ? (
-                                        <button
-                                            className={"btn btn-primary"}
-                                            onClick={handleRegisterEvent}
-                                        >
-                                            Inscribirse
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className={"btn btn-primary"}
-                                            onClick={handleBuyTickets}
-                                        >
-                                            Comprar entradas
-                                        </button>
-                                    )}
-                                    {usuario?.rol === 'ADMIN' && (
+                                    {isEditing ? (
                                         <>
-                                            {!displayInvitados ? (
-                                                <button
-                                                    onClick={() => setDisplayInvitados(true)}
-                                                    className={"btn btn-primary"}
-                                                >
-                                                    Ver asistentes
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    onClick={() => setDisplayInvitados(false)}
-                                                    className={"btn btn-primary"}
-                                                >
-                                                    Ocultar asistentes
-                                                </button>
-                                            )}
-                                            {displayInvitados && (
-                                                <div style={{display: 'flex', columnGap: '40px'}}>
-                                                    <div>
-                                                        <h4>Invitados</h4>
-                                                        <ul className={"list-container list-group list-group-flush"}>
-                                                            {evento.invitados.map((invitado, index) => (
-                                                                <li className={"list-group-item d-flex justify-content-between align-items-center"}
-                                                                    key={index}>
-                                                                    {invitado}
-                                                                    <button
-                                                                        onClick={() => handleRemoveInvitado(invitado)}
-                                                                        style={{color: "red"}}><FaTrash/></button>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                    <div>
-                                                        <h4>Participantes</h4>
-                                                        <ul className={"list-container list-group list-group-flush"}>
-                                                            {evento.participantes.map((participante, index) => (
-                                                                <li className={"list-group-item d-flex justify-content-between align-items-center"}
-                                                                    key={index}>
-                                                                    {participante}
-                                                                    <span
-                                                                        onClick={() => handleRemoveParticipante(participante)}
-                                                                        style={{color: "red"}}><FaTrash/></span>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            )
-                                            }
+                                            <input
+                                                type="text"
+                                                value={evento.nombre}
+                                                onChange={(e) =>
+                                                    setEvento({
+                                                        ...evento,
+                                                        nombre: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                            <input
+                                                type="text"
+                                                value={evento.tipo}
+                                                onChange={(e) =>
+                                                    setEvento({
+                                                        ...evento,
+                                                        tipo: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                            <input
+                                                type="date"
+                                                value={evento.fecha}
+                                                onChange={(e) =>
+                                                    setEvento({
+                                                        ...evento,
+                                                        fecha: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                            <input
+                                                type="text"
+                                                value={evento.nombreOrganizador}
+                                                onChange={(e) =>
+                                                    setEvento({
+                                                        ...evento,
+                                                        nombreOrganizador:
+                                                            e.target.value,
+                                                    })
+                                                }
+                                            />
+                                            <input
+                                                type="text"
+                                                value={
+                                                    evento.contactoOrganizador
+                                                }
+                                                onChange={(e) =>
+                                                    setEvento({
+                                                        ...evento,
+                                                        contactoOrganizador:
+                                                            e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <h2 style={{ alignSelf: "center" }}>
+                                                {evento.nombre}
+                                            </h2>
+                                            <h5
+                                                style={{
+                                                    color: "#0d6efd",
+                                                    alignSelf: "center",
+                                                }}
+                                            >
+                                                {evento.tipo}
+                                            </h5>
+                                            <p>Fecha: {evento.fecha}</p>
+                                            <p>
+                                                Organiza:{" "}
+                                                {evento.nombreOrganizador}
+                                            </p>
+                                            <p>
+                                                Contacto:{" "}
+                                                {evento.contactoOrganizador}
+                                            </p>
+                                            <p>
+                                                Patrocina:{" "}
+                                                {evento.empresaPatrocinadora}
+                                            </p>
                                         </>
                                     )}
+                                    <div>
+                                        <h4>
+                                            {evento.participantes.length}{" "}
+                                            {evento.participantes.length === 1
+                                                ? "Participante"
+                                                : "Participantes"}
+                                        </h4>
+                                    </div>
+                                    <button
+                                        className={"btn btn-primary"}
+                                        onClick={() => setDisplayPasskey(true)}
+                                    >
+                                        Participar
+                                    </button>
+                                    <div>
+                                        <h4>Invitados externos</h4>
+                                        <ul
+                                            className={
+                                                "list-group list-group-flush"
+                                            }
+                                            style={{
+                                                backgroundColor: "transparent",
+                                            }}
+                                        >
+                                            {evento.invitados.length === 0 ? (
+                                                <li
+                                                    className={
+                                                        "list-group-item d-flex justify-content-between align-items-center"
+                                                    }
+                                                    style={{
+                                                        backgroundColor:
+                                                            "transparent",
+                                                    }}
+                                                >
+                                                    No hay invitados externos
+                                                </li>
+                                            ) : (
+                                                <>
+                                                    {evento.invitados.map(
+                                                        (invitado, index) => (
+                                                            <li
+                                                                className={
+                                                                    "list-group-item d-flex justify-content-between align-items-center"
+                                                                }
+                                                                style={{
+                                                                    backgroundColor:
+                                                                        "transparent",
+                                                                }}
+                                                                key={index}
+                                                            >
+                                                                {
+                                                                    invitado.nombre
+                                                                }{" "}
+                                                                {
+                                                                    invitado.apellido
+                                                                }
+                                                                {" - "}
+                                                                {
+                                                                    invitado.descripcionRol
+                                                                }
+                                                                {usuario?.rol ===
+                                                                    "ADMIN" && (
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            handleRemoveInvitado(
+                                                                                invitado.id
+                                                                            )
+                                                                        }
+                                                                        style={{
+                                                                            color: "red",
+                                                                        }}
+                                                                    >
+                                                                        <FaTrash />
+                                                                    </button>
+                                                                )}
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </>
+                                            )}
+                                        </ul>
+                                        {usuario?.rol === "ADMIN" && (
+                                            <button
+                                                className="btn btn-link"
+                                                onClick={() =>
+                                                    setDisplayInvitado(true)
+                                                }
+                                            >
+                                                + Anadir
+                                            </button>
+                                        )}
+                                    </div>
                                 </>
                             )}
                         </>
-                        )}
+                    )}
                 </div>
             </div>
         </div>

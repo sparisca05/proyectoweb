@@ -40,6 +40,9 @@ public class EventoService {
 
         evento.setNombre(request.getNombre());
         evento.setFecha(request.getFecha());
+        evento.setTipo(request.getTipo());
+        evento.setNombreOrganizador(request.getNombreOrganizador());
+        evento.setContactoOrganizador(request.getContactoOrganizador());
         saveEvento(evento);
 
         return evento;
@@ -55,13 +58,16 @@ public class EventoService {
     }
 
     @Transactional
-    public String addParticipante(String username, Long eventoId) throws RuntimeException {
+    public String addParticipante(String username, Long eventoId, String claveIngresada) throws RuntimeException {
         Evento evento = getEventoById(eventoId);
+        if (!evento.getClave().equals(claveIngresada)) {
+            throw new RuntimeException("La clave ingersada es incorrecta, intente de nuevo.");
+        }
         Usuario usuario = usuarioService.getUserByUsername(username);
         if (!evento.getParticipantes().contains(usuario)) {
             evento.addParticipante(usuario);
             eventoRepository.save(evento);
-            return username + " se agregó con éxito al evento: " + evento.getNombre();
+            return "Fuiste agregado con éxito al evento: " + evento.getNombre();
         } else {
             throw new RuntimeException("Usuario ya agregado al evento");
         }
@@ -83,24 +89,24 @@ public class EventoService {
     public String addInvitado(String nombre, Long eventoId) throws RuntimeException {
         Evento evento = getEventoById(eventoId);
         InvitadoExterno invitadoExterno = invitadoService.getInvitadoExternoByNombre(nombre);
-        if (!evento.getInvitados().contains(invitadoExterno)) {
+        if (evento != null) {
             evento.addInvitado(invitadoExterno);
             eventoRepository.save(evento);
         } else {
-            throw new RuntimeException("El invitado ya está inscrito al evento");
+            throw new RuntimeException("Error al inscribir invitado.");
         }
-        return "El invitado " + nombre + " se inscribió al evento " + evento.getNombre();
+        return "El invitado fue inscrito con éxito al evento.";
     }
 
-    public String removeInvitado(String nombre, Long eventoId) throws RuntimeException {
+    public String removeInvitado(Long invitadoId, Long eventoId) throws RuntimeException {
         Evento evento = getEventoById(eventoId);
-        InvitadoExterno invitadoExterno = invitadoService.getInvitadoExternoByNombre(nombre);
+        InvitadoExterno invitadoExterno = invitadoService.getInvitadoExternoById(invitadoId);
         if (evento.getInvitados().contains(invitadoExterno)) {
             evento.removeInvitado(invitadoExterno);
             eventoRepository.save(evento);
-            return nombre + " se eliminó con éxito del evento: " + evento.getNombre();
+            return "El invitado se eliminó con éxito del evento." ;
         } else {
-            throw new RuntimeException("El invitado no se encontró en el evento");
+            throw new RuntimeException("Error al eliminar invitado del evento");
         }
     }
 }

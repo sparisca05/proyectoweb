@@ -35,12 +35,18 @@ public class Evento {
     @Column(nullable = false, unique = true)
     private String nombre;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
 
     @Column(name = "tipo_evento", nullable = false)
     private String tipo;
+
+    @Column(nullable = false)
+    private String nombreOrganizador;
+
+    @Column(nullable = false)
+    private String contactoOrganizador;
 
     // Método para generar una clave aleatoria
     public String generarClave() {

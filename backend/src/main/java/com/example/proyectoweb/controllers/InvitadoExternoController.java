@@ -45,7 +45,7 @@ public class InvitadoExternoController {
     @PostMapping
     public String postInvitadoExterno(@RequestBody InvitadoExterno invitadoExterno) {
         invitadoExternoService.saveInvitadoExterno(invitadoExterno);
-        return "Invitado externo inscrito con éxito";
+        return "Invitado externo creado con éxito";
     }
 
     // Eliminar un invitado externo

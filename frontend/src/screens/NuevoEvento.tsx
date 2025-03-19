@@ -2,53 +2,72 @@ import Navbar from "../components/Navbar.tsx";
 import { useEffect, useState } from "react";
 import { API_URL } from "../main.tsx";
 import { getToken } from "./Home.tsx";
+import { IoMdClose } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
-const NuevoEvento = () => {
+export interface Empresa {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    logo: string;
+    eventos: any[];
+}
+
+function NuevoEvento() {
     const [nombre, setNombre] = useState<string>("");
     const [fecha, setFecha] = useState<string>("");
     const [tipo, setTipo] = useState<string>("");
-    const [empresas, setEmpresas] = useState([
-        {
-            id: "",
-            nombre: "",
-        },
-    ]);
-    const [empresaPatrocinadora, setEmpresaPatrocinadora] =
-        useState<string>("");
+    const [nombreOrganizador, setNombreOrganizador] = useState<string>("");
+    const [contactoOrganizador, setContactoOrganizador] = useState<string>("");
+    const [empresas, setEmpresas] = useState<Empresa[]>([]);
+    const [empresaPatrocinadora, setEmpresaPatrocinadora] = useState<Empresa>();
 
-    const fetchEmpresas = async () => {
-        try {
-            const response = await fetch(`${API_URL}/api/v1/empresas`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + getToken(),
-                },
-            });
-            if (response.ok) {
-                const data = await response.json();
-                setEmpresas(
-                    data.map((empresa: { id: string; nombre: string }) => ({
-                        id: empresa.id,
-                        nombre: empresa.nombre,
-                    }))
-                );
-            } else {
-                alert("Error al cargar las empresas");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchEmpresas = async () => {
+            try {
+                const response = await fetch(`${API_URL}/api/v1/empresas`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + getToken(),
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setEmpresas(data);
+                } else {
+                    alert("Error al cargar las empresas");
+                }
+            } catch (error) {
+                alert("Error de conexión. Por favor, intenta más tarde.");
+                console.log(error);
             }
-        } catch (error) {
-            alert("Error de conexión. Por favor, intenta más tarde.");
-            console.log(error);
-        }
+        };
+        fetchEmpresas();
+    }, []);
+
+    const handleEmpresaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedEmpresa = empresas.find(
+            (empresa) => empresa.id === Number(e.target.value)
+        );
+        setEmpresaPatrocinadora(selectedEmpresa || undefined);
     };
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
-        console.log(nombre, fecha, tipo, empresaPatrocinadora);
+
+        // Format the date to "dd-mm-yyyy"
+        const [year, month, day] = fecha.split("-");
+        const formattedFecha = `${day}-${month}-${year}`;
+
         const requestBody = {
             nombre: nombre,
-            fecha: fecha,
+            fecha: formattedFecha,
             tipo: tipo,
+            nombreOrganizador: nombreOrganizador,
+            contactoOrganizador: contactoOrganizador,
             empresaPatrocinadora: empresaPatrocinadora,
         };
 
@@ -67,6 +86,7 @@ const NuevoEvento = () => {
 
             if (response.ok) {
                 alert("Evento creado exitosamente!");
+                navigate("/eventos");
             } else {
                 const errorData = await response.json();
                 alert(errorData.message || "Error al crear el evento");
@@ -77,15 +97,15 @@ const NuevoEvento = () => {
         }
     };
 
-    useEffect(() => {
-        fetchEmpresas();
-    }, []);
-
     return (
         <div className={"main-container"}>
             <Navbar />
             <div className={"welcome"}>
                 <div className={"auth-container"}>
+                    <IoMdClose
+                        className="back-btn"
+                        onClick={() => navigate("/eventos")}
+                    />
                     <h2>Nuevo evento</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
@@ -136,7 +156,50 @@ const NuevoEvento = () => {
                                     aria-label="Sizing example input"
                                     aria-describedby="inputGroup-sizing-default"
                                     value={fecha}
-                                    onChange={(e) => setFecha(e.target.value)}
+                                    onChange={(e) => [
+                                        setFecha(e.target.value),
+                                        console.log(fecha),
+                                    ]}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="row mb-3">
+                            <div className="col">
+                                <label
+                                    className="form-label"
+                                    id="inputGroup-sizing-default"
+                                >
+                                    Nombre del organizador
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    value={nombreOrganizador}
+                                    onChange={(e) =>
+                                        setNombreOrganizador(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                            <div className="col">
+                                <label
+                                    className="form-label"
+                                    id="inputGroup-sizing-default"
+                                >
+                                    Contacto del organizador
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    value={contactoOrganizador}
+                                    onChange={(e) =>
+                                        setContactoOrganizador(e.target.value)
+                                    }
                                     required
                                 />
                             </div>
@@ -152,17 +215,14 @@ const NuevoEvento = () => {
                                 name="empresa-patrocinadora"
                                 id="empresa-patrocinadora"
                                 className="form-select"
-                                value={empresaPatrocinadora}
-                                defaultValue={""}
-                                onChange={(e) =>
-                                    setEmpresaPatrocinadora(e.target.value)
-                                }
+                                value={empresaPatrocinadora?.id || ""}
+                                onChange={handleEmpresaChange}
                             >
                                 <option value="" disabled>
                                     Escoge una...
                                 </option>
-                                {empresas.map((empresa, index) => (
-                                    <option key={index} value={empresa.id}>
+                                {empresas.map((empresa) => (
+                                    <option key={empresa.id} value={empresa.id}>
                                         {empresa.nombre}
                                     </option>
                                 ))}
@@ -179,6 +239,5 @@ const NuevoEvento = () => {
             </div>
         </div>
     );
-};
-
+}
 export default NuevoEvento;

@@ -31,7 +31,7 @@ const Navbar = () => {
     }, []);
 
     const title = () => {
-        return <h1>Fashion Event</h1>;
+        return <h1>Eventos EIA</h1>;
     };
 
     return (

@@ -63,7 +63,10 @@ function Register() {
         <div className={"main-container"}>
             <Navbar />
             <div className={"welcome"}>
-                <div className={"auth-container"}>
+                <div
+                    className={"auth-container"}
+                    style={{ alignItems: "unset" }}
+                >
                     <h2>Regístrate</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">

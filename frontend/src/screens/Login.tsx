@@ -1,45 +1,45 @@
 // noinspection TypeScriptCheckImport
-import { useState } from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import { API_URL } from '../main.tsx';
+import { API_URL } from "../main.tsx";
 import LoginButton from "../components/LoginButton.tsx";
 import Navbar from "../components/Navbar.tsx";
 
 function Login() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
         // Crear el cuerpo del POST
         const requestBody = {
             username: username,
-            password: password
+            password: password,
         };
 
         try {
             // Realizar el POST al backend
-            const response = await fetch(`${API_URL}/auth/login` , {
-                method: 'POST',
+            const response = await fetch(`${API_URL}/auth/login`, {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify(requestBody),
             });
             // Si la respuesta es exitosa (por ejemplo, 200), manejar el éxito
             const { token } = await response.json();
-            setErrorMessage('');
+            setErrorMessage("");
             // Aquí podrías almacenar un token JWT o redirigir a otra página
-            localStorage.setItem('authToken', token);
-            navigate('/eventos');
+            localStorage.setItem("authToken", token);
+            navigate("/eventos");
         } catch (error) {
             // Manejo de errores en la conexión
-            setErrorMessage('Usuario o contraseña incorrectos.');
+            setErrorMessage("Usuario o contraseña incorrectos.");
             console.log(error);
         }
     };
@@ -48,7 +48,10 @@ function Login() {
         <div className="main-container">
             <Navbar />
             <div className={"welcome"}>
-                <div className={"auth-container"}>
+                <div
+                    className={"auth-container"}
+                    style={{ alignItems: "unset" }}
+                >
                     <h2>Iniciar Sesión</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
@@ -71,19 +74,29 @@ function Login() {
                                 required
                             />
                         </div>
-                        <LoginButton submit={true}/>
-                        <div style={{margin: '10px 0'}}>
+                        <LoginButton submit={true} />
+                        <div style={{ margin: "10px 0" }}>
                             <p>
-                                ¿No tienes una cuenta?{' '}
+                                ¿No tienes una cuenta?{" "}
                                 <Link
                                     to="/register"
-                                    style={{textDecoration: "none"}}
+                                    style={{ textDecoration: "none" }}
                                 >
                                     Regístrate
                                 </Link>
                             </p>
                         </div>
-                        {errorMessage && <p style={{color: 'red', width: '100%', margin: '10px 0'}}>{errorMessage}</p>}
+                        {errorMessage && (
+                            <p
+                                style={{
+                                    color: "red",
+                                    width: "100%",
+                                    margin: "10px 0",
+                                }}
+                            >
+                                {errorMessage}
+                            </p>
+                        )}
                     </form>
                 </div>
             </div>

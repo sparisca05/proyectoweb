@@ -38,18 +38,7 @@ public class EventoController {
     public Evento getEventoById(@PathVariable Long id) {
         return eventoService.getEventoById(id);
     }
-
-    // Comprar un ticket para un evento con el usuario actual
-    @PutMapping("/{id}/comprar-ticket")
-    public String addInvitado(@PathVariable Long id) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        try {
-            return eventoService.addInvitado(username, id);
-        } catch (RuntimeException e) {
-            return e.getMessage();
-        }
-    }
-
+    
     // Crear un nuevo evento
     @PostMapping("/nuevo-evento")
     @PreAuthorize("hasRole('ADMIN')")
@@ -57,8 +46,32 @@ public class EventoController {
         return eventoService.saveEvento(evento);
     }
 
+    // Participar en un evento con el usuario actual
+    @PutMapping("/{id}/agregar-participante")
+    public ResponseEntity<String> addParticipante(@PathVariable Long id, @RequestBody String claveIngresada) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            String response = eventoService.addParticipante(username, id, claveIngresada);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // Inscríbir un invitado externo a un evento
+    @PutMapping("/{id}/agregar-invitado")
+    @PreAuthorize("hasAnyAuthority('admin:update', 'organizador:update')")
+    public ResponseEntity<String> addInvitado(@RequestBody String nombre, @PathVariable Long id) {
+        try {
+            String response = eventoService.addInvitado(nombre, id);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     // Modificar un evento
-    @PutMapping("/{id}/modificar-evento")
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('admin:update', 'organizador:update')")
     public Evento updateEvento(@RequestBody Evento evento, @PathVariable Long id) {
         return eventoService.updateEventoById(evento, id);
@@ -71,17 +84,6 @@ public class EventoController {
         return eventoService.deleteEvento(id);
     }
 
-    // Eliminar un invitado de un evento
-    @DeleteMapping("/{id}/eliminar-invitado")
-    @PreAuthorize("hasAnyAuthority('admin:delete', 'organizador:delete')")
-    public String removeInvitado(@RequestParam String username, @PathVariable Long id) {
-        try {
-            return eventoService.removeInvitado(username, id);
-        } catch (RuntimeException e) {
-            return e.getMessage();
-        }
-    }
-
     // Eliminar un participante de un evento
     @DeleteMapping("/{id}/eliminar-participante")
     @PreAuthorize("hasAnyAuthority('admin:delete', 'organizador:delete')")
@@ -90,6 +92,18 @@ public class EventoController {
             return eventoService.removeParticipante(username, id);
         } catch (RuntimeException e) {
             return e.getMessage();
+        }
+    }
+    
+    // Eliminar un invitado de un evento
+    @DeleteMapping("/{id}/eliminar-invitado")
+    @PreAuthorize("hasAnyAuthority('admin:delete', 'organizador:delete')")
+    public ResponseEntity<String> removeInvitado(@RequestParam Long invitadoId, @PathVariable Long id) {
+        try {
+            String response = eventoService.removeInvitado(invitadoId, id);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
