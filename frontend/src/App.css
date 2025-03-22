@@ -10,7 +10,7 @@ button {
     justify-content: flex-start;
     min-height: 100vh;
     margin: auto;
-    background-image: url('../src/assets/pexels-sofia-morales-95410047-14567680.jpg'); /* Reemplaza con la ruta de tu imagen */
+    background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('../src/assets/pexels-sofia-morales-95410047-14567680.jpg');
     background-size: cover;
     background-position: center;
     background-color: #282c34; /* Color de respaldo */
@@ -115,19 +115,8 @@ button {
     display: flex;
     column-gap: 10px;
 }
-.evento-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    margin: auto;
-    background-image: url('../src/assets/pexels-pachon-in-motion-426015731-18337644.jpg'); 
-    background-size: cover;
-    background-position: center;
-    font-family: 'Rubik', sans-serif;
-}
 .eventos {
+    width: 100%;
     padding: 30px;
     h1 {
         text-align: center;
@@ -138,7 +127,6 @@ button {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: center;
     align-items: flex-start;
     width: 100%;
 }
@@ -166,6 +154,15 @@ button {
     h5 {
         color: #0c55c6;
     }
+}
+.evento-profile {
+    max-width: 300px;
+    height: 250px;
+    background-color: white;
+    color: black;
+}
+.evento-profile:hover {
+    background-color: rgba(197, 197, 197, 0.5);
 }
 .evento:hover {
     background-color: rgba(197, 197, 197, 0.5);

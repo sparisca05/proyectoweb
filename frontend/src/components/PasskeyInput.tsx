@@ -58,7 +58,7 @@ function PasskeyInput({
                 />
                 <form onSubmit={handleSubmit}>
                     <label className="form-label">
-                        Ingresa la clave labelara participar en el evento:
+                        Ingresa la clave para participar en el evento:
                     </label>
                     <input
                         className="form-control"

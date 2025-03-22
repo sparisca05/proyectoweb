@@ -10,21 +10,22 @@ const MisEventos = () => {
     const [loading, setLoading] = useState<boolean>(true); // Estado para mostrar una carga
     const [error, setError] = useState(""); // Estado para mostrar un error
 
-    /*
     useEffect(() => {
         const token = getToken();
 
-        axios.get(`${API_URL}/api/v1/usuario/mis-eventos`, {
-            headers: {
-                'Authorization': 'Bearer ' + token,
-            }
-        })
+        axios
+            .get(`${API_URL}/api/v1/usuario/mis-eventos`, {
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+            })
             .then((response) => {
+                console.log(response.data);
                 setEventos(response.data);
                 setLoading(false);
             })
-            .catch(error => {
-                setError('Error: ' + error);
+            .catch((error) => {
+                setError("Error: " + error);
                 setLoading(false);
             });
     }, []);
@@ -36,7 +37,7 @@ const MisEventos = () => {
             </div>
         );
     }
-*/
+
     const noEventosMessage = eventos.length === 0 && (
         <div>No estás en ningún evento aún.</div>
     );
@@ -50,16 +51,12 @@ const MisEventos = () => {
                     <Link
                         to={`/eventos/${evento.id}`}
                         key={evento.id}
-                        className="evento"
+                        className="evento evento-profile"
                     >
                         <p>{evento.nombre}</p>
                         <div>
                             <p>Fecha: </p>
                             {evento.fecha}
-                        </div>
-                        <div>
-                            <p>Precio: $</p>
-                            {evento.precio}
                         </div>
                     </Link>
                 ))}

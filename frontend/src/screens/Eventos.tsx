@@ -86,10 +86,12 @@ const EventoList: React.FC = () => {
 
     if (loading) {
         return (
-            <div className={"evento-container"}>
+            <div className={"main-container"}>
                 <Navbar />
                 <div className={"eventos"}>
-                    <h4>Cargando eventos...</h4>
+                    <h4 style={{ textAlign: "center", color: "white" }}>
+                        Cargando eventos...
+                    </h4>
                 </div>
             </div>
         );
@@ -100,7 +102,7 @@ const EventoList: React.FC = () => {
     );
 
     return (
-        <div className={"evento-container"}>
+        <div className={"main-container"}>
             <Navbar />
             <div className={"eventos"}>
                 <h1>Eventos</h1>
