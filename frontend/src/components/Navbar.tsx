@@ -43,14 +43,14 @@ const Navbar = () => {
     };
 
     return (
-        <nav className={"navbar"} style={{ width: "100%" }}>
+        <nav className={"navbar "} style={{ width: "100%" }}>
             <div className={"container-fluid"}>
                 <>
                     <div className={"nav-links"}>
                         {title()}
                         <Link
                             to={"/eventos"}
-                            style={{ textDecoration: "none" }}
+                            className={"nav-link"}
                         >
                             Eventos
                         </Link>

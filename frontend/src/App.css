@@ -32,6 +32,22 @@ button {
     font-weight: 500;
     font-size: larger;
 }
+.nav-link {
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
+    background-color: rgb(144, 26, 212);
+    color: white;
+    border-color: #f0f0f0;
+    border: 2px solid white;
+    transition: 0.5s;
+}
+.nav-link:hover{
+    opacity: 0.7;
+    color: #f0f0f0;
+}
 .navbar-profile {
     display: flex;
     align-items: center;
@@ -304,7 +320,6 @@ button {
     background-position: center;
     background-color: #282c34; /* Color de respaldo */
     color: white;
-    font-family: 'Rubik', sans-serif;
 }
 
 .hero-section h1 {
