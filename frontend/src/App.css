@@ -284,6 +284,7 @@ button {
     background-position: center;
     background-color: #282c34; /* Color de respaldo */
     color: white;
+    font-family: 'Rubik', sans-serif;
 }
 
 .hero-section h1 {
@@ -337,7 +338,7 @@ button {
 }
 
 .feature {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.3);
     padding: 20px;
     border-radius: 10px;
     width: 250px;
@@ -358,4 +359,5 @@ button {
     background-size: cover;
     background-position: center;
     background-color: #282c34; /* Color de respaldo */
+    font-family: 'Rubik', sans-serif;
 }
