@@ -257,6 +257,8 @@ function EventoView() {
                                     >
                                         Participar
                                     </button>
+                                    
+                                        
                                     <div>
                                         <h4>Invitados externos</h4>
                                         <ul
