@@ -6,11 +6,13 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { API_URL } from "../main.tsx";
 import Navbar from "../components/Navbar.tsx";
 import { getToken } from "./Home.tsx";
+import { FaTrash } from "react-icons/fa";
 
 export interface Evento {
     id: number;
     nombre: string;
     tipo: string;
+    clave: string;
     nombreOrganizador: string;
     contactoOrganizador: string;
     fecha: string;
@@ -62,6 +64,26 @@ const EventoList: React.FC = () => {
             });
     }, []);
 
+    const handleDelete = (id: number) => {
+        if (
+            window.confirm("¿Estás seguro de que deseas eliminar este evento?")
+        ) {
+            axios
+                .delete(`${API_URL}/api/v1/eventos/${id}`, {
+                    headers: {
+                        Authorization: "Bearer " + getToken(),
+                    },
+                })
+                .then(() => {
+                    setEventos(eventos.filter((evento) => evento.id !== id));
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    setError("Error: " + error);
+                });
+        }
+    };
+
     if (loading) {
         return (
             <div className={"main-container"}>
@@ -99,6 +121,16 @@ const EventoList: React.FC = () => {
                                     <p>Fecha: </p>
                                     {evento.fecha}
                                 </div>
+                                {usuario && usuario.rol === "ADMIN" && (
+                                    <FaTrash
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleDelete(evento.id);
+                                        }}
+                                        className="delete-icon"
+                                        size={40}
+                                    />
+                                )}
                             </Link>
                         ))}
                         {usuario && usuario.rol === "ADMIN" && (

@@ -228,6 +228,12 @@ function EventoView() {
                                             >
                                                 {evento.tipo}
                                             </h5>
+                                            {usuario?.rol === "ADMIN" && (
+                                                <h4>
+                                                    Clave de acceso:{" "}
+                                                    {evento.clave}
+                                                </h4>
+                                            )}
                                             <p>Fecha: {evento.fecha}</p>
                                             <p>
                                                 Organiza:{" "}
@@ -257,8 +263,7 @@ function EventoView() {
                                     >
                                         Participar
                                     </button>
-                                    
-                                        
+
                                     <div>
                                         <h4>Invitados externos</h4>
                                         <ul
