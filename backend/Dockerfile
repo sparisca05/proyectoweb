@@ -17,4 +17,4 @@ COPY src /backend/src
 RUN ./mvnw clean install -DskipTests
 
 # EJECUTAR LA APLICACION
-CMD ["java", "-jar", "target/parcialFashionEvent-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/protyectoWeb-0.0.1-SNAPSHOT.jar"]
