@@ -7,6 +7,7 @@ import ProfileIcon from "./ProfileIcon.tsx";
 import LoginButton from "./LoginButton.tsx";
 import LogoutButton from "./LogoutButton.tsx";
 import { API_URL } from "../main.tsx";
+import logo_url from "../assets/Imagen de WhatsApp 2025-03-22 a las 15.48.24_a903337e.jpg"
 
 const Navbar = () => {
     const [usuario, setUsuario] = useState("");
@@ -31,11 +32,18 @@ const Navbar = () => {
     }, []);
 
     const title = () => {
-        return <h1>Eventos EIA</h1>;
+        return (
+            <Link to="/" style={{ textDecoration: "none" }}>
+                <img 
+                    src={logo_url}
+                    style={{ height: "100px", cursor: "pointer" }}
+                />
+            </Link>
+        );
     };
 
     return (
-        <nav className={"navbar bg-body-tertiary"} style={{ width: "100%" }}>
+        <nav className={"navbar"} style={{ width: "100%" }}>
             <div className={"container-fluid"}>
                 <>
                     <div className={"nav-links"}>

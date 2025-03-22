@@ -18,9 +18,11 @@ button {
 }
 .navbar {
     align-items: center;
-    padding: 30px;
+    padding-right:30px;
+    padding-left:30px;
     min-height: 100px;
     border-bottom: 1px solid rgba(186,186,186,0.78);
+    background-color: rgba(9,4,20,1);
 }
 .nav-links {
     display: flex;
