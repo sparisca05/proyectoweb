@@ -88,10 +88,8 @@ const EventoList: React.FC = () => {
         return (
             <div className={"evento-container"}>
                 <Navbar />
-                <div className={"welcome"}>
-                    <div className={"content-container"}>
-                        <h4>Cargando eventos...</h4>
-                    </div>
+                <div className={"eventos"}>
+                    <h4>Cargando eventos...</h4>
                 </div>
             </div>
         );
@@ -104,46 +102,44 @@ const EventoList: React.FC = () => {
     return (
         <div className={"evento-container"}>
             <Navbar />
-            <div className={"welcome"}>
-                <div className={"content-container eventos"}>
-                    <h2>Eventos</h2>
-                    {error ? <div>{error}</div> : noEventosMessage}
-                    <div>
-                        {eventos.map((evento) => (
-                            <Link
-                                to={`/eventos/${evento.id}`}
-                                key={evento.id}
-                                className="evento"
-                            >
-                                <h4>{evento.nombre}</h4>
-                                <h5>{evento.tipo}</h5>
-                                <div>
-                                    <p>Fecha: </p>
-                                    {evento.fecha}
-                                </div>
-                                {usuario && usuario.rol === "ADMIN" && (
-                                    <FaTrash
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            handleDelete(evento.id);
-                                        }}
-                                        className="delete-icon"
-                                        size={40}
-                                    />
-                                )}
-                            </Link>
-                        ))}
-                        {usuario && usuario.rol === "ADMIN" && (
-                            <div className="add evento">
-                                <IoIosAddCircleOutline
-                                    className="add-icon"
-                                    onClick={() =>
-                                        navigate("/eventos/nuevo-evento")
-                                    }
-                                />
+            <div className={"eventos"}>
+                <h1>Eventos</h1>
+                {error ? <div>{error}</div> : noEventosMessage}
+                <div>
+                    {eventos.map((evento) => (
+                        <Link
+                            to={`/eventos/${evento.id}`}
+                            key={evento.id}
+                            className="evento"
+                        >
+                            <h4>{evento.nombre}</h4>
+                            <h5>{evento.tipo}</h5>
+                            <div>
+                                <p>Fecha: </p>
+                                {evento.fecha}
                             </div>
-                        )}
-                    </div>
+                            {usuario && usuario.rol === "ADMIN" && (
+                                <FaTrash
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleDelete(evento.id);
+                                    }}
+                                    className="delete-icon"
+                                    size={40}
+                                />
+                            )}
+                        </Link>
+                    ))}
+                    {usuario && usuario.rol === "ADMIN" && (
+                        <div className="add evento">
+                            <IoIosAddCircleOutline
+                                className="add-icon"
+                                onClick={() =>
+                                    navigate("/eventos/nuevo-evento")
+                                }
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
