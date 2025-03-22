@@ -64,7 +64,7 @@ const EventoList: React.FC = () => {
 
     if (loading) {
         return (
-            <div className={"main-container"}>
+            <div className={"evento-container"}>
                 <Navbar />
                 <div className={"welcome"}>
                     <div className={"content-container"}>
@@ -80,7 +80,7 @@ const EventoList: React.FC = () => {
     );
 
     return (
-        <div className={"main-container"}>
+        <div className={"evento-container"}>
             <Navbar />
             <div className={"welcome"}>
                 <div className={"content-container eventos"}>

@@ -11,6 +11,7 @@ import { UsuarioRol } from "./Eventos.tsx";
 import PasskeyInput from "../components/PasskeyInput.tsx";
 import { Evento } from "./Eventos.tsx";
 import AddInvitadoInput from "../components/AddInvitadoInput.tsx";
+import "../App.css";
 
 function EventoView() {
     const token = getToken();
