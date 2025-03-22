@@ -1,19 +1,20 @@
 package com.example.proyectoweb.config;
 
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 
 @Service
 public class JwtService {
@@ -21,6 +22,7 @@ public class JwtService {
     // Replace this with a secure key in a real application, ideally fetched from environment variables
     Dotenv dotenv = Dotenv.load();
     private static final String SECRET_KEY = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    private static final long EXPIRATION_TIME = 1000 * 60 * 30; // 30 minutes
 
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
@@ -32,7 +34,7 @@ public class JwtService {
                 .setClaims(extractClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -71,6 +73,16 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
         return getExpirationDateFromToken(token).before(new Date());
+    }
+
+    public String refreshToken(String token) {
+        Claims claims = getAllClaims(token);
+        claims.setIssuedAt(new Date(System.currentTimeMillis()));
+        claims.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME));
+        return Jwts.builder()
+                .setClaims(claims)
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
 }
