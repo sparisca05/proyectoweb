@@ -194,14 +194,18 @@ button {
     border: none;
 }
 .add-icon {
-    color: rgb(212, 26, 197);
+    margin: 10px;
+    color: white;
+    background-color: rgb(212, 26, 197);
+    border-radius: 50%;
     width: 60px;
     height: 60px;
     cursor: pointer;
-    transition: color 0.3s;
+    transition: all 0.3s;
 }
 .add-icon:hover {
-    color: white;
+    opacity: 0.8;
+    background-color: rgba(212, 26, 197, 0.6);
 }
 .clave-input {
     position: absolute;

@@ -12,7 +12,7 @@ import EventoView from "./screens/EventoView.tsx";
 import NuevoEvento from "./screens/NuevoEvento.tsx";
 import NuevaEmpresa from "./screens/NuevaEmpresa.tsx";
 import Hitos from "./screens/Hitos.tsx";
-
+import { UsuarioProvider } from "./contexts/UsuarioContext.tsx";
 
 export const API_URL = import.meta.env.VITE_API_URL;
 
@@ -46,10 +46,7 @@ const App = ({ router }: { router: any }) => {
 };
 
 createRoot(document.getElementById("root")!).render(
-    /*
-  <StrictMode>
-    <App />
-  </StrictMode>,
-  */
-    <App router={router} />
+    <UsuarioProvider>
+        <App router={router} />
+    </UsuarioProvider>
 );
