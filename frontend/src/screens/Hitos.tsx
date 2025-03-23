@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../main.tsx";
 import Navbar from "../components/Navbar.tsx";
-
-
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import { useUsuario } from "../contexts/UsuarioContext.tsx";
 
 interface Hito {
     id: number;
@@ -17,13 +18,14 @@ const Hitos: React.FC = () => {
     const [hitos, setHitos] = useState<Hito[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState("");
-    
+    const usuario = useUsuario();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios
             .get(`${API_URL}/api/v1/hitos`)
             .then((response) => {
-                console.log("Datos de hitos:", response.data);
                 if (response.data && response.data.length > 0) {
                     setHitos(response.data);
                 } else {
@@ -32,11 +34,9 @@ const Hitos: React.FC = () => {
             })
             .catch((error) => {
                 console.error("Error al obtener hitos:", error);
-                
             })
             .finally(() => setLoading(false));
-    }, []);
-
+    }, [usuario]);
 
     if (loading) {
         return (
@@ -58,9 +58,8 @@ const Hitos: React.FC = () => {
                 <h1>Hitos</h1>
                 {error ? <div>{error}</div> : null}
                 <table className="custom-table">
-                    <thead >
+                    <thead>
                         <tr>
-                            
                             <th>Nombre</th>
                             <th>Categoría</th>
                             <th>Evento Relevante</th>
@@ -73,11 +72,23 @@ const Hitos: React.FC = () => {
                                 <td>{hito.nombre}</td>
                                 <td>{hito.categoria}</td>
                                 <td>{hito.eventoRelevante?.nombre || "N/A"}</td>
-                                <td>{hito.ganadores.length > 0 ? hito.ganadores.join(", ") : "Sin ganadores"}</td>
+                                <td>
+                                    {hito.ganadores.length > 0
+                                        ? hito.ganadores.join(", ")
+                                        : "Sin ganadores"}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+                {usuario && usuario.rol === "ADMIN" && (
+                    <div className="add">
+                        <IoIosAddCircleOutline
+                            className="add-icon"
+                            onClick={() => navigate("/eventos/nuevo-evento")}
+                        />
+                    </div>
+                )}
             </div>
             
         </div>

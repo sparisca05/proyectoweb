@@ -7,6 +7,7 @@ import { API_URL } from "../main.tsx";
 import Navbar from "../components/Navbar.tsx";
 import { getToken } from "./Home.tsx";
 import { FaTrash } from "react-icons/fa";
+import { useUsuario } from "../contexts/UsuarioContext.tsx";
 
 export interface Evento {
     id: number;
@@ -20,19 +21,15 @@ export interface Evento {
     participantes: any[];
     empresaPatrocinadora: any;
 }
-export interface UsuarioRol {
-    rol: string;
-}
 
 const EventoList: React.FC = () => {
     const [eventos, setEventos] = useState<Evento[]>([]);
-    const [usuario, setUsuario] = useState<UsuarioRol | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState("");
+    const usuario = useUsuario();
 
     const navigate = useNavigate();
 
-    // Efecto que hace la petición cuando el componente se monta
     useEffect(() => {
         axios
             .get(`${API_URL}/api/v1/eventos`)
@@ -44,25 +41,7 @@ const EventoList: React.FC = () => {
                 setError("Error: " + err);
                 setLoading(false);
             });
-    }, []);
-
-    useEffect(() => {
-        if (!getToken()) {
-            return;
-        }
-        axios
-            .get(`${API_URL}/api/v1/usuario/perfil`, {
-                headers: {
-                    Authorization: "Bearer " + getToken(),
-                },
-            })
-            .then((response) => {
-                setUsuario(response.data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    }, []);
+    }, [usuario]);
 
     const handleDelete = (id: number) => {
         if (
