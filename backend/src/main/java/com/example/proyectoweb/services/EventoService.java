@@ -61,7 +61,7 @@ public class EventoService {
     public String addParticipante(String username, Long eventoId, String claveIngresada) throws RuntimeException {
         Evento evento = getEventoById(eventoId);
         if (!evento.getClave().equals(claveIngresada)) {
-            throw new RuntimeException("La clave ingersada es incorrecta, intente de nuevo.");
+            throw new RuntimeException("La clave ingresada es incorrecta, intente de nuevo.");
         }
         Usuario usuario = usuarioService.getUserByUsername(username);
         if (!evento.getParticipantes().contains(usuario)) {
