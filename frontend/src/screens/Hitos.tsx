@@ -64,7 +64,7 @@ const Hitos: React.FC = () => {
                             <th>Nombre</th>
                             <th>Categoría</th>
                             <th>Evento Relevante</th>
-                            <th>Ganadores</th>
+                            <th>Ganador</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,6 +79,7 @@ const Hitos: React.FC = () => {
                     </tbody>
                 </table>
             </div>
+            
         </div>
     );
 };

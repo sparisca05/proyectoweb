@@ -30,6 +30,7 @@ const router = createBrowserRouter([
     { path: "nueva-empresa", element: <NuevaEmpresa /> },
     { path: "/perfil", element: <Profile /> },
     { path: "/hitos", element: <Hitos /> },
+    
 ]);
 
 const App = ({ router }: { router: any }) => {

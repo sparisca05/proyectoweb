@@ -312,10 +312,10 @@ button {
     justify-content: center;
     min-height: 100vh;
     padding: 20px;
-    background-image: url('../src/assets/pexels-sofia-morales-95410047-14567680.jpg'); /* Reemplaza con la ruta de tu imagen */
+    background-image: url('../src/assets/pexels-sofia-morales-95410047-14567680.jpg'); 
     background-size: cover;
     background-position: center;
-    background-color: #282c34; /* Color de respaldo */
+    background-color: #282c34; 
     color: white;
 }
 
@@ -387,8 +387,8 @@ button {
 .custom-table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #222; /* Fondo oscuro para la tabla */
-    color: white; /* Letras blancas */
+    background-color: #222; 
+    color: white; 
     text-align: left;
     border-radius: 10px;
     overflow: hidden;
