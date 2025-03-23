@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +26,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     // Obtener todos los usuarios
-    @GetMapping("/usuarios")
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping()
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         return ResponseEntity.ok(usuarioService.obtenerTodos());
     }
