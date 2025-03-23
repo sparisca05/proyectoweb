@@ -24,45 +24,33 @@ interface UsuarioProviderProps {
     children: React.ReactNode;
 }
 
+
 export const UsuarioProvider: React.FC<UsuarioProviderProps> = ({
     children,
 }) => {
     const [usuario, setUsuario] = useState<Usuario | null>(null);
 
     useEffect(() => {
-        const fetchUsuario = () => {
-            if (!isLoggedIn()) {
-                return;
-            }
-            axios
-                .get(`${API_URL}/api/v1/usuario/perfil`, {
-                    headers: {
-                        Authorization: "Bearer " + getToken(),
-                    },
-                })
-                .then((response) => {
-                    setUsuario(response.data);
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                });
-        };
-
-        fetchUsuario();
-
-        const handleBeforeUnload = () => {
-            setUsuario(null);
-        };
-
-        window.addEventListener("beforeunload", handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleBeforeUnload);
-        };
+        if (!isLoggedIn()) {
+            return;
+        }
+        axios
+            .get(`${API_URL}/api/v1/usuario/perfil`, {
+                headers: {
+                    Authorization: "Bearer " + getToken(),
+                },
+            })
+            .then((response) => {
+                console.log(response.data);
+                setUsuario(response.data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
     }, []);
 
     return (
-        <UsuarioContext.Provider value={{ usuario, setUsuario }}>
+        <UsuarioContext.Provider value={{usuario, setUsuario}}>
             {children}
         </UsuarioContext.Provider>
     );

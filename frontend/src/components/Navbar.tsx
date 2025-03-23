@@ -34,6 +34,11 @@ const Navbar = () => {
                         <Link to={"/hitos"} className={"nav-link"}>
                             Hitos
                         </Link>
+                        {usuario?.usuario?.rol==="ADMIN"&&(
+                        <Link to={"/PanelAdmin"} className={"nav-link"}>
+                            Panel de Usuarios
+                        </Link>
+                        )}
                     </div>
                     {isLoggedIn() ? (
                         location.pathname !== "/perfil" ? (
