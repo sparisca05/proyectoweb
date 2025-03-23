@@ -382,3 +382,40 @@ button {
 .feature h3 {
     margin-bottom: 10px;
 }
+
+/* esta chimbada es de hitos */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #222; /* Fondo oscuro para la tabla */
+    color: white; /* Letras blancas */
+    text-align: left;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.custom-table thead {
+    
+        background-color: #444;
+}
+
+.custom-table th {
+    padding: 12px;
+    border-bottom: 2px solid #666;
+    text-transform: uppercase;
+}
+
+.custom-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-table tbody tr:nth-child(even) {
+    background-color: #333;
+}
+
+.custom-table tbody tr:hover {
+    background: rgba(0, 123, 255, 0.2);
+    transition: 0.3s;
+}

@@ -8,6 +8,7 @@ import LoginButton from "./LoginButton.tsx";
 import LogoutButton from "./LogoutButton.tsx";
 import { API_URL } from "../main.tsx";
 import logo_url from "../assets/Imagen de WhatsApp 2025-03-22 a las 15.48.24_a903337e.jpg"
+import hitos from "../screens/Hitos.tsx"
 
 const Navbar = () => {
     const [usuario, setUsuario] = useState("");
@@ -54,6 +55,7 @@ const Navbar = () => {
                         >
                             Eventos
                         </Link>
+                        <Link to={"/hitos"} className={"nav-link"}>Hitos</Link>
                     </div>
                     {isLoggedIn() ? (
                         location.pathname !== "/perfil" ? (
