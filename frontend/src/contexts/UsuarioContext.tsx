@@ -3,7 +3,7 @@ import axios from "axios";
 import { API_URL } from "../main.tsx";
 import { getToken, isLoggedIn } from "../screens/Home.tsx";
 
-interface Usuario {
+export interface Usuario {
     nombre: string;
     apellido: string;
     username: string;
@@ -11,7 +11,12 @@ interface Usuario {
     rol: string;
 }
 
-const UsuarioContext = createContext<Usuario | null>(null);
+interface UsuarioContextType {
+    usuario: Usuario | null;
+    setUsuario: React.Dispatch<React.SetStateAction<Usuario | null>>;
+}
+
+const UsuarioContext = createContext<UsuarioContextType | null>(null);
 
 export const useUsuario = () => useContext(UsuarioContext);
 
@@ -25,25 +30,39 @@ export const UsuarioProvider: React.FC<UsuarioProviderProps> = ({
     const [usuario, setUsuario] = useState<Usuario | null>(null);
 
     useEffect(() => {
-        if (!isLoggedIn()) {
-            return;
-        }
-        axios
-            .get(`${API_URL}/api/v1/usuario/perfil`, {
-                headers: {
-                    Authorization: "Bearer " + getToken(),
-                },
-            })
-            .then((response) => {
-                setUsuario(response.data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+        const fetchUsuario = () => {
+            if (!isLoggedIn()) {
+                return;
+            }
+            axios
+                .get(`${API_URL}/api/v1/usuario/perfil`, {
+                    headers: {
+                        Authorization: "Bearer " + getToken(),
+                    },
+                })
+                .then((response) => {
+                    setUsuario(response.data);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        };
+
+        fetchUsuario();
+
+        const handleBeforeUnload = () => {
+            setUsuario(null);
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
     }, []);
 
     return (
-        <UsuarioContext.Provider value={usuario}>
+        <UsuarioContext.Provider value={{ usuario, setUsuario }}>
             {children}
         </UsuarioContext.Provider>
     );

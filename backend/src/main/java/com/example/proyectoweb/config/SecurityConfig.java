@@ -3,11 +3,6 @@ package com.example.proyectoweb.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import static com.example.proyectoweb.entity.Permission.ADMIN_DELETE;
-import static com.example.proyectoweb.entity.Permission.ADMIN_READ;
-import static com.example.proyectoweb.entity.Permission.ADMIN_UPDATE;
-import static com.example.proyectoweb.entity.Permission.ADMIN_WRITE;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -22,6 +17,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import static com.example.proyectoweb.entity.Permission.ADMIN_DELETE;
+import static com.example.proyectoweb.entity.Permission.ADMIN_READ;
+import static com.example.proyectoweb.entity.Permission.ADMIN_UPDATE;
+import static com.example.proyectoweb.entity.Permission.ADMIN_WRITE;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,6 +45,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                                                                                      // autenticación
                         .requestMatchers(GET, "api/v1/eventos", "api/v1/eventos/**").permitAll() // Permitir ver eventos
                                                                                                  // sin autenticación
+                        .requestMatchers(GET, "/api/v1/hitos", "/api/v1/hitos/**").permitAll() // Permitir ver hitos sin
+                                                                                             // autenticación
 
                         .requestMatchers(GET, "/api/v1/organizador/**")
                         .hasAuthority(ADMIN_READ.name())

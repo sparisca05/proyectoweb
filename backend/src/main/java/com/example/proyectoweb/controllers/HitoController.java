@@ -4,7 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.proyectoweb.entity.Hito;
 import com.example.proyectoweb.services.HitoService;
@@ -19,8 +25,12 @@ public class HitoController {
     // Ver todos los hitos
     @GetMapping
     public ResponseEntity<List<Hito>> getAllHitos() {
-        List<Hito> hitos = hitoService.getAllHitos();
-        return ResponseEntity.ok(hitos);
+        try {
+            List<Hito> hitos = hitoService.getAllHitos();
+            return ResponseEntity.ok(hitos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     // Ver un hito por su ID

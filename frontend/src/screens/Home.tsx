@@ -1,7 +1,6 @@
-// import React from 'react';
-
 import { Link, NavigateFunction } from "react-router-dom";
 import "../App.css";
+import { useUsuario, Usuario } from "../contexts/UsuarioContext";
 
 export const getToken: () => string | null = () => {
     return localStorage.getItem("authToken");
@@ -12,9 +11,13 @@ export const isLoggedIn = () => {
     return token !== null;
 };
 
-export const handleLogout = (navigate: NavigateFunction) => {
+export const handleLogout = (
+    navigate: NavigateFunction,
+    setUsuario: React.Dispatch<React.SetStateAction<Usuario | null>>
+) => {
     navigate("/login");
     localStorage.removeItem("authToken");
+    setUsuario(null);
 };
 
 function Home() {
@@ -47,15 +50,24 @@ function Home() {
                 <div className="features">
                     <div className="feature">
                         <h3>Organiza tus eventos</h3>
-                        <p>Planifica eventos con facilidad y comparte con tus amigos.</p>
+                        <p>
+                            Planifica eventos con facilidad y comparte con tus
+                            amigos.
+                        </p>
                     </div>
                     <div className="feature">
                         <h3>Descubre nuevas experiencias</h3>
-                        <p>Explora eventos de diferentes categorías en un solo lugar.</p>
+                        <p>
+                            Explora eventos de diferentes categorías en un solo
+                            lugar.
+                        </p>
                     </div>
                     <div className="feature">
                         <h3>Conéctate con la comunidad</h3>
-                        <p>Únete a eventos, conoce gente y crea recuerdos inolvidables.</p>
+                        <p>
+                            Únete a eventos, conoce gente y crea recuerdos
+                            inolvidables.
+                        </p>
                     </div>
                 </div>
             </section>

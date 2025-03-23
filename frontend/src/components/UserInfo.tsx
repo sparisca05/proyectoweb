@@ -11,11 +11,11 @@ const UserInfo = () => {
                     <div>
                         <div className={"name"}>
                             <p style={{ fontWeight: "bold", fontSize: "28px" }}>
-                                {user.nombre} {user.apellido}
+                                {user.usuario?.nombre} {user.usuario?.apellido}
                             </p>
-                            <p>{user.username}</p>
+                            <p>{user.usuario?.username}</p>
                         </div>
-                        <p>Rol: {user.rol}</p>
+                        <p>Rol: {user.usuario?.rol}</p>
                     </div>
                 ) : (
                     <p>No se encontraron datos del usuario.</p>

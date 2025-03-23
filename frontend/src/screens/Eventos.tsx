@@ -99,7 +99,7 @@ const EventoList: React.FC = () => {
                                 <p>Fecha: </p>
                                 {evento.fecha}
                             </div>
-                            {usuario && usuario.rol === "ADMIN" && (
+                            {usuario && usuario.usuario?.rol === "ADMIN" && (
                                 <FaTrash
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -111,7 +111,7 @@ const EventoList: React.FC = () => {
                             )}
                         </Link>
                     ))}
-                    {usuario && usuario.rol === "ADMIN" && (
+                    {usuario && usuario.usuario?.rol === "ADMIN" && (
                         <div className="add evento">
                             <IoIosAddCircleOutline
                                 className="add-icon"

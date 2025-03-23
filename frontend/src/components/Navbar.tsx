@@ -38,7 +38,9 @@ const Navbar = () => {
                     {isLoggedIn() ? (
                         location.pathname !== "/perfil" ? (
                             <ProfileIcon
-                                username={usuario?.nombre || "Iniciar sesión"}
+                                username={
+                                    usuario?.usuario?.nombre || "Iniciar sesión"
+                                }
                             />
                         ) : (
                             <LogoutButton />

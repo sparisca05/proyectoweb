@@ -7,7 +7,7 @@ import { IoMdClose } from "react-icons/io";
 import Navbar from "../components/Navbar.tsx";
 import { getToken } from "./Home.tsx";
 import { API_URL } from "../main.tsx";
-import { UsuarioRol } from "./Eventos.tsx";
+import { Usuario } from "../contexts/UsuarioContext.tsx";
 import PasskeyInput from "../components/PasskeyInput.tsx";
 import { Evento } from "./Eventos.tsx";
 import AddInvitadoInput from "../components/AddInvitadoInput.tsx";
@@ -17,7 +17,7 @@ function EventoView() {
     const token = getToken();
     const { id } = useParams<{ id: string }>();
     const [evento, setEvento] = useState<Evento>(); // Estado para almacenar la lista de eventos
-    const [usuario, setUsuario] = useState<UsuarioRol | null>(null);
+    const [usuario, setUsuario] = useState<Usuario | null>(null);
     const [loading, setLoading] = useState<boolean>(true); // Estado para mostrar una carga
     const [displayPasskey, setDisplayPasskey] = useState<boolean>(false);
     const [displayInvitado, setDisplayInvitado] = useState<boolean>(false);

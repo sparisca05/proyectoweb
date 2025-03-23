@@ -81,16 +81,15 @@ const Hitos: React.FC = () => {
                         ))}
                     </tbody>
                 </table>
-                {usuario && usuario.rol === "ADMIN" && (
+                {usuario && usuario.usuario?.rol === "ADMIN" && (
                     <div className="add">
                         <IoIosAddCircleOutline
                             className="add-icon"
-                            onClick={() => navigate("/eventos/nuevo-evento")}
+                            onClick={() => navigate("/hitos/nuevo-hito")}
                         />
                     </div>
                 )}
             </div>
-            
         </div>
     );
 };

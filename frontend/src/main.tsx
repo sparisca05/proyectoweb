@@ -12,6 +12,7 @@ import EventoView from "./screens/EventoView.tsx";
 import NuevoEvento from "./screens/NuevoEvento.tsx";
 import NuevaEmpresa from "./screens/NuevaEmpresa.tsx";
 import Hitos from "./screens/Hitos.tsx";
+import NuevoHito from "./screens/NuevoHito.tsx";
 import { UsuarioProvider } from "./contexts/UsuarioContext.tsx";
 
 export const API_URL = import.meta.env.VITE_API_URL;
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
     { path: "nueva-empresa", element: <NuevaEmpresa /> },
     { path: "/perfil", element: <Profile /> },
     { path: "/hitos", element: <Hitos /> },
-    
+    { path: "/hitos/nuevo-hito", element: <NuevoHito /> },
 ]);
 
 const App = ({ router }: { router: any }) => {

@@ -23,7 +23,6 @@ function Login() {
         };
 
         try {
-            // Realizar el POST al backend
             const response = await fetch(`${API_URL}/auth/login`, {
                 method: "POST",
                 headers: {
@@ -31,14 +30,12 @@ function Login() {
                 },
                 body: JSON.stringify(requestBody),
             });
-            // Si la respuesta es exitosa (por ejemplo, 200), manejar el éxito
             const { token } = await response.json();
             setErrorMessage("");
-            // Aquí podrías almacenar un token JWT o redirigir a otra página
             localStorage.setItem("authToken", token);
             navigate("/eventos");
+            window.location.reload();
         } catch (error) {
-            // Manejo de errores en la conexión
             setErrorMessage("Usuario o contraseña incorrectos.");
             console.log(error);
         }
