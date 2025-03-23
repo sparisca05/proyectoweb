@@ -58,7 +58,7 @@ public class EventoController {
         }
     }
 
-    // Inscríbir un invitado externo a un evento
+    // Inscribir un invitado externo a un evento
     @PutMapping("/{id}/agregar-invitado")
     @PreAuthorize("hasAnyAuthority('admin:update', 'organizador:update')")
     public ResponseEntity<String> addInvitado(@RequestBody String nombre, @PathVariable Long id) {

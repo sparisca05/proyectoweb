@@ -5,16 +5,41 @@ import { getToken } from "./Home.tsx";
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { Evento } from "./Eventos.tsx";
+import { Usuario } from "../contexts/UsuarioContext.tsx";
+import { getEventParticipants } from "../api/eventos.ts";
 
 function NuevoHito() {
     const [nombre, setNombre] = useState<string>("");
     const [categoria, setCategoria] = useState<string>("");
     const [eventos, setEventos] = useState<Evento[]>([]);
     const [eventoRelevante, setEventoRelevante] = useState<any>();
-    const [ganadores, setGanadores] = useState<string[]>([]);
+    const [ganadores, setGanadores] = useState<Usuario[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [participants, setParticipants] = useState<Usuario[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const navigate = useNavigate();
+
+    const getParticipants = () => {
+        eventoRelevante?.id &&
+            getEventParticipants(eventoRelevante?.id).then((participants) =>
+                setParticipants(participants)
+            );
+    };
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleAddWinner = (usuario: Usuario) => {
+        if (!ganadores.includes(usuario)) {
+            setGanadores([...ganadores, usuario]);
+        }
+    };
+
+    const filteredParticipants = participants.filter((usuario) =>
+        usuario.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     useEffect(() => {
         const token = getToken();
@@ -42,6 +67,12 @@ function NuevoHito() {
         );
         setEventoRelevante(selectedEvento || undefined);
     };
+
+    useEffect(() => {
+        if (eventoRelevante) {
+            getParticipants();
+        }
+    }, [eventoRelevante]);
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
@@ -87,24 +118,24 @@ function NuevoHito() {
                     />
                     <h2>Nuevo hito</h2>
                     <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label
-                                className="form-label"
-                                id="inputGroup-sizing-default"
-                            >
-                                Nombre
-                            </label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-default"
-                                value={nombre}
-                                onChange={(e) => setNombre(e.target.value)}
-                                required
-                            />
-                        </div>
                         <div className="row mb-3">
+                            <div className="col">
+                                <label
+                                    className="form-label"
+                                    id="inputGroup-sizing-default"
+                                >
+                                    Nombre
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    value={nombre}
+                                    onChange={(e) => setNombre(e.target.value)}
+                                    required
+                                />
+                            </div>
                             <div className="col">
                                 <label
                                     className="form-label"
@@ -130,7 +161,7 @@ function NuevoHito() {
                                 htmlFor="empresa-patrocinadora"
                                 className="form-label"
                             >
-                                Empresa patrocinadora
+                                Evento asociado
                             </label>
                             <select
                                 name="empresa-patrocinadora"
@@ -140,7 +171,7 @@ function NuevoHito() {
                                 onChange={handleEventoChange}
                             >
                                 <option value="" disabled>
-                                    Escoge una...
+                                    Escoge uno...
                                 </option>
                                 {eventos.map((evento) => (
                                     <option key={evento.id} value={evento.id}>
@@ -148,10 +179,74 @@ function NuevoHito() {
                                     </option>
                                 ))}
                             </select>
-                            <a className="" href="/nueva-empresa">
-                                + Añadir una nueva
-                            </a>
                         </div>
+                        <div className="mb-3">
+                            {eventoRelevante && (
+                                <>
+                                    <label
+                                        htmlFor="seleccionar-ganadores"
+                                        className="form-label"
+                                    >
+                                        Seleccionar ganadores
+                                    </label>
+                                    <input
+                                        name="seleccionar-ganadores"
+                                        id="seleccionar-ganadores"
+                                        className="form-control"
+                                        type="text"
+                                        placeholder="Buscar por nombre"
+                                        value={searchTerm}
+                                        onChange={handleSearchChange}
+                                    />
+                                    <select
+                                        className="form-select"
+                                        size={3}
+                                        multiple
+                                    >
+                                        {filteredParticipants.map((usuario) => (
+                                            <option
+                                                className="list-group-item list-group-item-action"
+                                                key={usuario.username}
+                                                onClick={() =>
+                                                    handleAddWinner(usuario)
+                                                }
+                                            >
+                                                {usuario.nombre}{" "}
+                                                {usuario.apellido}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </>
+                            )}
+                        </div>
+                        {ganadores.length > 0 && (
+                            <div className="mb-3">
+                                <label
+                                    htmlFor="ganadores"
+                                    className="form-label"
+                                >
+                                    Ganadores
+                                </label>
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Apellido</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {ganadores.map((usuario) => (
+                                            <tr key={usuario.username}>
+                                                <td>{usuario.nombre}</td>
+                                                <td>{usuario.apellido}</td>
+                                                <td>{usuario.correo}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                         <button type="submit" className="btn btn-primary">
                             Guardar
                         </button>
