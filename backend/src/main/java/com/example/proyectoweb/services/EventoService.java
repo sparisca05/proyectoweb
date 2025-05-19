@@ -93,7 +93,7 @@ public class EventoService {
             evento.addInvitado(invitadoExterno);
             eventoRepository.save(evento);
         } else {
-            throw new RuntimeException("Error al inscribir invitado.");
+            throw new RuntimeException("Error al inscribir invitados.");
         }
         return "El invitado fue inscrito con éxito al evento.";
     }
