@@ -56,6 +56,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                         .hasAuthority(ADMIN_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/organizador/**")
                         .hasAuthority(ADMIN_DELETE.name())
+                        
+                       
+
 
                         .anyRequest().authenticated())
                 .cors(withDefaults())
