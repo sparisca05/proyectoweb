@@ -24,6 +24,7 @@ import static com.example.proyectoweb.entity.Permission.ADMIN_UPDATE;
 import static com.example.proyectoweb.entity.Permission.ADMIN_WRITE;
 
 import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -56,11 +57,25 @@ public class SecurityConfig implements WebMvcConfigurer {
                         .hasAuthority(ADMIN_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/organizador/**")
                         .hasAuthority(ADMIN_DELETE.name())
+                        .requestMatchers(GET, "/api/v1/usuario/perfil").authenticated()
+                        .requestMatchers(GET, "/api/v1/usuario/mis-eventos").authenticated()
 
                         .anyRequest().authenticated())
                 .cors(withDefaults())
                 .sessionManagement(sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Deshabilitar manejo de sesiones
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("{\"error\":\"Necesitas iniciar sesión para acceder a este recurso\"}");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.getWriter().write("{\"error\":\"No tienes permisos para acceder a este recurso\"}");
+                        })
+                )
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

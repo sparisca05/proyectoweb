@@ -28,16 +28,37 @@ const Navbar = () => {
                 <>
                     <div className={"nav-links"}>
                         {title()}
-                        <Link to={"/eventos"} className={"nav-link"}>
+                        <Link
+                            to={"/eventos"}
+                            className={`nav-link ${
+                                window.location.pathname === "/eventos"
+                                    ? "active"
+                                    : ""
+                            }`}
+                        >
                             Eventos
                         </Link>
-                        <Link to={"/hitos"} className={"nav-link"}>
+                        <Link
+                            to={"/hitos"}
+                            className={`nav-link ${
+                                window.location.pathname === "/hitos"
+                                    ? "active"
+                                    : ""
+                            }`}
+                        >
                             Hitos
                         </Link>
-                        {usuario?.usuario?.rol==="ADMIN"&&(
-                        <Link to={"/PanelAdmin"} className={"nav-link"}>
-                            Panel de Usuarios
-                        </Link>
+                        {usuario?.usuario?.rol === "ADMIN" && (
+                            <Link
+                                to={"/PanelAdmin"}
+                                className={`nav-link ${
+                                    window.location.pathname === "/PanelAdmin"
+                                        ? "active"
+                                        : ""
+                                }`}
+                            >
+                                Panel de Usuarios
+                            </Link>
                         )}
                     </div>
                     {isLoggedIn() ? (

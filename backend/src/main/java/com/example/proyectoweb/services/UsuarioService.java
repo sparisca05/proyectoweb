@@ -71,14 +71,32 @@ public class UsuarioService implements UserDetailsService {
     public Usuario updateUserById(Usuario request, Long userId) {
         Usuario user = userRepository.findById(userId).get();
 
-        user.setNombre(request.getNombre());
-        user.setApellido(request.getApellido());
-        user.setCorreo(request.getCorreo());
-        user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
-        saveUser(user);
+        if (!(request.getNombre() == null || request.getNombre().isEmpty())) {
+            user.setNombre(request.getNombre());
+        }
+        if (!(request.getApellido() == null || request.getApellido().isEmpty())) {
+            user.setApellido(request.getApellido());
+        }
+        if (!(request.getUsername() == null || request.getUsername().isEmpty())) {
+            user.setUsername(request.getUsername());
+        }
+        if (!(request.getCorreo() == null || request.getCorreo().isEmpty())) {
+            user.setCorreo(request.getCorreo());
+        }
+        if (!(request.getPassword() == null || request.getPassword().isEmpty())) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+        userRepository.save(user);
 
         return user;
+    }
+
+    public void updateUserRole(Usuario request, Long userId) {
+        Usuario user = userRepository.findById(userId).get();
+
+        user.setRol(request.getRol());
+
+        userRepository.save(user);
     }
 
     public String deleteUser(Long userId) {

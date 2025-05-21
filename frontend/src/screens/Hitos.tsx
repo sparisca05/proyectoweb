@@ -29,7 +29,7 @@ const Hitos: React.FC = () => {
                 if (response.data && response.data.length > 0) {
                     setHitos(response.data);
                 } else {
-                    setError("No hay hitos disponibles.");
+                    setError("No se han asignado hitos aún.");
                 }
             })
             .catch((error) => {
@@ -56,8 +56,12 @@ const Hitos: React.FC = () => {
             <Navbar />
             <div className={"eventos"}>
                 <h1>Hitos</h1>
-                {error ? <div>{error}</div> : null}
                 <table className="custom-table">
+                    {error && (
+                        <div style={{ textAlign: "center", color: "white" }}>
+                            {error}
+                        </div>
+                    )}
                     <thead>
                         <tr>
                             <th>Nombre</th>
