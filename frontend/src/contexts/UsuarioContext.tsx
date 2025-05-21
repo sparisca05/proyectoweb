@@ -24,7 +24,6 @@ interface UsuarioProviderProps {
     children: React.ReactNode;
 }
 
-
 export const UsuarioProvider: React.FC<UsuarioProviderProps> = ({
     children,
 }) => {
@@ -41,16 +40,15 @@ export const UsuarioProvider: React.FC<UsuarioProviderProps> = ({
                 },
             })
             .then((response) => {
-                console.log(response.data);
                 setUsuario(response.data);
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
-    }, []);
+    }, [window.location.pathname]);
 
     return (
-        <UsuarioContext.Provider value={{usuario, setUsuario}}>
+        <UsuarioContext.Provider value={{ usuario, setUsuario }}>
             {children}
         </UsuarioContext.Provider>
     );

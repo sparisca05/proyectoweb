@@ -1,6 +1,6 @@
 import { Link, NavigateFunction } from "react-router-dom";
 import "../App.css";
-import { useUsuario, Usuario } from "../contexts/UsuarioContext";
+import { Usuario } from "../contexts/UsuarioContext";
 
 export const getToken: () => string | null = () => {
     return localStorage.getItem("authToken");

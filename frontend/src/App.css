@@ -32,26 +32,37 @@ button {
     font-weight: 500;
     font-size: larger;
 }
+.nav-links .active {
+    background-color: rgba(144, 26, 212, 0.849);
+    color: #f0f0f0;
+}
 .nav-link {
     padding: 12px 24px;
     font-size: 1rem;
     border-radius: 8px;
     text-decoration: none;
     transition: 0.3s;
-    background-color: rgb(144, 26, 212);
+    border-radius: 50px;
     color: white;
-    border-color: #f0f0f0;
-    border: 2px solid white;
     transition: 0.5s;
 }
 .nav-link:hover{
-    opacity: 0.7;
+    background-color: rgba(144, 26, 212, 0.849);
     color: #f0f0f0;
 }
 .navbar-profile {
     display: flex;
     align-items: center;
     column-gap: 10px;
+    color: white;
+    text-decoration: none;
+    border: 1px solid white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+.navbar-profile:hover {
+    background-color: rgba(144, 26, 212, 0.849);
 }
 .back-btn {
     display: flex;

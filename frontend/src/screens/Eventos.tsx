@@ -19,7 +19,7 @@ export interface Evento {
     fecha: string;
     invitados: any[];
     participantes: any[];
-    empresaPatrocinadora: any;
+    empresaPatrocinadora: number;
 }
 
 const EventoList: React.FC = () => {
@@ -77,7 +77,9 @@ const EventoList: React.FC = () => {
     }
 
     const noEventosMessage = eventos.length === 0 && (
-        <div>No hay eventos disponibles.</div>
+        <div style={{ textAlign: "center", color: "white" }}>
+            No hay eventos disponibles.
+        </div>
     );
 
     return (

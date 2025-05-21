@@ -30,6 +30,7 @@ function EventoView() {
             .get(`${API_URL}/api/v1/eventos/${id}`)
             .then((response) => {
                 setEvento(response.data);
+                console.log(response.data);
                 setLoading(false);
             })
             .catch((error) => {

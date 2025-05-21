@@ -45,6 +45,7 @@ function Register() {
                 // Aquí podrías almacenar un token JWT o redirigir a otra página
                 localStorage.setItem("authToken", token);
                 navigate("/eventos");
+                window.location.reload();
             } else {
                 // Si hay algún error, manejar el error
                 const errorData = await response.json();

@@ -14,7 +14,6 @@ function NuevoHito() {
     const [eventos, setEventos] = useState<Evento[]>([]);
     const [eventoRelevante, setEventoRelevante] = useState<any>();
     const [ganadores, setGanadores] = useState<Usuario[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [participants, setParticipants] = useState<Usuario[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -54,7 +53,6 @@ function NuevoHito() {
             .then((data) => {
                 console.log(data);
                 setEventos(data);
-                setLoading(false);
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -114,7 +112,7 @@ function NuevoHito() {
                 <div className={"auth-container"}>
                     <IoMdClose
                         className="back-btn"
-                        onClick={() => navigate("/eventos")}
+                        onClick={() => navigate("/hitos")}
                     />
                     <h2>Nuevo hito</h2>
                     <form onSubmit={handleSubmit}>
