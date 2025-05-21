@@ -12,7 +12,7 @@ function NuevoHito() {
     const [nombre, setNombre] = useState<string>("");
     const [categoria, setCategoria] = useState<string>("");
     const [eventos, setEventos] = useState<Evento[]>([]);
-    const [eventoRelevante, setEventoRelevante] = useState<any>();
+    const [eventoRelevante, setEventoRelevante] = useState<Evento>();
     const [ganadores, setGanadores] = useState<Usuario[]>([]);
     const [participants, setParticipants] = useState<Usuario[]>([]);
     const [searchTerm, setSearchTerm] = useState("");

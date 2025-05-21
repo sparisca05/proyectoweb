@@ -21,7 +21,7 @@ function NuevoEvento() {
     const [contactoOrganizador, setContactoOrganizador] = useState<string>("");
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [empresaPatrocinadora, setEmpresaPatrocinadora] = useState<Empresa>();
-
+    
     const navigate = useNavigate();
 
     useEffect(() => {

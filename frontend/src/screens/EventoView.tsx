@@ -10,6 +10,7 @@ import { API_URL } from "../main.tsx";
 import { Usuario } from "../contexts/UsuarioContext.tsx";
 import PasskeyInput from "../components/PasskeyInput.tsx";
 import { Evento } from "./Eventos.tsx";
+import { Hito} from "./Hitos.tsx";
 import AddInvitadoInput from "../components/AddInvitadoInput.tsx";
 import "../App.css";
 
@@ -22,6 +23,7 @@ function EventoView() {
     const [displayPasskey, setDisplayPasskey] = useState<boolean>(false);
     const [displayInvitado, setDisplayInvitado] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [hitos, setHitos] = useState<Hito[]>([]);
 
     const navigate = useNavigate();
 
@@ -51,6 +53,10 @@ function EventoView() {
                 console.error("Error: ", error);
             });
     }, [id, token]);
+
+    const ganadoresEvento = hitos
+    .filter(hito => hito.eventoRelevante?.nombre === evento?.nombre)
+    .flatMap(hito => hito.ganadores); 
 
     const handleRemoveInvitado = async (invitadoId: number) => {
         await axios
@@ -248,6 +254,13 @@ function EventoView() {
                                             <p>
                                                 Patrocina:{" "}
                                                 {evento.empresaPatrocinadora}
+                                            </p>
+                                            <p>
+                                                Ganador:{" "}
+                                                {ganadoresEvento.length > 0
+                                                     ? ganadoresEvento.join(", ")
+                                                             : "Sin ganadores"
+                                                }
                                             </p>
                                         </>
                                     )}

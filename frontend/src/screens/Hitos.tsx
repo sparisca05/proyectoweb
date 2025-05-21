@@ -6,7 +6,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useUsuario } from "../contexts/UsuarioContext.tsx";
 
-interface Hito {
+export interface Hito {
     id: number;
     nombre: string;
     categoria: string;
