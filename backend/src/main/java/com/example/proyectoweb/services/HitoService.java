@@ -14,22 +14,18 @@ public class HitoService  {
     @Autowired
     private final IHitoRepository hitoRepository;
 
-    
     public List<Hito> getAllHitos() {
         return hitoRepository.findAll();
     }
 
-  
     public Hito getHitoById(Long id) {
         Optional<Hito> hito = hitoRepository.findById(id);
         return hito.orElse(null);
     }
 
-   
     public Hito createHito(Hito hito) {
         return hitoRepository.save(hito);
     }
-
 
     public Hito updateHito(Long id, Hito updatedHito) {
         Optional<Hito> existingHito = hitoRepository.findById(id);

@@ -6,6 +6,9 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Collection;
 
 @Data
@@ -14,6 +17,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @Entity
 @Table(name = "usuario")
+@JsonIgnoreProperties({"accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled"})
 public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +39,7 @@ public class Usuario implements UserDetails {
     Role rol;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return rol.getAuthorities();
     }

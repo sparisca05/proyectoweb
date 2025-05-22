@@ -19,7 +19,10 @@ export interface Evento {
     fecha: string;
     invitados: any[];
     participantes: any[];
-    empresaPatrocinadora: number;
+    empresaPatrocinadora: {
+        id: number;
+        nombre: string;
+    };
 }
 
 const EventoList: React.FC = () => {

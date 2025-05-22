@@ -4,6 +4,7 @@ import { API_URL } from "../main.tsx";
 import { getToken, isLoggedIn } from "../screens/Home.tsx";
 
 export interface Usuario {
+    id: number;
     nombre: string;
     apellido: string;
     username: string;

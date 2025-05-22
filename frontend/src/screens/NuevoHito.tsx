@@ -14,16 +14,26 @@ function NuevoHito() {
     const [eventos, setEventos] = useState<Evento[]>([]);
     const [eventoRelevante, setEventoRelevante] = useState<Evento>();
     const [ganadores, setGanadores] = useState<Usuario[]>([]);
-    const [participants, setParticipants] = useState<Usuario[]>([]);
+    const [participants, setParticipants] = useState<Usuario[]>([
+        {
+            id: 0,
+            nombre: "",
+            apellido: "",
+            username: "",
+            correo: "",
+            rol: "",
+        },
+    ]);
     const [searchTerm, setSearchTerm] = useState("");
 
     const navigate = useNavigate();
 
     const getParticipants = () => {
         eventoRelevante?.id &&
-            getEventParticipants(eventoRelevante?.id).then((participants) =>
-                setParticipants(participants)
-            );
+            getEventParticipants(eventoRelevante?.id).then((participants) => {
+                setParticipants(participants);
+                console.log(participants);
+            });
     };
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +61,6 @@ function NuevoHito() {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 setEventos(data);
             })
             .catch((error) => {
@@ -78,8 +87,12 @@ function NuevoHito() {
         const requestBody = {
             nombre: nombre,
             categoria: categoria,
-            eventoRelevante: eventoRelevante,
-            ganadores: ganadores,
+            eventoRelevante: {
+                id: eventoRelevante?.id,
+            },
+            ganadores: ganadores.map((usuario) => ({
+                id: usuario.id,
+            })),
         };
 
         try {

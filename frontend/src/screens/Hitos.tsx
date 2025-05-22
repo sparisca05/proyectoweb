@@ -5,17 +5,27 @@ import Navbar from "../components/Navbar.tsx";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useUsuario } from "../contexts/UsuarioContext.tsx";
+import { getToken } from "./Home.tsx";
 
 export interface Hito {
     id: number;
     nombre: string;
     categoria: string;
-    eventoRelevante: { nombre: string };
-    ganadores: string[];
+    eventoRelevante: {
+        id: number;
+        nombre: string;
+    };
+    ganadores: {
+        id: number;
+        username: string;
+        nombre: string;
+        apellido: string;
+    }[];
 }
 
 const Hitos: React.FC = () => {
     const [hitos, setHitos] = useState<Hito[]>([]);
+    const [selectedHito, setSelectedHito] = useState<Hito | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState("");
     const usuario = useUsuario();
@@ -28,6 +38,7 @@ const Hitos: React.FC = () => {
             .then((response) => {
                 if (response.data && response.data.length > 0) {
                     setHitos(response.data);
+                    console.log("Hitos:", response.data);
                 } else {
                     setError("No se han asignado hitos aún.");
                 }
@@ -75,11 +86,19 @@ const Hitos: React.FC = () => {
                             <tr key={hito.id}>
                                 <td>{hito.nombre}</td>
                                 <td>{hito.categoria}</td>
-                                <td>{hito.eventoRelevante?.nombre || "N/A"}</td>
+                                <td>{hito.eventoRelevante.nombre}</td>
                                 <td>
-                                    {hito.ganadores.length > 0
-                                        ? hito.ganadores.join(", ")
-                                        : "Sin ganadores"}
+                                    {hito.ganadores.length > 0 ? (
+                                        hito.ganadores.map((ganador) => (
+                                            <div key={ganador.id}>
+                                                {ganador.username} -{" "}
+                                                {ganador.nombre}{" "}
+                                                {ganador.apellido}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div>No hay ganadores</div>
+                                    )}
                                 </td>
                             </tr>
                         ))}

@@ -62,20 +62,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 
                         .anyRequest().authenticated())
                 .cors(withDefaults())
-                .sessionManagement(sessionManager -> sessionManager
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Deshabilitar manejo de sesiones
-                .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().write("{\"error\":\"Necesitas iniciar sesión para acceder a este recurso\"}");
-                        })
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                            response.getWriter().write("{\"error\":\"No tienes permisos para acceder a este recurso\"}");
-                        })
-                )
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

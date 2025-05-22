@@ -43,6 +43,7 @@ public class UsuarioService implements UserDetailsService {
         Usuario user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         UsuarioInfo userInfo = new UsuarioInfo();
+        userInfo.setId(user.getId());
         userInfo.setNombre(user.getNombre());
         userInfo.setApellido(user.getApellido());
         userInfo.setUsername(user.getUsername());
