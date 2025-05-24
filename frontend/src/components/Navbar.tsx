@@ -67,6 +67,7 @@ const Navbar = () => {
                                 username={
                                     usuario?.usuario?.nombre || "Iniciar sesión"
                                 }
+                                link={usuario?.usuario ? "/perfil" : "/login"}
                             />
                         ) : (
                             <LogoutButton />
@@ -74,7 +75,10 @@ const Navbar = () => {
                     ) : (
                         <div style={{ display: "flex", columnGap: "10px" }}>
                             <LoginButton submit={false} />
-                            <Link to={"/register"} className="btn btn-primary">
+                            <Link
+                                to={"/register"}
+                                className="btn submit-button"
+                            >
                                 Registrarse
                             </Link>
                         </div>

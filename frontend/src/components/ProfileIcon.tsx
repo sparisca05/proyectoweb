@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 
-const ProfileIcon = ({ username }: { username: string }) => {
+const ProfileIcon = ({
+    username,
+    link,
+}: {
+    username: string;
+    link: string;
+}) => {
     return (
-        <Link to={"/perfil"} className={"navbar-profile"}>
+        <Link to={link} className={"navbar-profile"}>
             <p style={{ margin: 0 }}>{username}</p>
             <svg
                 xmlns="http://www.w3.org/2000/svg"

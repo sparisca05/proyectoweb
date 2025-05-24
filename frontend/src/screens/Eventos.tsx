@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoIosAdd } from "react-icons/io";
 
 import { API_URL } from "../main.tsx";
 import Navbar from "../components/Navbar.tsx";
@@ -118,7 +118,7 @@ const EventoList: React.FC = () => {
                     ))}
                     {usuario && usuario.usuario?.rol === "ADMIN" && (
                         <div className="add evento">
-                            <IoIosAddCircleOutline
+                            <IoIosAdd
                                 className="add-icon"
                                 onClick={() =>
                                     navigate("/eventos/nuevo-evento")

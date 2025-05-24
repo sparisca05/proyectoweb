@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../main.tsx";
 import Navbar from "../components/Navbar.tsx";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoIosAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useUsuario } from "../contexts/UsuarioContext.tsx";
-import { getToken } from "./Home.tsx";
 
 export interface Hito {
     id: number;
@@ -91,7 +90,6 @@ const Hitos: React.FC = () => {
                                     {hito.ganadores.length > 0 ? (
                                         hito.ganadores.map((ganador) => (
                                             <div key={ganador.id}>
-                                                {ganador.username} -{" "}
                                                 {ganador.nombre}{" "}
                                                 {ganador.apellido}
                                             </div>
@@ -106,7 +104,7 @@ const Hitos: React.FC = () => {
                 </table>
                 {usuario && usuario.usuario?.rol === "ADMIN" && (
                     <div className="add">
-                        <IoIosAddCircleOutline
+                        <IoIosAdd
                             className="add-icon"
                             onClick={() => navigate("/hitos/nuevo-hito")}
                         />

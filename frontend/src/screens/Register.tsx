@@ -155,7 +155,7 @@ function Register() {
                                 required
                             />
                         </div>
-                        <button type="submit" className={"btn btn-primary"}>
+                        <button type="submit" className={"btn submit-button"}>
                             Registrarse
                         </button>
                         <div style={{ margin: "10px 0" }}>

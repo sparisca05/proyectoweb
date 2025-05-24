@@ -49,7 +49,7 @@ function Login() {
                     className={"auth-container"}
                     style={{ alignItems: "unset" }}
                 >
-                    <h2>Iniciar Sesión</h2>
+                    <h2 style={{ padding: "10px 0" }}>Iniciar Sesión</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label className="form-label">Usuario:</label>
