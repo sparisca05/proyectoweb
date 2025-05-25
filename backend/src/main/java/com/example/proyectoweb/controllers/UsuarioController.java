@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,6 +63,13 @@ public class UsuarioController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName(); // Obtener el username del
                                                                                             // usuario autenticado
         Long id = usuarioService.getUserByUsername(username).getId();
+        return usuarioService.updateUserById(request, id);
+    }
+
+    // Editar información de usuario
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Usuario updateUserInfo(@PathVariable Long id, @RequestBody Usuario request) {
         return usuarioService.updateUserById(request, id);
     }
 

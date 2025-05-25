@@ -113,7 +113,7 @@ function NuevaEmpresa() {
                         </div>
                         <button
                             type="submit"
-                            className="btn btn-primary"
+                            className="btn submit-button"
                             onClick={handleSubmit}
                         >
                             Crear

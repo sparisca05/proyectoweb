@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import Navbar from "../components/Navbar.tsx";
 import { getToken } from "./Home.tsx";
@@ -19,26 +20,27 @@ function EventoView() {
     const { id } = useParams<{ id: string }>();
     const [evento, setEvento] = useState<Evento>(); // Estado para almacenar la lista de eventos
     const [usuario, setUsuario] = useState<Usuario | null>(null);
+    const [userHasEvent, setUserHasEvent] = useState<boolean>(false); // Estado para verificar si el usuario tiene el evento
     const [loading, setLoading] = useState<boolean>(true); // Estado para mostrar una carga
     const [displayPasskey, setDisplayPasskey] = useState<boolean>(false);
     const [displayInvitado, setDisplayInvitado] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [showClave, setShowClave] = useState<boolean>(false); // Nuevo estado para mostrar/ocultar la clave
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios
-            .get(`${API_URL}/api/v1/eventos/${id}`)
-            .then((response) => {
-                setEvento(response.data);
-                console.log(response.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                setLoading(false);
-            });
+        let userParticipated = false;
+        if (evento) {
+            userParticipated = evento.participantes.some(
+                (participante: { id: number | undefined }) =>
+                    participante.id === usuario?.id
+            );
+            setUserHasEvent(userParticipated);
+        }
+    }, [evento && usuario]);
 
+    useEffect(() => {
         axios
             .get(`${API_URL}/api/v1/usuario/perfil`, {
                 headers: {
@@ -51,7 +53,38 @@ function EventoView() {
             .catch((error) => {
                 console.error("Error: ", error);
             });
+        axios
+            .get(`${API_URL}/api/v1/eventos/${id}`)
+            .then((response) => {
+                setEvento(response.data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                setLoading(false);
+            });
     }, [id, token]);
+
+    const handleRemoveParticipacion = async () => {
+        await axios
+            .delete(`${API_URL}/api/v1/eventos/${id}/eliminar-participante`, {
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+                params: {
+                    username: usuario?.username,
+                },
+            })
+            .then((response) => response.data)
+            .then((message) => {
+                alert(message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert("Error al eliminar la participación del evento.");
+                console.error("Error:", error);
+            });
+    };
 
     const handleRemoveInvitado = async (invitadoId: number) => {
         await axios
@@ -137,7 +170,7 @@ function EventoView() {
                             <>
                                 {!isEditing ? (
                                     <button
-                                        className="btn btn-outline-primary"
+                                        className="btn submit-button outline"
                                         onClick={handleEditClick}
                                     >
                                         Editar
@@ -232,21 +265,63 @@ function EventoView() {
                                                 {evento.tipo}
                                             </h5>
                                             {usuario?.rol === "ADMIN" && (
-                                                <h4>
+                                                <p className="list-item">
                                                     Clave de acceso:{" "}
-                                                    {evento.clave}
-                                                </h4>
+                                                    <strong>
+                                                        {showClave
+                                                            ? evento.clave
+                                                            : "●●●●●●●●"}
+                                                        <button
+                                                            onClick={() =>
+                                                                setShowClave(
+                                                                    !showClave
+                                                                )
+                                                            }
+                                                            style={{
+                                                                background:
+                                                                    "none",
+                                                                border: "none",
+                                                                cursor: "pointer",
+                                                                padding: 0,
+                                                                marginLeft:
+                                                                    "0.5rem",
+                                                            }}
+                                                        >
+                                                            {showClave ? (
+                                                                <FaEyeSlash color="white" />
+                                                            ) : (
+                                                                <FaEye color="white" />
+                                                            )}
+                                                        </button>
+                                                    </strong>
+                                                </p>
                                             )}
-                                            <p>Fecha: {evento.fecha}</p>
-                                            <p>
+                                            <p className="list-item">
+                                                Fecha:{" "}
+                                                <strong>{evento.fecha}</strong>
+                                            </p>
+                                            <p className="list-item">
                                                 Organiza:{" "}
-                                                {evento.nombreOrganizador}
+                                                <strong>
+                                                    {evento.nombreOrganizador}
+                                                </strong>
                                             </p>
-                                            <p>
+                                            <p className="list-item">
                                                 Contacto:{" "}
-                                                {evento.contactoOrganizador}
+                                                <strong>
+                                                    {evento.contactoOrganizador}
+                                                </strong>
                                             </p>
-                                            <p>Patrocina: {null}</p>
+                                            <p className="list-item">
+                                                Patrocina:{" "}
+                                                <strong>
+                                                    {
+                                                        evento
+                                                            .empresaPatrocinadora
+                                                            .nombre
+                                                    }
+                                                </strong>
+                                            </p>
                                         </>
                                     )}
                                     <div>
@@ -257,13 +332,25 @@ function EventoView() {
                                                 : "Participantes"}
                                         </h4>
                                     </div>
-                                    <button
-                                        className={"btn btn-primary"}
-                                        onClick={() => setDisplayPasskey(true)}
-                                    >
-                                        Participar
-                                    </button>
-
+                                    {userHasEvent ? (
+                                        <button
+                                            className={"btn btn-danger"}
+                                            onClick={() =>
+                                                handleRemoveParticipacion()
+                                            }
+                                        >
+                                            Dejar de participar
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className={"btn submit-button"}
+                                            onClick={() =>
+                                                setDisplayPasskey(true)
+                                            }
+                                        >
+                                            Participar
+                                        </button>
+                                    )}
                                     <div>
                                         <h4>Invitados externos</h4>
                                         <ul

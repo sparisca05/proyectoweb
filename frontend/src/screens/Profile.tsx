@@ -1,9 +1,10 @@
 import Navbar from "../components/Navbar.tsx";
 import UserInfo from "../components/UserInfo.tsx";
 import MisEventos from "../components/MisEventos.tsx";
+import { getToken } from "./Home.tsx";
 
 function Profile() {
-    const token = localStorage.getItem("authToken");
+    const token = getToken();
     if (!token) {
         window.location.href = "/login";
     }

@@ -5,10 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../main.tsx";
 import LoginButton from "../components/LoginButton.tsx";
 import Navbar from "../components/Navbar.tsx";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const navigate = useNavigate();
@@ -52,7 +54,7 @@ function Login() {
                     <h2 style={{ padding: "10px 0" }}>Iniciar Sesión</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
-                            <label className="form-label">Usuario:</label>
+                            <label className="form-label">Usuario</label>
                             <input
                                 className="form-control"
                                 type="username"
@@ -60,16 +62,38 @@ function Login() {
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
                             />
-                        </div>
+                        </div>{" "}
                         <div className="mb-3">
-                            <label className={"form-label"}>Contraseña:</label>
-                            <input
-                                className={"form-control"}
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
+                            <label className={"form-label"}>Contraseña</label>
+                            <div className="input-group">
+                                <input
+                                    className={"form-control"}
+                                    type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    required
+                                />
+                                <button
+                                    id="show-password-btn"
+                                    type="button"
+                                    className="btn btn-outline-secondary"
+                                    onClick={() =>
+                                        setShowPassword(!showPassword)
+                                    }
+                                    style={{
+                                        position: "absolute",
+                                        zIndex: 10,
+                                        padding: "0px 10px",
+                                        right: "0px",
+                                        background: "none",
+                                        border: "none",
+                                    }}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </button>
+                            </div>
                         </div>
                         <LoginButton submit={true} />
                         <div style={{ margin: "10px 0" }}>

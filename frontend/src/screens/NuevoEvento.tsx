@@ -21,7 +21,7 @@ function NuevoEvento() {
     const [contactoOrganizador, setContactoOrganizador] = useState<string>("");
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [empresaPatrocinadora, setEmpresaPatrocinadora] = useState<Empresa>();
-    
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -228,10 +228,10 @@ function NuevoEvento() {
                                 ))}
                             </select>
                             <a className="" href="/nueva-empresa">
-                                + Añadir una nueva
+                                + Crear nueva empresa
                             </a>
                         </div>
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn submit-button">
                             Crear evento
                         </button>
                     </form>

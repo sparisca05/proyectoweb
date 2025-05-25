@@ -30,8 +30,8 @@ function Home() {
 
             <section className="cta-buttons">
                 {isLoggedIn() ? (
-                    <Link to="/eventos" className="btn btn-primary">
-                        Explorar eventos
+                    <Link to="/eventos" className="shadow__btn">
+                        Explorar Eventos
                     </Link>
                 ) : (
                     <>

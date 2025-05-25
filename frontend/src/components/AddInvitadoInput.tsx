@@ -94,7 +94,7 @@ function PasskeyInput({
                         onChange={(e) => setDescription(e.target.value)}
                         required
                     />
-                    <button type="submit" className="btn btn-secondary">
+                    <button type="submit" className="btn submit-button">
                         Guardar
                     </button>
                 </form>

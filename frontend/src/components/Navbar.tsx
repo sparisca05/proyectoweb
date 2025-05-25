@@ -16,7 +16,7 @@ const Navbar = () => {
             <Link to="/" style={{ textDecoration: "none" }}>
                 <img
                     src={logo_url}
-                    style={{ height: "100px", cursor: "pointer" }}
+                    style={{ height: "70px", cursor: "pointer" }}
                 />
             </Link>
         );
@@ -31,7 +31,7 @@ const Navbar = () => {
                         <Link
                             to={"/eventos"}
                             className={`nav-link ${
-                                window.location.pathname === "/eventos"
+                                window.location.pathname.includes("/eventos")
                                     ? "active"
                                     : ""
                             }`}
@@ -41,7 +41,7 @@ const Navbar = () => {
                         <Link
                             to={"/hitos"}
                             className={`nav-link ${
-                                window.location.pathname === "/hitos"
+                                window.location.pathname.includes("/hitos")
                                     ? "active"
                                     : ""
                             }`}
@@ -52,7 +52,9 @@ const Navbar = () => {
                             <Link
                                 to={"/PanelAdmin"}
                                 className={`nav-link ${
-                                    window.location.pathname === "/PanelAdmin"
+                                    window.location.pathname.includes(
+                                        "/PanelAdmin"
+                                    )
                                         ? "active"
                                         : ""
                                 }`}

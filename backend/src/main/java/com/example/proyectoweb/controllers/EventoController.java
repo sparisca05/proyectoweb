@@ -1,6 +1,7 @@
 package com.example.proyectoweb.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.proyectoweb.dto.EventoDTO;
+import com.example.proyectoweb.dto.HitoDTO;
 import com.example.proyectoweb.entity.Evento;
+import com.example.proyectoweb.entity.Hito;
 import com.example.proyectoweb.services.EventoService;
+import com.example.proyectoweb.services.InvitadoExternoService;
+import com.example.proyectoweb.services.OrganizacionExternaService;
+import com.example.proyectoweb.services.UsuarioService;
 
 @RestController
 @RequestMapping("api/v1/eventos")
@@ -25,18 +32,40 @@ public class EventoController {
 
     @Autowired
     private EventoService eventoService;
+    @Autowired
+    private UsuarioService usuarioService;
+    @Autowired
+    private InvitadoExternoService invitadoService;
+    @Autowired
+    private OrganizacionExternaService organizacionService;
 
     // Ver todos los eventos
     @GetMapping
-    public ResponseEntity<List<Evento>> getEventos() {
-        List<Evento> eventos = eventoService.getAllEventos();
-        return ResponseEntity.ok(eventos);
+    public ResponseEntity<List<EventoDTO>> getEventos() {
+        try {
+            List<Evento> eventos = eventoService.getAllEventos();
+            if (eventos.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            // Convertir a DTOs
+            List<EventoDTO> eventosDto = eventos.stream()
+                .map(evento -> EventoControllerHelper.entityToDto(evento))
+                .collect(Collectors.toList());
+            return ResponseEntity.ok(eventosDto);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     // Ver un evento por su id
     @GetMapping("/{id}")
-    public Evento getEventoById(@PathVariable Long id) {
-        return eventoService.getEventoById(id);
+    public EventoDTO getEventoById(@PathVariable Long id) {
+        Evento evento = eventoService.getEventoById(id);
+        if (evento == null) {
+            return null;
+        }
+        // Convertir a DTO
+        return EventoControllerHelper.entityToDtoWithRelations(evento, usuarioService, invitadoService, organizacionService);
     }
     
     // Crear un nuevo evento

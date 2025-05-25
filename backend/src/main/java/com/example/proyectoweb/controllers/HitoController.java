@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,6 +71,7 @@ public class HitoController {
 
     // Inscribir un nuevo hito
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> postHito(@RequestBody Hito hito) {
         try {
             // Si hay un evento especificado por ID, configurarlo
@@ -89,6 +91,7 @@ public class HitoController {
 
     // Actualizar un hito existente
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateHito(@PathVariable Long id, @RequestBody Hito hitoRequest) {
         try {
             // Verificar si el hito existe
