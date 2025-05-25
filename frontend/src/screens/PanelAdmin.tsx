@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar.tsx";
 import { useUsuario } from "../contexts/UsuarioContext.tsx";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "./Home.tsx";
-import { FaSave, FaTimes, FaEdit } from "react-icons/fa";
+import { FaSave, FaTimes, FaEdit, FaTrash } from "react-icons/fa";
 import "../App.css";
 
 interface Usuario {
@@ -61,6 +61,31 @@ const AdminPanel: React.FC = () => {
             </div>
         );
     }
+
+    const handleDeleteClick = async (userId: number) => {
+        if (
+            window.confirm("¿Estás seguro de que deseas eliminar este usuario?")
+        ) {
+            try {
+                const token = getToken();
+                await axios.delete(`${API_URL}/api/v1/usuario/${userId}`, {
+                    headers: {
+                        Authorization: "Bearer " + token,
+                    },
+                });
+                // Filtrar el usuario eliminado de la lista
+                setUsuarios(usuarios.filter((user) => user.id !== userId));
+                setSuccessMessage("Usuario eliminado con éxito");
+                // Quitar el mensaje después de 3 segundos
+                setTimeout(() => setSuccessMessage(""), 3000);
+            } catch (error) {
+                console.error("Error al eliminar el usuario:", error);
+                setError("No se pudo eliminar el usuario");
+                setTimeout(() => setError(""), 3000);
+            }
+        }
+    };
+
     const handleEditClick = (user: Usuario) => {
         setEditingUserId(user.id);
         setEditedUser({ ...user });
@@ -254,16 +279,28 @@ const AdminPanel: React.FC = () => {
                                             </button>
                                         </div>
                                     ) : (
-                                        <button
-                                            className="btn btn-sm submit-button"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleEditClick(user);
-                                            }}
-                                            title="Editar usuario"
-                                        >
-                                            <FaEdit />
-                                        </button>
+                                        <div className="btn-group">
+                                            <button
+                                                className="btn btn-sm submit-button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditClick(user);
+                                                }}
+                                                title="Editar usuario"
+                                            >
+                                                <FaEdit />
+                                            </button>
+                                            <button
+                                                className="btn btn-sm btn-danger"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDeleteClick(user.id);
+                                                }}
+                                                title="Eliminar usuario"
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        </div>
                                     )}
                                 </td>
                             </tr>

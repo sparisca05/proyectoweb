@@ -60,10 +60,10 @@ function Home() {
                     </Link>
                 ) : (
                     <>
-                        <Link to="/login" className="btn btn-outline-primary">
+                        <Link to="/login" className="btn submit-button outline">
                             Iniciar sesión
                         </Link>
-                        <Link to="/register" className="btn btn-primary">
+                        <Link to="/register" className="btn submit-button">
                             Registrarse
                         </Link>
                     </>

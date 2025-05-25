@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosAdd } from "react-icons/io";
+import { FaTrash } from "react-icons/fa";
 
 import { API_URL } from "../main.tsx";
 import Navbar from "../components/Navbar.tsx";
 import { getToken } from "./Home.tsx";
-import { FaTrash } from "react-icons/fa";
 import { useUsuario } from "../contexts/UsuarioContext.tsx";
 
 export interface Evento {

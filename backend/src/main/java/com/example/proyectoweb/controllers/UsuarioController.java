@@ -73,11 +73,18 @@ public class UsuarioController {
         return usuarioService.updateUserById(request, id);
     }
 
-    // Eliminar perfil
+    // Eliminar usuario autenticado
     @DeleteMapping("/perfil")
     public String deleteUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName(); // Obtener el username del
                                                                                             // usuario autenticado
         return usuarioService.deleteUser(usuarioService.getUserByUsername(username).getId());
+    }
+    
+    // Eliminar usuario por id
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteUserById(@PathVariable Long id) {
+        return usuarioService.deleteUser(id);
     }
 }

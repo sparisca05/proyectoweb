@@ -13,6 +13,7 @@ import PasskeyInput from "../components/PasskeyInput.tsx";
 import { Evento } from "./Eventos.tsx";
 import AddInvitadoInput from "../components/AddInvitadoInput.tsx";
 import "../App.css";
+import Confirmation from "../components/Confirmation.tsx";
 
 function EventoView() {
     const token = getToken();
@@ -26,6 +27,7 @@ function EventoView() {
     const [displayInvitado, setDisplayInvitado] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [showClave, setShowClave] = useState<boolean>(false); // Nuevo estado para mostrar/ocultar la clave
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     const navigate = useNavigate();
 
@@ -65,7 +67,21 @@ function EventoView() {
             });
     }, [id, token]);
 
-    const handleRemoveParticipacion = async () => {
+    const handleRemoveParticipationClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setShowConfirmation(true);
+    };
+
+    const handleConfirm = () => {
+        handleRemoveParticipation();
+        setShowConfirmation(false);
+    };
+
+    const handleCancel = () => {
+        setShowConfirmation(false);
+    };
+
+    const handleRemoveParticipation = async () => {
         await axios
             .delete(`${API_URL}/api/v1/eventos/${id}/eliminar-participante`, {
                 headers: {
@@ -143,6 +159,15 @@ function EventoView() {
                     setDisplayInvitado={setDisplayInvitado}
                 />
             )}
+            {showConfirmation && (
+                <Confirmation
+                    title="Dejar de participar"
+                    message="¿Estás seguro de que deseas dejar de participar en este evento?"
+                    confirmText="Dejar de participar"
+                    onConfirm={handleConfirm}
+                    onCancel={handleCancel}
+                />
+            )}
             <Navbar />
             <div className={"welcome"}>
                 <div className={"auth-container"}>
@@ -197,6 +222,7 @@ function EventoView() {
                                     {isEditing ? (
                                         <>
                                             <input
+                                                className="form-control"
                                                 type="text"
                                                 value={evento.nombre}
                                                 onChange={(e) =>
@@ -207,6 +233,7 @@ function EventoView() {
                                                 }
                                             />
                                             <input
+                                                className="form-control"
                                                 type="text"
                                                 value={evento.tipo}
                                                 onChange={(e) =>
@@ -217,6 +244,7 @@ function EventoView() {
                                                 }
                                             />
                                             <input
+                                                className="form-control"
                                                 type="date"
                                                 value={evento.fecha}
                                                 onChange={(e) =>
@@ -227,6 +255,7 @@ function EventoView() {
                                                 }
                                             />
                                             <input
+                                                className="form-control"
                                                 type="text"
                                                 value={evento.nombreOrganizador}
                                                 onChange={(e) =>
@@ -238,6 +267,7 @@ function EventoView() {
                                                 }
                                             />
                                             <input
+                                                className="form-control"
                                                 type="text"
                                                 value={
                                                     evento.contactoOrganizador
@@ -335,8 +365,8 @@ function EventoView() {
                                     {userHasEvent ? (
                                         <button
                                             className={"btn btn-danger"}
-                                            onClick={() =>
-                                                handleRemoveParticipacion()
+                                            onClick={
+                                                handleRemoveParticipationClick
                                             }
                                         >
                                             Dejar de participar
