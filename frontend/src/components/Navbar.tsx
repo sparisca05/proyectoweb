@@ -62,6 +62,18 @@ const Navbar = () => {
                                 Panel de Usuarios
                             </Link>
                         )}
+                        <Link
+                            to={"/historico-eventos"}
+                            className={`nav-link ${
+                                window.location.pathname.includes(
+                                    "/historico-eventos"
+                                )
+                                    ? "active"
+                                    : ""
+                            }`}
+                        >
+                            Histórico de Eventos
+                        </Link>
                     </div>
                     {isLoggedIn() ? (
                         location.pathname !== "/perfil" ? (
