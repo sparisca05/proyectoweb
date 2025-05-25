@@ -67,7 +67,8 @@ const Navbar = () => {
                         location.pathname !== "/perfil" ? (
                             <ProfileIcon
                                 username={
-                                    usuario?.usuario?.nombre || "Iniciar sesión"
+                                    usuario?.usuario?.username ||
+                                    "Iniciar sesión"
                                 }
                                 link={usuario?.usuario ? "/perfil" : "/login"}
                             />

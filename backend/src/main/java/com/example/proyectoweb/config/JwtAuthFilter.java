@@ -27,19 +27,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
     @Lazy
-    private UserDetailsService userDetailsService;
-
-    @Override
+    private UserDetailsService userDetailsService;    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
-        System.out.println("AuthHeader: " + authHeader);
+        
         // Check if the header starts with "Bearer "
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7); // Extract token
-            username = jwtService.getUsernameFromToken(token); // Extract username from token
+            
+            try {
+                username = jwtService.getUsernameFromToken(token); // Extract username from token
+            } catch (io.jsonwebtoken.ExpiredJwtException e) {
+                // Token expirado - Enviar código de estado 401 con mensaje específico
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\":\"TOKEN_EXPIRED\",\"message\":\"Su sesión ha expirado. Por favor, inicie sesión nuevamente.\"}");
+                return; // Detener la cadena de filtros
+            } catch (Exception e) {
+                // Otro error en el token - No es necesario hacer nada específico aquí
+            }
         }
 
         // If the token is valid and no authentication is set in the context

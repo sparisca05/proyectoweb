@@ -3,7 +3,32 @@ import "../App.css";
 import { Usuario } from "../contexts/UsuarioContext";
 
 export const getToken: () => string | null = () => {
-    return localStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
+    const expiration = localStorage.getItem("tokenExpiration");
+
+    // Si no hay token o fecha de expiración, simplemente devolver el token (o null)
+    if (!token || !expiration) {
+        return token;
+    }
+
+    // Verificar si el token ha expirado
+    const expirationTime = parseInt(expiration, 10);
+    const now = new Date().getTime();
+
+    if (now >= expirationTime) {
+        console.log("Token expirado");
+        // El token ha expirado, limpiarlo
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("tokenExpiration");
+
+        // Redirigir al login con el parámetro expired=true
+        if (window.location.pathname !== "/login") {
+            window.location.href = "/login?expired=true";
+        }
+        return null;
+    }
+
+    return token;
 };
 
 export const isLoggedIn = () => {

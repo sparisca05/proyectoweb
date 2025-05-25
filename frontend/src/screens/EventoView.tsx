@@ -11,12 +11,12 @@ import { API_URL } from "../main.tsx";
 import { Usuario } from "../contexts/UsuarioContext.tsx";
 import PasskeyInput from "../components/PasskeyInput.tsx";
 import { Evento } from "./Eventos.tsx";
-import { Hito } from "./Hitos.tsx";
 import AddInvitadoInput from "../components/AddInvitadoInput.tsx";
 import "../App.css";
 
 function EventoView() {
     const token = getToken();
+    console.log(token);
     const { id } = useParams<{ id: string }>();
     const [evento, setEvento] = useState<Evento>(); // Estado para almacenar la lista de eventos
     const [usuario, setUsuario] = useState<Usuario | null>(null);

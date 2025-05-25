@@ -15,9 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
-
-    private final IUsuarioRepository userRepository;
+public class AuthService {    private final IUsuarioRepository userRepository;
     private final UsuarioService usuarioService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -27,11 +25,18 @@ public class AuthService {
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         String token = jwtService.getToken(user);
+        
+        long expiresIn = jwtService.getExpirationTimeInMillis(token);
+        long currentTimeMillis = System.currentTimeMillis();
+        long expiresInSeconds = (expiresIn - currentTimeMillis) / 1000;
+        
         return AuthResponse.builder()
                 .token(token)
+                .expiresIn(expiresIn)
+                .expiresInSeconds(expiresInSeconds)
                 .build();
     }
-
+    
     public AuthResponse register(RegisterRequest request) {
         Usuario user;
         user = Usuario.builder()
@@ -44,9 +49,16 @@ public class AuthService {
                 .build();
 
         usuarioService.saveUser(user);
+        
+        String token = jwtService.getToken(user);
+        long expiresIn = jwtService.getExpirationTimeInMillis(token);
+        long currentTimeMillis = System.currentTimeMillis();
+        long expiresInSeconds = (expiresIn - currentTimeMillis) / 1000;
 
         return AuthResponse.builder()
-                .token(jwtService.getToken(user))
+                .token(token)
+                .expiresIn(expiresIn)
+                .expiresInSeconds(expiresInSeconds)
                 .build();
     }
 

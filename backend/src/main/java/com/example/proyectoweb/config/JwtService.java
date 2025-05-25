@@ -22,7 +22,7 @@ public class JwtService {
     // Replace this with a secure key in a real application, ideally fetched from environment variables
     Dotenv dotenv = Dotenv.load();
     private static final String SECRET_KEY = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-    private static final long EXPIRATION_TIME = 1000 * 60 * 30; // 30 minutes
+    private static final long EXPIRATION_TIME = 1000 * 60 * 120; // 120 minutes
 
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
@@ -46,11 +46,13 @@ public class JwtService {
 
     public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
-    }
-
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+    }    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    
+    public long getExpirationTimeInMillis(String token) {
+        return getExpirationDateFromToken(token).getTime();
     }
 
     private Claims getAllClaims(String token) {

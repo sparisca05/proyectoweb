@@ -1,11 +1,11 @@
 // noinspection TypeScriptCheckImport
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { API_URL } from "../main.tsx";
 import LoginButton from "../components/LoginButton.tsx";
 import Navbar from "../components/Navbar.tsx";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -15,6 +15,17 @@ function Login() {
 
     const navigate = useNavigate();
 
+    // Verificar si hay un parámetro "expired" en la URL
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const expired = queryParams.get("expired");
+
+        if (expired === "true") {
+            setErrorMessage(
+                "Su sesión ha expirado. Por favor inicie sesión nuevamente."
+            );
+        }
+    }, []);
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
@@ -32,9 +43,28 @@ function Login() {
                 },
                 body: JSON.stringify(requestBody),
             });
-            const { token } = await response.json();
+
+            console.log("Response:", response);
+
+            if (!response.ok) {
+                throw new Error("Error en la autenticación");
+            }
+
+            const data = await response.json();
             setErrorMessage("");
-            localStorage.setItem("authToken", token);
+
+            // Guardar el token y su tiempo de expiración
+            localStorage.setItem("authToken", data.token);
+
+            // Si tenemos información de expiración, la guardamos también
+            if (data.expiresIn) {
+                console.log("Token expirará en:", data.expiresIn);
+                localStorage.setItem(
+                    "tokenExpiration",
+                    data.expiresIn.toString()
+                );
+            }
+
             navigate("/eventos");
             window.location.reload();
         } catch (error) {

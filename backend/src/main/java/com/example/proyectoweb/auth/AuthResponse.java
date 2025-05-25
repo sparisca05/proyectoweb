@@ -12,14 +12,7 @@ import lombok.NoArgsConstructor;
 public class AuthResponse {
 
     String token;
-    /*
-    public AuthResponse(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
-    */
+    Long expiresIn; // Tiempo de expiración en milisegundos desde epoch
+    Long expiresInSeconds; // Tiempo de expiración en segundos desde ahora
 
 }

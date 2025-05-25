@@ -37,17 +37,19 @@ function Register() {
                 body: JSON.stringify(requestBody),
             });
 
-            if (response.ok) {
-                // Si la respuesta es exitosa (por ejemplo, 200), manejar el éxito
+            if (response.status === 409) {
+                // Manejo de error 409 (conflicto)
+                const errorData = await response.json();
+                setErrorMessage(errorData.message || "Usuario ya existe");
+                setSuccessMessage("");
+            } else if (response.ok) {
                 const { token } = await response.json();
                 setSuccessMessage(`Registro exitoso!`);
                 setErrorMessage("");
-                // Aquí podrías almacenar un token JWT o redirigir a otra página
                 localStorage.setItem("authToken", token);
                 navigate("/eventos");
                 window.location.reload();
             } else {
-                // Si hay algún error, manejar el error
                 const errorData = await response.json();
                 setErrorMessage(errorData.message || "Error en el registro");
                 setSuccessMessage("");
