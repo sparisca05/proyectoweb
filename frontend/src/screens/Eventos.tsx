@@ -35,7 +35,7 @@ const EventoList: React.FC = () => {
 
     useEffect(() => {
         axios
-            .get(`${API_URL}/api/v1/eventos`)
+            .get(`${API_URL}/api/v1/eventos/activos`)
             .then((response) => {
                 setEventos(response.data);
                 setLoading(false);

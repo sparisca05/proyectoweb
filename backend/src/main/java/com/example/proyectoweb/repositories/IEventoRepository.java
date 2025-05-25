@@ -13,4 +13,7 @@ public interface IEventoRepository extends JpaRepository<Evento, Long> {
     @Query(value = "SELECT e.* FROM eventos e JOIN evento_usuario eu ON e.id = eu.evento_id WHERE eu.usuario_id = :userId", nativeQuery = true)
     List<Evento> getEventosByUsuario(@Param("userId") Long id);
 
+    @Query(value = "SELECT * FROM eventos WHERE fecha > NOW() ORDER BY fecha ASC", nativeQuery = true)
+    List<Evento> findEventosAnteriores();
+
 }

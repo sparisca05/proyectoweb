@@ -49,7 +49,25 @@ public class EventoController {
             }
             // Convertir a DTOs
             List<EventoDTO> eventosDto = eventos.stream()
-                .map(evento -> EventoControllerHelper.entityToDto(evento))
+                .map(evento -> EventoControllerHelper.entityToDtoWithRelations(evento, usuarioService, invitadoService, organizacionService))
+                .collect(Collectors.toList());
+            return ResponseEntity.ok(eventosDto);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    // Ver eventos activos
+    @GetMapping("/activos")
+    public ResponseEntity<List<EventoDTO>> getEventosActivos() {
+        try {
+            List<Evento> eventos = eventoService.getEventosActivos();
+            if (eventos.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            // Convertir a DTOs
+            List<EventoDTO> eventosDto = eventos.stream()
+                .map(evento -> EventoControllerHelper.entityToDtoWithRelations(evento, usuarioService, invitadoService, organizacionService))
                 .collect(Collectors.toList());
             return ResponseEntity.ok(eventosDto);
         } catch (Exception e) {

@@ -17,7 +17,6 @@ import Confirmation from "../components/Confirmation.tsx";
 
 function EventoView() {
     const token = getToken();
-    console.log(token);
     const { id } = useParams<{ id: string }>();
     const [evento, setEvento] = useState<Evento>(); // Estado para almacenar la lista de eventos
     const [usuario, setUsuario] = useState<Usuario | null>(null);
@@ -28,6 +27,7 @@ function EventoView() {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [showClave, setShowClave] = useState<boolean>(false); // Nuevo estado para mostrar/ocultar la clave
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [estadoEvento, setEstadoEvento] = useState<string>("");
 
     const navigate = useNavigate();
 
@@ -39,6 +39,10 @@ function EventoView() {
                     participante.id === usuario?.id
             );
             setUserHasEvent(userParticipated);
+        }
+        if (evento) {
+            const estado = calcularEstadoEvento(evento);
+            setEstadoEvento(estado);
         }
     }, [evento && usuario]);
 
@@ -66,6 +70,12 @@ function EventoView() {
                 setLoading(false);
             });
     }, [id, token]);
+
+    const calcularEstadoEvento = (evento: Evento) => {
+        const ahora = new Date();
+        const fechaEvento = new Date(evento.fecha);
+        return fechaEvento < ahora ? "Pasado" : "Activo";
+    };
 
     const handleRemoveParticipationClick = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -362,6 +372,21 @@ function EventoView() {
                                                 : "Participantes"}
                                         </h4>
                                     </div>
+                                    {estadoEvento === "Pasado" ? (
+                                        <p className="list-item">
+                                            Estado:{" "}
+                                            <strong style={{ color: "red" }}>
+                                                {estadoEvento}
+                                            </strong>
+                                        </p>
+                                    ) : (
+                                        <p className="list-item">
+                                            Estado:{" "}
+                                            <strong style={{ color: "green" }}>
+                                                {estadoEvento}
+                                            </strong>
+                                        </p>
+                                    )}
                                     {userHasEvent ? (
                                         <button
                                             className={"btn btn-danger"}

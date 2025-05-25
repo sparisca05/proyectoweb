@@ -62,17 +62,16 @@ function NuevoEvento() {
         const [year, month, day] = fecha.split("-");
         const formattedFecha = `${day}-${month}-${year}`;
 
-        const requestBody: any = {
+        const requestBody = {
             nombre: nombre,
             fecha: formattedFecha,
             tipo: tipo,
             nombreOrganizador: nombreOrganizador,
             contactoOrganizador: contactoOrganizador,
+            empresaPatrocinadora: {
+                id: empresaPatrocinadora?.id,
+            },
         };
-
-        if (empresaPatrocinadora && empresaPatrocinadora.id) {
-            requestBody.empresaPatrocinadoraId = empresaPatrocinadora.id;
-        }
         console.log(requestBody);
 
         try {

@@ -35,6 +35,10 @@ public class EventoService {
         return eventoRepository.findAll();
     }
 
+    public List<Evento> getEventosActivos() {
+        return eventoRepository.findEventosAnteriores();
+    }
+
     public Evento updateEventoById(Evento request, Long eventoId) {
         Evento evento = eventoRepository.findById(eventoId).get();
 
