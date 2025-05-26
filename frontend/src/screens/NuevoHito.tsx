@@ -177,7 +177,7 @@ function NuevoHito() {
                             <select
                                 name="empresa-patrocinadora"
                                 id="empresa-patrocinadora"
-                                className="form-select"
+                                className="form-select ganadores-select"
                                 value={eventoRelevante?.id || ""}
                                 onChange={handleEventoChange}
                             >
@@ -210,7 +210,7 @@ function NuevoHito() {
                                         onChange={handleSearchChange}
                                     />
                                     <select
-                                        className="form-select"
+                                        className="form-select ganadores-select"
                                         size={3}
                                         multiple
                                     >
@@ -231,27 +231,36 @@ function NuevoHito() {
                             )}
                         </div>
                         {ganadores.length > 0 && (
+                            console.log(ganadores),
                             <div className="mb-3">
                                 <label
                                     htmlFor="ganadores"
                                     className="form-label"
+                                    style={{ color: "#fff" }} // Letras blancas en el label
                                 >
                                     Ganadores
                                 </label>
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th>Nombre</th>
-                                            <th>Apellido</th>
-                                            <th>Email</th>
+                                            <th style={{ color: "#fff" }}>Nombre</th>
+                                            <th style={{ color: "#fff" }}>Apellido</th>
+                                            <th style={{ color: "#fff" }}>Username</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        
                                         {ganadores.map((usuario) => (
                                             <tr key={usuario.username}>
-                                                <td>{usuario.nombre}</td>
-                                                <td>{usuario.apellido}</td>
-                                                <td>{usuario.correo}</td>
+                                                <td style={{ color: "#fff" }}>
+                                                    {usuario.nombre}
+                                                </td>
+                                                <td style={{ color: "#fff" }}>
+                                                    {usuario.apellido}
+                                                </td>
+                                                <td style={{ color: "#fff" }}>
+                                                    {usuario.username}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
