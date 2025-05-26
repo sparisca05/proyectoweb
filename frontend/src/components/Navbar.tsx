@@ -74,6 +74,16 @@ const Navbar = () => {
                         >
                             Histórico de Eventos
                         </Link>
+                        <Link
+                            to={"/empresas"}
+                            className={`nav-link ${
+                                window.location.pathname.includes("/empresas")
+                                    ? "active"
+                                    : ""
+                            }`}
+                        >
+                            Empresas Patrocinadoras
+                        </Link>
                     </div>
                     {isLoggedIn() ? (
                         location.pathname !== "/perfil" ? (

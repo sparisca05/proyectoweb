@@ -58,7 +58,7 @@ const HistoricoEventos = () => {
 
     const calcularEstadoEvento = (evento: Evento) => {
         const ahora = new Date();
-        const fechaEvento = new Date(evento.fecha);
+        const fechaEvento = parseFecha(evento.fecha); 
         return fechaEvento < ahora ? "Pasado" : "Activo";
     };
 

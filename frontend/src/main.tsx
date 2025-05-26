@@ -12,6 +12,7 @@ import EventoView from "./screens/EventoView.tsx";
 import NuevoEvento from "./screens/NuevoEvento.tsx";
 import NuevaEmpresa from "./screens/NuevaEmpresa.tsx";
 import Hitos from "./screens/Hitos.tsx";
+import EmpresaView from "./screens/empresaview.tsx";
 import NuevoHito from "./screens/NuevoHito.tsx";
 import PanelAdmin from "./screens/PanelAdmin.tsx";
 import HistoricoEventos from "./screens/HistoricoEventos.tsx";
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
     { path: "/hitos", element: <Hitos /> },
     { path: "/hitos/nuevo-hito", element: <NuevoHito /> },
     { path: "/PanelAdmin", element: <PanelAdmin /> },
+    { path: "/empresas", element: <EmpresaView /> },
 ]);
 
 const App = ({ router }: { router: any }) => {
