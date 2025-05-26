@@ -185,8 +185,21 @@ function NuevoHito() {
                                     Escoge uno...
                                 </option>
                                 {eventos.map((evento) => (
-                                    <option key={evento.id} value={evento.id}>
+                                    <option
+                                        key={evento.id}
+                                        value={evento.id}
+                                        disabled={
+                                            !evento.participantes ||
+                                            evento.participantes.length === 0
+                                        }
+                                    >
                                         {evento.nombre}
+                                        {
+                                            !evento.participantes ||
+                                            evento.participantes.length === 0
+                                                ? " (Sin participantes)"
+                                                : ""
+                                        }
                                     </option>
                                 ))}
                             </select>
