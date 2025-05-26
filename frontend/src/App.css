@@ -521,3 +521,51 @@ button {
     background: rgba(0, 123, 255, 0.2);
     transition: 0.3s;
 }
+
+/* Forzar fondo y color en select multiple */
+.form-select[multiple], select[multiple] {
+  background-color: #232323 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+  border-radius: 6px !important;
+  font-size: 1em !important;
+  padding: 8px !important;
+  margin-top: 8px !important;
+  min-height: 100px !important;
+}
+.form-select,
+select,
+.ganadores-select {
+  background-color: #232323 !important;
+  color: #b3e5fc !important;
+  border: 1px solid #444 !important;
+  border-radius: 6px !important;
+  font-size: 1em !important;
+  padding: 8px !important;
+  margin-top: 8px !important;
+  min-height: 40px !important;
+}
+
+/* Forzar fondo y color en las opciones */
+
+
+/* Opción seleccionada */
+
+
+
+.ganadores-select,
+.ganadores-select option {
+  background-color: #232323 !important;
+  color: #b3e5fc !important;
+  border: 1px solid #444 !important;
+  border-radius: 6px !important;
+  font-size: 1em !important;
+  padding: 8px !important;
+  min-height: 10px !important;
+}
+
+.ganadores-select option:checked {
+  background-color: #1976d2 !important;
+  color: #fff !important;
+}
+

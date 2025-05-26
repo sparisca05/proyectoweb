@@ -62,6 +62,24 @@ const HistoricoEventos = () => {
         return fechaEvento < ahora ? "Pasado" : "Activo";
     };
 
+ 
+    const parseFecha = (fechaStr: string) => {
+        if (!fechaStr) return new Date(0);
+   
+        if (fechaStr.includes("T") || fechaStr.includes("/")) return new Date(fechaStr);
+ 
+        const parts = fechaStr.split("-");
+        if (parts.length === 3 && parts[2].length === 4) {
+          
+            return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+        }
+     
+        if (parts.length === 3 && parts[0].length === 4) {
+            return new Date(fechaStr);
+        }
+        return new Date(fechaStr);
+    };
+
     return (
         <div className="main-container">
             <Navbar />
@@ -83,8 +101,8 @@ const HistoricoEventos = () => {
                         {eventos
                             .sort(
                                 (a, b) =>
-                                    new Date(b.fecha).getTime() -
-                                    new Date(a.fecha).getTime()
+                                    parseFecha(b.fecha).getTime() -
+                                    parseFecha(a.fecha).getTime()
                             )
                             .map((evento) => {
                                 const estado = calcularEstadoEvento(evento);
@@ -142,7 +160,7 @@ const HistoricoEventos = () => {
                                                 color: "#fff",
                                             }}
                                         >
-                                            <b style={{ color: "#ffd600" }}>
+                                            <b style={{ color: "#ffffff" }}>
                                                 Tipo:
                                             </b>{" "}
                                             <span style={{ color: "#b3e5fc" }}>
@@ -155,7 +173,7 @@ const HistoricoEventos = () => {
                                                 color: "#fff",
                                             }}
                                         >
-                                            <b style={{ color: "#ffd600" }}>
+                                            <b style={{ color: "#ffffff" }}>
                                                 Fecha:
                                             </b>{" "}
                                             <span style={{ color: "#b3e5fc" }}>
@@ -168,7 +186,7 @@ const HistoricoEventos = () => {
                                                 color: "#fff",
                                             }}
                                         >
-                                            <b style={{ color: "#ffd600" }}>
+                                            <b style={{ color: "#ffffff" }}>
                                                 Organizador:
                                             </b>{" "}
                                             <span style={{ color: "#b3e5fc" }}>
@@ -181,7 +199,7 @@ const HistoricoEventos = () => {
                                                 color: "#fff",
                                             }}
                                         >
-                                            <b style={{ color: "#ffd600" }}>
+                                            <b style={{ color: "#ffffff" }}>
                                                 Empresa Patrocinadora:
                                             </b>{" "}
                                             <span style={{ color: "#b3e5fc" }}>
