@@ -59,7 +59,7 @@ function NuevoEvento() {
                     alert("Error al cargar las empresas");
                 }
             } catch (error) {
-                alert("Error de conexión. Por favor, intenta más tard.");
+                alert("Error de conexión. Por favor, intenta más tarde.");
                 console.log(error);
             }
         };
