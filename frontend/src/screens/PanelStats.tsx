@@ -4,16 +4,18 @@ import {
     CategoryScale,
     LinearScale,
     BarElement,
+    ArcElement,
     Title,
     Tooltip,
     Legend,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Bar, Doughnut } from "react-chartjs-2";
 
 ChartJS.register(
     CategoryScale,
     LinearScale,
     BarElement,
+    ArcElement,
     Title,
     Tooltip,
     Legend
@@ -60,7 +62,23 @@ function PanelStats({
         return conteo;
     };
 
+    const contarParticipantesPorEvento = () => {
+        const conteo: { [key: string]: number } = {};
+        eventos.forEach((evento) => {
+            if (evento.tipo) {
+                conteo[evento.tipo] =
+                    (conteo[evento.tipo] || 0) + evento.participantes.length;
+            }
+        });
+        return conteo;
+    };
+
     const eventosConteo = contarEventosPorTipo();
+    const participantesConteo = contarParticipantesPorEvento();
+    const totalParticipantes = Object.values(participantesConteo).reduce(
+        (acc, count) => acc + count,
+        0
+    );
 
     // Filter out event types with 0 count
     const filteredEventos = Object.entries(eventosConteo).filter(
@@ -68,6 +86,17 @@ function PanelStats({
     );
     const filteredLabels = filteredEventos.map(([tipo]) => tipo);
     const filteredData = filteredEventos.map(([, count]) => count);
+
+    // Filter out event types with 0 participants
+    const filteredParticipantes = Object.entries(participantesConteo).filter(
+        ([, count]) => count > 0
+    );
+    const filteredParticipantesLabels = filteredParticipantes.map(
+        ([tipo]) => tipo
+    );
+    const filteredParticipantesData = filteredParticipantes.map(
+        ([, count]) => count
+    );
 
     const chartData = {
         labels: filteredLabels,
@@ -100,9 +129,40 @@ function PanelStats({
         ],
     };
 
+    const participantesChartData = {
+        labels: filteredParticipantesLabels,
+        datasets: [
+            {
+                label: "Número de Participantes",
+                data: filteredParticipantesData,
+                backgroundColor: [
+                    "rgba(75, 192, 192, 0.6)",
+                    "rgba(255, 159, 64, 0.6)",
+                    "rgba(153, 102, 255, 0.6)",
+                    "rgba(255, 99, 132, 0.6)",
+                    "rgba(54, 162, 235, 0.6)",
+                    "rgba(255, 205, 86, 0.6)",
+                    "rgba(199, 199, 199, 0.6)",
+                    "rgba(83, 102, 255, 0.6)",
+                ].slice(0, filteredParticipantesData.length),
+                borderColor: [
+                    "rgba(75, 192, 192, 1)",
+                    "rgba(255, 159, 64, 1)",
+                    "rgba(153, 102, 255, 1)",
+                    "rgba(255, 99, 132, 1)",
+                    "rgba(54, 162, 235, 1)",
+                    "rgba(255, 205, 86, 1)",
+                    "rgba(199, 199, 199, 1)",
+                    "rgba(83, 102, 255, 1)",
+                ].slice(0, filteredParticipantesData.length),
+                borderWidth: 1,
+            },
+        ],
+    };
+
     const chartOptions = {
         responsive: true,
-        maintainAspectRatio: false, // Allows custom height
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 position: "top" as const,
@@ -128,6 +188,31 @@ function PanelStats({
                 beginAtZero: true,
                 ticks: {
                     stepSize: 1,
+                },
+            },
+        },
+    };
+
+    const participantesChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: "top" as const,
+            },
+            title: {
+                display: true,
+                text: "Participantes por Tipo de Evento",
+                font: {
+                    size: 20,
+                },
+                color: "#fff",
+            },
+            tooltip: {
+                callbacks: {
+                    label: function (context: any) {
+                        return `${context.label}: ${context.parsed} participantes`;
+                    },
                 },
             },
         },
@@ -180,10 +265,27 @@ function PanelStats({
                         height: "400px",
                         width: "100%",
                         maxWidth: "800px",
-                        margin: "0 auto",
+                        margin: "0 auto 40px auto",
                     }}
                 >
                     <Bar data={chartData} options={chartOptions} />
+                </div>
+                <div
+                    className="chart-container"
+                    style={{
+                        height: "400px",
+                        width: "100%",
+                        maxWidth: "800px",
+                        margin: "0 auto",
+                    }}
+                >
+                    <Doughnut
+                        data={participantesChartData}
+                        options={participantesChartOptions}
+                    />
+                    <h4>
+                        Total de usuarios participantes: {totalParticipantes}
+                    </h4>
                 </div>
             </div>
         </div>

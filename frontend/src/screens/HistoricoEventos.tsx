@@ -4,7 +4,6 @@ import { MdPublic, MdLock } from "react-icons/md";
 
 import Navbar from "../components/Navbar";
 import { Evento } from "./Eventos";
-import { getToken } from "./Home";
 import { useUsuario } from "../contexts/UsuarioContext";
 import { getEventos } from "../api/eventos";
 import { getEventosUsuario } from "../api/usuarios";
@@ -20,13 +19,14 @@ const HistoricoEventos = () => {
             setLoading(true);
             setError("");
             try {
-                const token = getToken();
                 const rol = usuarioContext?.usuario?.rol;
 
                 if (rol === "ADMIN") {
                     setEventos(await getEventos());
-                } else {
+                } else if (rol === "PARTICIPANTE") {
                     setEventos(await getEventosUsuario());
+                } else {
+                    setEventos([]);
                 }
             } catch (err) {
                 console.error("Error fetching eventos:", err);
@@ -61,6 +61,23 @@ const HistoricoEventos = () => {
     const parseFecha = (fechaStr: string) => {
         if (!fechaStr) return new Date(0);
 
+        // Handle the format "dd-MM-yyyy HH:mm"
+        if (fechaStr.includes(" ") && fechaStr.includes("-")) {
+            const [datePart, timePart] = fechaStr.split(" ");
+            const [day, month, year] = datePart.split("-");
+            const [hours, minutes] = timePart.split(":");
+
+            // Create date with proper format: year, month (0-indexed), day, hours, minutes
+            return new Date(
+                parseInt(year),
+                parseInt(month) - 1,
+                parseInt(day),
+                parseInt(hours),
+                parseInt(minutes)
+            );
+        }
+
+        // Fallback for other formats
         if (fechaStr.includes("T") || fechaStr.includes("/"))
             return new Date(fechaStr);
 

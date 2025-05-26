@@ -38,12 +38,11 @@ export const addPublicEventParticipant = async (eventId: number): Promise<string
 
 export const addPrivateEventParticipant = async (eventId: number, clave: string): Promise<void> => {
     const response = await axios.put(`${API_URL}/api/v1/eventos/${eventId}/agregar-participante-privado`,
-        {
-            body: clave
-        },
+        clave,
         {
             headers: {
-                Authorization: `Bearer ${getToken()}`
+                Authorization: `Bearer ${getToken()}`,
+                'Content-Type': 'text/plain'
             }
         }
     );

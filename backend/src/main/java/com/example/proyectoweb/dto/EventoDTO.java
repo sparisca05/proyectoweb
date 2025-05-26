@@ -19,7 +19,7 @@ public class EventoDTO {
     private Long id;
     private String nombre;
     
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime fecha;
     
     private String tipo;

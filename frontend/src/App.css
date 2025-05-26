@@ -131,15 +131,16 @@ button {
 .auth-container form {
     width: 100%;
 }
-.auth-container input, .clave-input input {
+.auth-container input, .clave-input input, .search-container input {
     width: 100%;
     border-radius: 0px;
-    border-bottom: 1px solid rgba(186,186,186,0.78);
+    border-bottom: 1px solid rgba(186,186,186,0.78) !important;
     color: white;
     transition: 0.3s;
 }
-.auth-container input:focus, .clave-input input:focus {
-    border-bottom: 1.2px solid rgba(144, 26, 212, 0.849);
+.auth-container input:focus, .clave-input input:focus, .search-container input:focus {
+    border: none !important;
+    border-bottom: 1.2px solid rgba(144, 26, 212, 0.849) !important;
     scale: 1.01;
     box-shadow: none;
 }
@@ -662,6 +663,7 @@ select,
 }
 
 .stats-charts {
+    display: flex;
     background: rgba(9, 4, 20, 1);
     padding: 30px;
     border-radius: 12px;
@@ -669,7 +671,8 @@ select,
 }
 
 .chart-container h4 {
-    margin-top: 0;
+    text-align: center;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 

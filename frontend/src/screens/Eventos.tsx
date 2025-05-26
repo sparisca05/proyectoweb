@@ -36,7 +36,7 @@ const EventoList: React.FC = () => {
     const [error, setError] = useState("");
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [tipoFilter, setTipoFilter] = useState<string>("");
-    const [sortOrder, setSortOrder] = useState<string>("desc"); // "asc" for oldest first, "desc" for newest first
+    const [sortOrder, setSortOrder] = useState<string>("desc");
     const usuario = useUsuario();
 
     const navigate = useNavigate();
@@ -86,19 +86,6 @@ const EventoList: React.FC = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <div className={"main-container"}>
-                <Navbar />
-                <div className={"eventos"}>
-                    <h4 style={{ textAlign: "center", color: "white" }}>
-                        Cargando eventos...
-                    </h4>
-                </div>
-            </div>
-        );
-    }
-
     const filteredEventos = eventos
         .filter((evento) => {
             const matchesSearch =
@@ -146,6 +133,22 @@ const EventoList: React.FC = () => {
         </div>
     );
 
+    if (loading) {
+        return (
+            <div className={"main-container"}>
+                <Navbar />
+                <div className={"eventos"}>
+                    <h1>Eventos</h1>
+                    <div>
+                        <h4 style={{ textAlign: "center", color: "white" }}>
+                            Cargando eventos...
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className={"main-container"}>
             <Navbar />
@@ -156,6 +159,7 @@ const EventoList: React.FC = () => {
                     style={{
                         marginBottom: "20px",
                         display: "flex",
+                        maxWidth: "800px",
                         alignItems: "center",
                         gap: "10px",
                         flexWrap: "wrap",
@@ -174,14 +178,11 @@ const EventoList: React.FC = () => {
                             type="text"
                             placeholder="Buscar eventos por nombre, tipo o organizador..."
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
                             style={{
-                                padding: "10px",
-                                borderRadius: "5px",
-                                border: "1px solid #ccc",
-                                flex: 1,
-                                fontSize: "16px",
+                                border: "none",
+                                backgroundColor: "transparent",
                             }}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
                     <select
@@ -241,8 +242,8 @@ const EventoList: React.FC = () => {
                                         size={30}
                                     />
                                 )}
-                                <h4>{evento.nombre}</h4>
                                 <h5>{evento.tipo}</h5>
+                                <h4>{evento.nombre}</h4>
                                 <div
                                     style={{
                                         display: "flex",
