@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { API_URL } from "../main.tsx";
 import Navbar from "../components/Navbar.tsx";
 import { IoIosAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useUsuario } from "../contexts/UsuarioContext.tsx";
+import { getHitos } from "../api/hitos.ts";
 
 export interface Hito {
     id: number;
@@ -24,7 +23,6 @@ export interface Hito {
 
 const Hitos: React.FC = () => {
     const [hitos, setHitos] = useState<Hito[]>([]);
-    const [selectedHito, setSelectedHito] = useState<Hito | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState("");
     const usuario = useUsuario();
@@ -32,20 +30,20 @@ const Hitos: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios
-            .get(`${API_URL}/api/v1/hitos`)
-            .then((response) => {
-                if (response.data && response.data.length > 0) {
-                    setHitos(response.data);
-                    console.log("Hitos:", response.data);
-                } else {
-                    setError("No se han asignado hitos aún.");
-                }
-            })
-            .catch((error) => {
-                console.error("Error al obtener hitos:", error);
-            })
-            .finally(() => setLoading(false));
+        const fetchHitos = async () => {
+            try {
+                setLoading(true);
+                const hitos = await getHitos();
+                setHitos(hitos);
+                setError("");
+            } catch (error) {
+                console.error("Error fetching hitos:", error);
+                setError("Error: " + error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchHitos();
     }, [usuario]);
 
     if (loading) {

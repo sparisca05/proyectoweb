@@ -14,6 +14,8 @@ import { Evento } from "./Eventos.tsx";
 import AddInvitadoInput from "../components/AddInvitadoInput.tsx";
 import "../App.css";
 import Confirmation from "../components/Confirmation.tsx";
+import { getEventoById } from "../api/eventos.ts";
+import { getPerfil } from "../api/usuarios.ts";
 
 function EventoView() {
     const token = getToken();
@@ -47,28 +49,22 @@ function EventoView() {
     }, [evento && usuario]);
 
     useEffect(() => {
-        axios
-            .get(`${API_URL}/api/v1/usuario/perfil`, {
-                headers: {
-                    Authorization: "Bearer " + token,
-                },
-            })
-            .then((response) => {
-                setUsuario(response.data);
-            })
-            .catch((error) => {
-                console.error("Error: ", error);
-            });
-        axios
-            .get(`${API_URL}/api/v1/eventos/${id}`)
-            .then((response) => {
-                setEvento(response.data);
+        const fetchEvento = async () => {
+            try {
+                setLoading(true);
+                const eventId = parseInt(id ?? "0", 10);
+                const evento = await getEventoById(eventId);
+                setEvento(evento);
+
+                const usuario = await getPerfil(token || "");
+                setUsuario(usuario);
+            } catch (error) {
+                console.error("Error fetching evento:", error);
+            } finally {
                 setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                setLoading(false);
-            });
+            }
+        };
+        fetchEvento();
     }, [id, token]);
 
     const calcularEstadoEvento = (evento: Evento) => {

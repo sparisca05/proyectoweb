@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Evento } from "../screens/Eventos.tsx";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { getToken } from "../screens/Home.tsx";
-import { API_URL } from "../main.tsx";
+import { getEventosUsuario } from "../api/usuarios.ts";
 
 const MisEventos = () => {
     const [eventos, setEventos] = useState<Evento[]>([]); // Estado para almacenar la lista de eventos
@@ -11,23 +10,28 @@ const MisEventos = () => {
     const [error, setError] = useState(""); // Estado para mostrar un error
 
     useEffect(() => {
-        const token = getToken();
+        const fetchEventos = async () => {
+            try {
+                setLoading(true);
+                const token = getToken();
+                if (!token) {
+                    window.location.href = "/login";
+                    return;
+                }
 
-        axios
-            .get(`${API_URL}/api/v1/usuario/mis-eventos`, {
-                headers: {
-                    Authorization: "Bearer " + token,
-                },
-            })
-            .then((response) => {
-                console.log(response.data);
-                setEventos(response.data);
-                setLoading(false);
-            })
-            .catch((error) => {
+                const eventos = await getEventosUsuario(token);
+
+                setEventos(eventos);
+                setError("");
+            } catch (error) {
+                console.error("Error fetching eventos:", error);
                 setError("Error: " + error);
+            } finally {
                 setLoading(false);
-            });
+            }
+        };
+
+        fetchEventos();
     }, []);
 
     if (loading) {

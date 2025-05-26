@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { API_URL } from "../main";
 import { getToken } from "./Home";
 import { useUsuario } from "../contexts/UsuarioContext";
+import { getEventos } from "../api/eventos";
+import { getEventosUsuario } from "../api/usuarios";
 
 export interface Evento {
     id: number;
@@ -32,19 +32,12 @@ const HistoricoEventos = () => {
             try {
                 const token = getToken();
                 const rol = usuarioContext?.usuario?.rol;
-                let endpoint = `${API_URL}/api/v1/eventos`;
 
-                if (rol === "usuario") {
-                    endpoint = `${API_URL}/api/v1/usuario/mis-eventos`;
+                if (rol === "ADMIN") {
+                    setEventos(await getEventos());
+                } else {
+                    setEventos(await getEventosUsuario(token || ""));
                 }
-
-                const response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                setEventos(response.data);
             } catch (err) {
                 console.error("Error fetching eventos:", err);
                 setError("Error al obtener el historial de eventos.");
@@ -58,7 +51,7 @@ const HistoricoEventos = () => {
 
     const calcularEstadoEvento = (evento: Evento) => {
         const ahora = new Date();
-        const fechaEvento = parseFecha(evento.fecha); 
+        const fechaEvento = parseFecha(evento.fecha);
         return fechaEvento < ahora ? "Pasado" : "Activo";
     };
 

@@ -45,7 +45,7 @@ public class AuthService {    private final IUsuarioRepository userRepository;
                 .apellido(request.getApellido())
                 .username(request.getUsername())
                 .password(request.getPassword())
-                .rol(Role.ADMIN)
+                .rol(Role.PARTICIPANTE)
                 .build();
 
         usuarioService.saveUser(user);

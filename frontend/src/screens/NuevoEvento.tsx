@@ -23,6 +23,21 @@ function NuevoEvento() {
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [empresaPatrocinadora, setEmpresaPatrocinadora] = useState<Empresa>();
 
+    const tiposEvento = [
+        "Conferencia",
+        "Seminario",
+        "Taller",
+        "Hackathon",
+        "Networking",
+        "Capacitación",
+        "Feria",
+        "Presentación",
+        "Competencia",
+        "Ceremonia",
+        "Bootcamp",
+        "Otro",
+    ];
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -72,7 +87,6 @@ function NuevoEvento() {
                 id: empresaPatrocinadora?.id,
             },
         };
-        console.log(requestBody);
 
         try {
             const response = await fetch(
@@ -136,15 +150,26 @@ function NuevoEvento() {
                                 >
                                     Tipo del evento
                                 </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
+                                <select
+                                    className="form-select"
                                     aria-label="Sizing example input"
                                     aria-describedby="inputGroup-sizing-default"
                                     value={tipo}
                                     onChange={(e) => setTipo(e.target.value)}
                                     required
-                                />
+                                >
+                                    <option value="" disabled>
+                                        Selecciona uno...
+                                    </option>
+                                    {tiposEvento.map((tipoEvento) => (
+                                        <option
+                                            key={tipoEvento}
+                                            value={tipoEvento}
+                                        >
+                                            {tipoEvento}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="col">
                                 <label
@@ -239,7 +264,7 @@ function NuevoEvento() {
                                 onChange={handleEmpresaChange}
                             >
                                 <option value="" disabled>
-                                    Escoge una...
+                                    Selecciona una...
                                 </option>
                                 {empresas.map((empresa) => (
                                     <option key={empresa.id} value={empresa.id}>

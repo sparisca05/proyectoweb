@@ -39,7 +39,6 @@ public class UsuarioController {
     }
 
     // Información de perfil propio
-    
     @GetMapping("/perfil")
     public Usuario getUserProfile() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName(); // Obtener el username del

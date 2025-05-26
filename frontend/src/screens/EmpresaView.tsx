@@ -85,41 +85,79 @@ const EmpresaView = () => {
                                 boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
                             }}
                         >
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                }}
+                            >
                                 <div>
-                                    <b style={{ color: "#fff", fontSize: "1.1em" }}>{empresa.nombre}</b>
-                                    <div style={{ color: "#b3e5fc", marginLeft: 16, marginTop: 8, fontWeight: "bold" }}>
+                                    <b
+                                        style={{
+                                            color: "#fff",
+                                            fontSize: "1.1em",
+                                        }}
+                                    >
+                                        {empresa.nombre}
+                                    </b>
+                                    <div
+                                        style={{
+                                            color: "#b3e5fc",
+                                            marginLeft: 16,
+                                            marginTop: 8,
+                                            fontWeight: "bold",
+                                        }}
+                                    >
                                         Eventos que patrocina:
                                     </div>
-                                    <ul style={{ margin: "4px 0 0 32px", color: "#b3e5fc" }}>
-                                        {empresa.eventos && empresa.eventos.length > 0 ? (
+                                    <ul
+                                        style={{
+                                            margin: "4px 0 0 32px",
+                                            color: "#b3e5fc",
+                                        }}
+                                    >
+                                        {empresa.eventos &&
+                                        empresa.eventos.length > 0 ? (
                                             empresa.eventos.map((evento) => (
-                                                <li key={evento.id} style={{ marginBottom: 4 }}>
+                                                <li
+                                                    key={evento.id}
+                                                    style={{ marginBottom: 4 }}
+                                                >
                                                     <button
                                                         className="btn btn-link"
                                                         style={{
                                                             color: "#b3e5fc",
-                                                            textDecoration: "underline",
+                                                            textDecoration:
+                                                                "underline",
                                                             padding: 0,
                                                             background: "none",
                                                             border: "none",
                                                             cursor: "pointer",
                                                             fontSize: "1em",
                                                         }}
-                                                        onClick={() => navigate(`/eventos/${evento.id}`)}
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/eventos/${evento.id}`
+                                                            )
+                                                        }
                                                     >
                                                         {evento.nombre}
                                                     </button>
                                                 </li>
                                             ))
                                         ) : (
-                                            <li style={{ color: "#aaa" }}>No patrocina eventos</li>
+                                            <li style={{ color: "#aaa" }}>
+                                                No patrocina eventos
+                                            </li>
                                         )}
                                     </ul>
                                 </div>
                                 <button
-                                    className="btn btn-primary"
-                                    onClick={() => navigate(`/empresas/${empresa.id}`)}
+                                    className="btn submit-button"
+                                    onClick={() =>
+                                        navigate(`/empresas/${empresa.id}`)
+                                    }
                                 >
                                     Ver detalles
                                 </button>

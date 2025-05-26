@@ -8,6 +8,7 @@ import { API_URL } from "../main.tsx";
 import Navbar from "../components/Navbar.tsx";
 import { getToken } from "./Home.tsx";
 import { useUsuario } from "../contexts/UsuarioContext.tsx";
+import { getEventos, getEventosActivos } from "../api/eventos.ts";
 
 export interface Evento {
     id: number;
@@ -34,16 +35,26 @@ const EventoList: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios
-            .get(`${API_URL}/api/v1/eventos/activos`)
-            .then((response) => {
-                setEventos(response.data);
+        const fetchEventos = async () => {
+            try {
+                setLoading(true);
+
+                const rol = usuario?.usuario?.rol;
+                if (rol === "ADMIN") {
+                    setEventos(await getEventos());
+                } else {
+                    setEventos(await getEventosActivos());
+                }
+
+                setError("");
+            } catch (error) {
+                console.error("Error fetching eventos:", error);
+                setError("Error: " + error);
+            } finally {
                 setLoading(false);
-            })
-            .catch((err) => {
-                setError("Error: " + err);
-                setLoading(false);
-            });
+            }
+        };
+        fetchEventos();
     }, [usuario]);
 
     const handleDelete = (id: number) => {

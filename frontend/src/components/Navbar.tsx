@@ -50,16 +50,16 @@ const Navbar = () => {
                         </Link>
                         {usuario?.usuario?.rol === "ADMIN" && (
                             <Link
-                                to={"/PanelAdmin"}
+                                to={"/panel-admin"}
                                 className={`nav-link ${
                                     window.location.pathname.includes(
-                                        "/PanelAdmin"
+                                        "/panel-admin"
                                     )
                                         ? "active"
                                         : ""
                                 }`}
                             >
-                                Panel de Usuarios
+                                Panel de Administrador
                             </Link>
                         )}
                         <Link
