@@ -93,12 +93,24 @@ public class EventoController {
         return eventoService.saveEvento(evento);
     }
 
-    // Participar en un evento con el usuario actual
-    @PutMapping("/{id}/agregar-participante")
-    public ResponseEntity<String> addParticipante(@PathVariable Long id, @RequestBody String claveIngresada) {
+    // Participar en un evento público (sin clave)
+    @PutMapping("/{id}/agregar-participante-publico")
+    public ResponseEntity<String> addParticipantePublico(@PathVariable Long id) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-            String response = eventoService.addParticipante(username, id, claveIngresada);
+            String response = eventoService.addParticipantePublico(username, id);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // Participar en un evento privado (con clave)
+    @PutMapping("/{id}/agregar-participante-privado")
+    public ResponseEntity<String> addParticipantePrivado(@PathVariable Long id, @RequestBody String claveIngresada) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            String response = eventoService.addParticipantePrivado(username, id, claveIngresada);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

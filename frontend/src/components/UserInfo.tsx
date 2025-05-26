@@ -54,8 +54,6 @@ const UserInfo = () => {
         setSuccess("");
 
         try {
-            // Asumiendo que existe un endpoint para actualizar usuarios
-            // Ajusta la URL según tu API
             const response = await axios.put(
                 `${API_URL}/api/v1/usuario/perfil`,
                 userData,

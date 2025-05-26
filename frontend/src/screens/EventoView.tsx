@@ -14,7 +14,7 @@ import { Evento } from "./Eventos.tsx";
 import AddInvitadoInput from "../components/AddInvitadoInput.tsx";
 import "../App.css";
 import Confirmation from "../components/Confirmation.tsx";
-import { getEventoById } from "../api/eventos.ts";
+import { addPublicEventParticipant, getEventoById } from "../api/eventos.ts";
 import { getPerfil } from "../api/usuarios.ts";
 
 function EventoView() {
@@ -56,7 +56,7 @@ function EventoView() {
                 const evento = await getEventoById(eventId);
                 setEvento(evento);
 
-                const usuario = await getPerfil(token || "");
+                const usuario = await getPerfil();
                 setUsuario(usuario);
             } catch (error) {
                 console.error("Error fetching evento:", error);
@@ -71,6 +71,25 @@ function EventoView() {
         const ahora = new Date();
         const fechaEvento = new Date(evento.fecha);
         return fechaEvento < ahora ? "Pasado" : "Activo";
+    };
+
+    const handleParticipar = async (eventId: number) => {
+        if (!token) {
+            alert("Debes iniciar sesión para inscribirte en un evento.");
+            return;
+        }
+        try {
+            if (!evento?.publico) {
+                setDisplayPasskey(true);
+                return;
+            }
+            const message = await addPublicEventParticipant(eventId);
+            alert(message);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error al agregar participante:", error);
+            alert("Error al agregar participante al evento.");
+        }
     };
 
     const handleRemoveParticipationClick = (e: React.MouseEvent) => {
@@ -300,38 +319,39 @@ function EventoView() {
                                             >
                                                 {evento.tipo}
                                             </h5>
-                                            {usuario?.rol === "ADMIN" && (
-                                                <p className="list-item">
-                                                    Clave de acceso:{" "}
-                                                    <strong>
-                                                        {showClave
-                                                            ? evento.clave
-                                                            : "●●●●●●●●"}
-                                                        <button
-                                                            onClick={() =>
-                                                                setShowClave(
-                                                                    !showClave
-                                                                )
-                                                            }
-                                                            style={{
-                                                                background:
-                                                                    "none",
-                                                                border: "none",
-                                                                cursor: "pointer",
-                                                                padding: 0,
-                                                                marginLeft:
-                                                                    "0.5rem",
-                                                            }}
-                                                        >
-                                                            {showClave ? (
-                                                                <FaEyeSlash color="white" />
-                                                            ) : (
-                                                                <FaEye color="white" />
-                                                            )}
-                                                        </button>
-                                                    </strong>
-                                                </p>
-                                            )}
+                                            {usuario?.rol === "ADMIN" &&
+                                                !evento.publico && (
+                                                    <p className="list-item">
+                                                        Clave de acceso:{" "}
+                                                        <strong>
+                                                            {showClave
+                                                                ? evento.clave
+                                                                : "●●●●●●●●"}
+                                                            <button
+                                                                onClick={() =>
+                                                                    setShowClave(
+                                                                        !showClave
+                                                                    )
+                                                                }
+                                                                style={{
+                                                                    background:
+                                                                        "none",
+                                                                    border: "none",
+                                                                    cursor: "pointer",
+                                                                    padding: 0,
+                                                                    marginLeft:
+                                                                        "0.5rem",
+                                                                }}
+                                                            >
+                                                                {showClave ? (
+                                                                    <FaEyeSlash color="white" />
+                                                                ) : (
+                                                                    <FaEye color="white" />
+                                                                )}
+                                                            </button>
+                                                        </strong>
+                                                    </p>
+                                                )}
                                             <p className="list-item">
                                                 Fecha:{" "}
                                                 <strong>{evento.fecha}</strong>
@@ -392,7 +412,9 @@ function EventoView() {
                                                         "btn submit-button"
                                                     }
                                                     onClick={() =>
-                                                        setDisplayPasskey(true)
+                                                        handleParticipar(
+                                                            evento.id
+                                                        )
                                                     }
                                                 >
                                                     Participar

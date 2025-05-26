@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../main.tsx";
 import { FaSave, FaTimes, FaEdit, FaTrash } from "react-icons/fa";

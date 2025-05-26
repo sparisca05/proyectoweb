@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { API_URL } from "../main";
-import { getToken } from "../screens/Home";
 import { IoMdClose } from "react-icons/io";
+import { addPrivateEventParticipant } from "../api/eventos";
 
 function PasskeyInput({
     evento,
@@ -10,43 +9,20 @@ function PasskeyInput({
     evento: any;
     setDisplayPasskey: any;
 }) {
-    const token = getToken();
     const [passkey, setPasskey] = useState("");
 
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        if (!token) {
-            alert("Debes iniciar sesión para inscribirte en un evento.");
-            return;
+    const handleSubmit = async () => {
+        try {
+            const message = await addPrivateEventParticipant(
+                evento.id,
+                passkey
+            );
+            alert(message);
+            setDisplayPasskey(false);
+        } catch (error) {
+            console.error("Error al agregar participante:", error);
+            alert("Error al agregar participante: " + error);
         }
-        if (!passkey) {
-            alert("Por favor, ingresa la clave.");
-            return;
-        }
-        await fetch(
-            `${API_URL}/api/v1/eventos/${evento.id}/agregar-participante`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization:
-                        "Bearer " + localStorage.getItem("authToken"),
-                },
-                body: passkey,
-            }
-        )
-            .then((response) => response.text())
-            .then((message) => {
-                alert(message);
-                if (
-                    message !=
-                    "La clave ingersada es incorrecta, intente de nuevo."
-                )
-                    window.location.reload();
-            })
-            .catch((error) => {
-                console.log(error);
-            });
     };
 
     return (

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { API_URL } from "../main.tsx";
 import { getToken } from "./Home.tsx";
 import { IoMdClose } from "react-icons/io";
+import { MdPublic, MdLock } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 export interface Empresa {
@@ -22,6 +23,7 @@ function NuevoEvento() {
     const [contactoOrganizador, setContactoOrganizador] = useState<string>("");
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [empresaPatrocinadora, setEmpresaPatrocinadora] = useState<Empresa>();
+    const [isPrivado, setIsPrivado] = useState<boolean>(false);
 
     const tiposEvento = [
         "Conferencia",
@@ -86,6 +88,7 @@ function NuevoEvento() {
             empresaPatrocinadora: {
                 id: empresaPatrocinadora?.id,
             },
+            publico: !isPrivado,
         };
 
         try {
@@ -127,11 +130,33 @@ function NuevoEvento() {
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label
+                                htmlFor="empresa-patrocinadora"
                                 className="form-label"
-                                id="inputGroup-sizing-default"
                             >
-                                Nombre
+                                Empresa que patrocina
                             </label>
+                            <select
+                                name="empresa-patrocinadora"
+                                id="empresa-patrocinadora"
+                                className="form-select"
+                                value={empresaPatrocinadora?.id || ""}
+                                onChange={handleEmpresaChange}
+                            >
+                                <option value="" disabled>
+                                    Selecciona una...
+                                </option>
+                                {empresas.map((empresa) => (
+                                    <option key={empresa.id} value={empresa.id}>
+                                        {empresa.nombre}
+                                    </option>
+                                ))}
+                            </select>
+                            <a className="" href="/nueva-empresa">
+                                + Crear nueva empresa
+                            </a>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Nombre</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -144,10 +169,7 @@ function NuevoEvento() {
                         </div>{" "}
                         <div className="row mb-3">
                             <div className="col">
-                                <label
-                                    className="form-label"
-                                    id="inputGroup-sizing-default"
-                                >
+                                <label className="form-label">
                                     Tipo del evento
                                 </label>
                                 <select
@@ -172,12 +194,7 @@ function NuevoEvento() {
                                 </select>
                             </div>
                             <div className="col">
-                                <label
-                                    className="form-label"
-                                    id="inputGroup-sizing-default"
-                                >
-                                    Fecha
-                                </label>
+                                <label className="form-label">Fecha</label>
                                 <input
                                     type="date"
                                     className="form-control"
@@ -192,12 +209,7 @@ function NuevoEvento() {
                                 />
                             </div>
                             <div className="col">
-                                <label
-                                    className="form-label"
-                                    id="inputGroup-sizing-default"
-                                >
-                                    Hora
-                                </label>
+                                <label className="form-label">Hora</label>
                                 <input
                                     type="time"
                                     className="form-control"
@@ -211,10 +223,7 @@ function NuevoEvento() {
                         </div>
                         <div className="row mb-3">
                             <div className="col">
-                                <label
-                                    className="form-label"
-                                    id="inputGroup-sizing-default"
-                                >
+                                <label className="form-label">
                                     Nombre del organizador
                                 </label>
                                 <input
@@ -230,10 +239,7 @@ function NuevoEvento() {
                                 />
                             </div>
                             <div className="col">
-                                <label
-                                    className="form-label"
-                                    id="inputGroup-sizing-default"
-                                >
+                                <label className="form-label">
                                     Contacto del organizador
                                 </label>
                                 <input
@@ -249,32 +255,44 @@ function NuevoEvento() {
                                 />
                             </div>
                         </div>
-                        <div className="mb-3">
+                        <div
+                            className="mb-3"
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                            }}
+                        >
                             <label
-                                htmlFor="empresa-patrocinadora"
                                 className="form-label"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "5px",
+                                    marginBottom: "10px",
+                                }}
                             >
-                                Empresa patrocinadora
+                                {!isPrivado ? (
+                                    <>
+                                        <MdPublic size={18} />
+                                        Público
+                                    </>
+                                ) : (
+                                    <>
+                                        <MdLock size={18} />
+                                        Privado
+                                    </>
+                                )}
                             </label>
-                            <select
-                                name="empresa-patrocinadora"
-                                id="empresa-patrocinadora"
-                                className="form-select"
-                                value={empresaPatrocinadora?.id || ""}
-                                onChange={handleEmpresaChange}
-                            >
-                                <option value="" disabled>
-                                    Selecciona una...
-                                </option>
-                                {empresas.map((empresa) => (
-                                    <option key={empresa.id} value={empresa.id}>
-                                        {empresa.nombre}
-                                    </option>
-                                ))}
-                            </select>
-                            <a className="" href="/nueva-empresa">
-                                + Crear nueva empresa
-                            </a>
+                            <label className="switch">
+                                <input
+                                    type="checkbox"
+                                    checked={isPrivado}
+                                    onChange={(e) =>
+                                        setIsPrivado(e.target.checked)
+                                    }
+                                />
+                                <span className="slider"></span>
+                            </label>
                         </div>
                         <button type="submit" className="btn submit-button">
                             Crear evento

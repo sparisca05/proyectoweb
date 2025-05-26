@@ -43,6 +43,9 @@ public class Evento {
     @Column(nullable = false)
     private String contactoOrganizador;
 
+    @Column(nullable = false)
+    private boolean isPublico = true;
+
     // Método para generar una clave aleatoria
     public String generarClave() {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

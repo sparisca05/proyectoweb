@@ -62,7 +62,20 @@ public class EventoService {
     }
 
     @Transactional
-    public String addParticipante(String username, Long eventoId, String claveIngresada) throws RuntimeException {
+    public String addParticipantePublico(String username, Long eventoId) throws RuntimeException {
+        Evento evento = getEventoById(eventoId);
+        Usuario usuario = usuarioService.getUserByUsername(username);
+        if (!evento.getParticipantes().contains(usuario)) {
+            evento.addParticipante(usuario);
+            eventoRepository.save(evento);
+            return "Fuiste agregado con éxito al evento: " + evento.getNombre();
+        } else {
+            throw new RuntimeException("Usuario ya agregado al evento");
+        }
+    }
+
+    @Transactional
+    public String addParticipantePrivado(String username, Long eventoId, String claveIngresada) throws RuntimeException {
         Evento evento = getEventoById(eventoId);
         if (!evento.getClave().equals(claveIngresada)) {
             throw new RuntimeException("La clave ingresada es incorrecta, intente de nuevo.");

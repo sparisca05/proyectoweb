@@ -19,7 +19,7 @@ const MisEventos = () => {
                     return;
                 }
 
-                const eventos = await getEventosUsuario(token);
+                const eventos = await getEventosUsuario();
 
                 setEventos(eventos);
                 setError("");

@@ -33,7 +33,7 @@ const AdminPanel: React.FC = () => {
             try {
                 setLoading(true);
 
-                const usuarios = await getUsuarios(token || "");
+                const usuarios = await getUsuarios();
                 setUsuarios(usuarios);
                 const eventos = await getEventos();
                 setEventos(eventos);

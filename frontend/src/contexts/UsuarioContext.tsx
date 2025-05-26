@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
-import { API_URL } from "../main.tsx";
-import { getToken, isLoggedIn } from "../screens/Home.tsx";
+import { isLoggedIn } from "../screens/Home.tsx";
+import { getPerfil } from "../api/usuarios.ts";
 
 export interface Usuario {
     id: number;
@@ -31,21 +30,20 @@ export const UsuarioProvider: React.FC<UsuarioProviderProps> = ({
     const [usuario, setUsuario] = useState<Usuario | null>(null);
 
     useEffect(() => {
-        if (!isLoggedIn()) {
-            return;
-        }
-        axios
-            .get(`${API_URL}/api/v1/usuario/perfil`, {
-                headers: {
-                    Authorization: "Bearer " + getToken(),
-                },
-            })
-            .then((response) => {
-                setUsuario(response.data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+        const fetchUsuario = async () => {
+            if (isLoggedIn()) {
+                try {
+                    const usuario = await getPerfil();
+                    setUsuario(usuario);
+                } catch (error) {
+                    console.error("Error fetching user profile:", error);
+                    setUsuario(null);
+                }
+            } else {
+                setUsuario(null);
+            }
+        };
+        fetchUsuario();
     }, [window.location.pathname]);
 
     return (

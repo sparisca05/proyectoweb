@@ -37,6 +37,7 @@ public class EventoControllerHelper {
                 .tipo(evento.getTipo())
                 .nombreOrganizador(evento.getNombreOrganizador())
                 .contactoOrganizador(evento.getContactoOrganizador())
+                .isPublico(evento.isPublico())
                 .clave(evento.getClave())
                 .build();
     }

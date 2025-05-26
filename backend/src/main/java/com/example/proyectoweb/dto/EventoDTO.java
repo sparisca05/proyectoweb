@@ -25,6 +25,7 @@ public class EventoDTO {
     private String tipo;
     private String nombreOrganizador;
     private String contactoOrganizador;
+    private boolean isPublico = true;
     private String clave;
     
     // Referencias simplificadas

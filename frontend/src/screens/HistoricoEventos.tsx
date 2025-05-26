@@ -1,23 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { MdPublic, MdLock } from "react-icons/md";
+
 import Navbar from "../components/Navbar";
+import { Evento } from "./Eventos";
 import { getToken } from "./Home";
 import { useUsuario } from "../contexts/UsuarioContext";
 import { getEventos } from "../api/eventos";
 import { getEventosUsuario } from "../api/usuarios";
-
-export interface Evento {
-    id: number;
-    nombre: string;
-    tipo: string;
-    fecha: string;
-    nombreOrganizador: string;
-    empresaPatrocinadora: {
-        id: number;
-        nombre: string;
-    };
-    participantes?: { id: number }[];
-}
 
 const HistoricoEventos = () => {
     const [eventos, setEventos] = useState<Evento[]>([]);
@@ -36,7 +26,7 @@ const HistoricoEventos = () => {
                 if (rol === "ADMIN") {
                     setEventos(await getEventos());
                 } else {
-                    setEventos(await getEventosUsuario(token || ""));
+                    setEventos(await getEventosUsuario());
                 }
             } catch (err) {
                 console.error("Error fetching eventos:", err);
@@ -130,18 +120,37 @@ const HistoricoEventos = () => {
                                                 justifyContent: "space-between",
                                             }}
                                         >
-                                            <Link
-                                                to={`/eventos/${evento.id}`}
+                                            <div
                                                 style={{
-                                                    color: "#2196f3",
-                                                    textDecoration: "underline",
-                                                    fontWeight: "bold",
-                                                    fontSize: "1.25em",
-                                                    cursor: "pointer",
+                                                    display: "flex",
+                                                    gap: "10px",
                                                 }}
                                             >
-                                                {evento.nombre}
-                                            </Link>
+                                                <Link
+                                                    to={`/eventos/${evento.id}`}
+                                                    style={{
+                                                        color: "#2196f3",
+                                                        textDecoration:
+                                                            "underline",
+                                                        fontWeight: "bold",
+                                                        fontSize: "1.25em",
+                                                        cursor: "pointer",
+                                                    }}
+                                                >
+                                                    {evento.nombre}
+                                                </Link>
+                                                {evento.publico ? (
+                                                    <MdPublic
+                                                        size={30}
+                                                        color="white"
+                                                    />
+                                                ) : (
+                                                    <MdLock
+                                                        size={30}
+                                                        color="white"
+                                                    />
+                                                )}
+                                            </div>
                                             <span
                                                 style={{
                                                     padding: "4px 14px",

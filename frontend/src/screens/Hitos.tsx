@@ -79,25 +79,26 @@ const Hitos: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {hitos.map((hito) => (
-                            <tr key={hito.id}>
-                                <td>{hito.nombre}</td>
-                                <td>{hito.categoria}</td>
-                                <td>{hito.eventoRelevante.nombre}</td>
-                                <td>
-                                    {hito.ganadores.length > 0 ? (
-                                        hito.ganadores.map((ganador) => (
-                                            <div key={ganador.id}>
-                                                {ganador.nombre}{" "}
-                                                {ganador.apellido}
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div>No hay ganadores</div>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
+                        {hitos &&
+                            hitos.map((hito) => (
+                                <tr key={hito.id}>
+                                    <td>{hito.nombre}</td>
+                                    <td>{hito.categoria}</td>
+                                    <td>{hito.eventoRelevante.nombre}</td>
+                                    <td>
+                                        {hito.ganadores.length > 0 ? (
+                                            hito.ganadores.map((ganador) => (
+                                                <div key={ganador.id}>
+                                                    {ganador.nombre}{" "}
+                                                    {ganador.apellido}
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>No hay ganadores</div>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
                 {usuario && usuario.usuario?.rol === "ADMIN" && (
