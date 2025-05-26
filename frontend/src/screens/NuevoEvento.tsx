@@ -16,6 +16,7 @@ export interface Empresa {
 function NuevoEvento() {
     const [nombre, setNombre] = useState<string>("");
     const [fecha, setFecha] = useState<string>("");
+    const [hora, setHora] = useState<string>("");
     const [tipo, setTipo] = useState<string>("");
     const [nombreOrganizador, setNombreOrganizador] = useState<string>("");
     const [contactoOrganizador, setContactoOrganizador] = useState<string>("");
@@ -54,13 +55,12 @@ function NuevoEvento() {
         );
         setEmpresaPatrocinadora(selectedEmpresa || undefined);
     };
-
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        // Format the date to "dd-mm-yyyy"
+        // Combine date and time, then format to "dd-MM-yyyy HH:mm"
         const [year, month, day] = fecha.split("-");
-        const formattedFecha = `${day}-${month}-${year}`;
+        const formattedFecha = `${day}-${month}-${year} ${hora}`;
 
         const requestBody = {
             nombre: nombre,
@@ -127,7 +127,7 @@ function NuevoEvento() {
                                 onChange={(e) => setNombre(e.target.value)}
                                 required
                             />
-                        </div>
+                        </div>{" "}
                         <div className="row mb-3">
                             <div className="col">
                                 <label
@@ -163,6 +163,23 @@ function NuevoEvento() {
                                         setFecha(e.target.value),
                                         console.log(fecha),
                                     ]}
+                                    required
+                                />
+                            </div>
+                            <div className="col">
+                                <label
+                                    className="form-label"
+                                    id="inputGroup-sizing-default"
+                                >
+                                    Hora
+                                </label>
+                                <input
+                                    type="time"
+                                    className="form-control"
+                                    aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    value={hora}
+                                    onChange={(e) => setHora(e.target.value)}
                                     required
                                 />
                             </div>

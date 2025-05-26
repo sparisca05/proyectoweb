@@ -62,18 +62,30 @@ const HistoricoEventos = () => {
         return fechaEvento < ahora ? "Pasado" : "Activo";
     };
 
- 
+    if (loading) {
+        return (
+            <div className={"main-container"}>
+                <Navbar />
+                <div className={"eventos"}>
+                    <h4 style={{ textAlign: "center", color: "white" }}>
+                        Cargando historial...
+                    </h4>
+                </div>
+            </div>
+        );
+    }
+
     const parseFecha = (fechaStr: string) => {
         if (!fechaStr) return new Date(0);
-   
-        if (fechaStr.includes("T") || fechaStr.includes("/")) return new Date(fechaStr);
- 
+
+        if (fechaStr.includes("T") || fechaStr.includes("/"))
+            return new Date(fechaStr);
+
         const parts = fechaStr.split("-");
         if (parts.length === 3 && parts[2].length === 4) {
-          
             return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
         }
-     
+
         if (parts.length === 3 && parts[0].length === 4) {
             return new Date(fechaStr);
         }
