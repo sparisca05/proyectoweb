@@ -62,6 +62,19 @@ const HistoricoEventos = () => {
         return fechaEvento < ahora ? "Pasado" : "Activo";
     };
 
+    if (loading) {
+        return (
+            <div className={"main-container"}>
+                <Navbar />
+                <div className={"eventos"}>
+                    <h4 style={{ textAlign: "center", color: "white" }}>
+                        Cargando historial...
+                    </h4>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="main-container">
             <Navbar />

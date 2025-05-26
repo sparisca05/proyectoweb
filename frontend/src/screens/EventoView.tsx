@@ -364,14 +364,6 @@ function EventoView() {
                                             </p>
                                         </>
                                     )}
-                                    <div>
-                                        <h4>
-                                            {evento.participantes.length}{" "}
-                                            {evento.participantes.length === 1
-                                                ? "Participante"
-                                                : "Participantes"}
-                                        </h4>
-                                    </div>
                                     {estadoEvento === "Pasado" ? (
                                         <p className="list-item">
                                             Estado:{" "}
@@ -380,32 +372,46 @@ function EventoView() {
                                             </strong>
                                         </p>
                                     ) : (
-                                        <p className="list-item">
-                                            Estado:{" "}
-                                            <strong style={{ color: "green" }}>
-                                                {estadoEvento}
-                                            </strong>
-                                        </p>
+                                        <>
+                                            <p className="list-item">
+                                                Estado:{" "}
+                                                <strong
+                                                    style={{ color: "green" }}
+                                                >
+                                                    {estadoEvento}
+                                                </strong>
+                                            </p>
+                                            {userHasEvent ? (
+                                                <button
+                                                    className={"btn btn-danger"}
+                                                    onClick={
+                                                        handleRemoveParticipationClick
+                                                    }
+                                                >
+                                                    Dejar de participar
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className={
+                                                        "btn submit-button"
+                                                    }
+                                                    onClick={() =>
+                                                        setDisplayPasskey(true)
+                                                    }
+                                                >
+                                                    Participar
+                                                </button>
+                                            )}
+                                        </>
                                     )}
-                                    {userHasEvent ? (
-                                        <button
-                                            className={"btn btn-danger"}
-                                            onClick={
-                                                handleRemoveParticipationClick
-                                            }
-                                        >
-                                            Dejar de participar
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className={"btn submit-button"}
-                                            onClick={() =>
-                                                setDisplayPasskey(true)
-                                            }
-                                        >
-                                            Participar
-                                        </button>
-                                    )}
+                                    <div>
+                                        <h4>
+                                            {evento.participantes.length}{" "}
+                                            {evento.participantes.length === 1
+                                                ? "Participante"
+                                                : "Participantes"}
+                                        </h4>
+                                    </div>
                                     <div>
                                         <h4>Invitados externos</h4>
                                         <ul

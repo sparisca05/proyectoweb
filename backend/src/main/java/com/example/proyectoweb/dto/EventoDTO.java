@@ -1,7 +1,7 @@
 package com.example.proyectoweb.dto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -20,7 +20,7 @@ public class EventoDTO {
     private String nombre;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date fecha;
+    private LocalDateTime fecha;
     
     private String tipo;
     private String nombreOrganizador;
