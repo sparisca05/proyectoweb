@@ -261,6 +261,7 @@ function NuevoEvento() {
                         </div>
                         <ImageUpload
                             onImageUpload={(url) => setImagenUrl(url)}
+                            endpoint="evento-imagen"
                         />
                         <div
                             className="mb-3"

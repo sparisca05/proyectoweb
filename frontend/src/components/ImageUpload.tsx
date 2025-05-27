@@ -5,7 +5,8 @@ import { getToken } from "../screens/Home";
 
 export const ImageUpload: React.FC<{
     onImageUpload: (url: string) => void;
-}> = ({ onImageUpload }) => {
+    endpoint: string;
+}> = ({ onImageUpload, endpoint }) => {
     const [uploading, setUploading] = useState(false);
     const [preview, setPreview] = useState<string>("");
 
@@ -27,7 +28,7 @@ export const ImageUpload: React.FC<{
             formData.append("imagen", file);
 
             const response = await axios.post(
-                `${API_URL}/api/v1/upload/evento-imagen`,
+                `${API_URL}/api/v1/upload/${endpoint}`,
                 formData,
                 {
                     headers: {

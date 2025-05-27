@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
 
 import Navbar from "../components/Navbar";
 import { API_URL } from "../main";
+import { ImageUpload } from "../components/ImageUpload";
 
 function NuevaEmpresa() {
     const [nombre, setNombre] = useState<string>("");
     const [descripcion, setDescripcion] = useState<string>("");
-    const [logo, setLogo] = useState<string>("");
+    const [logoUrl, setLogoUrl] = useState<string>("");
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log("Logo URL:", logoUrl);
+    }, [logoUrl]);
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
@@ -18,10 +23,10 @@ function NuevaEmpresa() {
         const requestBody = {
             nombre: nombre,
             descripcion: descripcion,
-            logo: logo,
+            logo: logoUrl,
         };
 
-        if (!nombre || !descripcion || !logo) {
+        if (!nombre || !descripcion || !logoUrl) {
             alert("Por favor, llena todos los campos.");
             return;
         }
@@ -94,23 +99,10 @@ function NuevaEmpresa() {
                                 required
                             />
                         </div>
-                        <div className="mb-3">
-                            <span
-                                className="form-label"
-                                id="inputGroup-sizing-default"
-                            >
-                                Logo
-                            </span>
-                            <input
-                                type="text"
-                                className="form-control"
-                                aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-default"
-                                value={logo}
-                                onChange={(e) => setLogo(e.target.value)}
-                                required
-                            />
-                        </div>
+                        <ImageUpload
+                            onImageUpload={(url) => setLogoUrl(url)}
+                            endpoint="empresa-logo"
+                        />
                         <button
                             type="submit"
                             className="btn submit-button"

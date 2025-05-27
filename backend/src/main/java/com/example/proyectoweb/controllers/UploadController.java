@@ -37,7 +37,7 @@ public class UploadController {
 
     @PostMapping("/empresa-logo")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, String>> uploadCompanyLogo(@RequestParam("logo") MultipartFile file) {
+    public ResponseEntity<Map<String, String>> uploadCompanyLogo(@RequestParam("imagen") MultipartFile file) {
         try {
             String logoUrl = cloudinaryService.uploadCompanyLogo(file);
             

@@ -314,6 +314,7 @@ function EventoView() {
                                                         imagenUrl: url,
                                                     })
                                                 }
+                                                endpoint="evento-imagen"
                                             />
                                         </>
                                     ) : (
