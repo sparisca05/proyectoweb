@@ -52,11 +52,7 @@ const HistoricoEventos = () => {
         doc.setFontSize(18);
         doc.text("Reporte de Eventos", 14, 18);
         doc.setFontSize(12);
-        doc.text(
-            `Generado el: ${new Date().toLocaleString()}`,
-            14,
-            26
-        );
+        doc.text(`Generado el: ${new Date().toLocaleString()}`, 14, 26);
 
         const tableColumn = [
             "Nombre",
@@ -65,7 +61,7 @@ const HistoricoEventos = () => {
             "Organizador",
             "Empresa Patrocinadora",
             "Público",
-            "Estado"
+            "Estado",
         ];
         const tableRows = eventos.map((evento) => [
             evento.nombre,
@@ -76,7 +72,7 @@ const HistoricoEventos = () => {
                 ? evento.empresaPatrocinadora.nombre
                 : "Sin patrocinador",
             evento.publico ? "Sí" : "No",
-            calcularEstadoEvento(evento)
+            calcularEstadoEvento(evento),
         ]);
 
         autoTable(doc, {
@@ -102,9 +98,15 @@ const HistoricoEventos = () => {
             ["Tipo", evento.tipo],
             ["Fecha", evento.fecha],
             ["Organizador", evento.nombreOrganizador],
-            ["Empresa Patrocinadora", evento.empresaPatrocinadora && evento.empresaPatrocinadora.nombre ? evento.empresaPatrocinadora.nombre : "Sin patrocinador"],
+            [
+                "Empresa Patrocinadora",
+                evento.empresaPatrocinadora &&
+                evento.empresaPatrocinadora.nombre
+                    ? evento.empresaPatrocinadora.nombre
+                    : "Sin patrocinador",
+            ],
             ["Público", evento.publico ? "Sí" : "No"],
-            ["Estado", calcularEstadoEvento(evento)]
+            ["Estado", calcularEstadoEvento(evento)],
         ];
         autoTable(doc, {
             head: [["Campo", "Valor"]],
@@ -115,16 +117,22 @@ const HistoricoEventos = () => {
         });
 
         // Participants table
-        const participantes = Array.isArray(evento.participantes) ? evento.participantes : [];
-        const nextY = (doc as any).lastAutoTable?.finalY ? (doc as any).lastAutoTable.finalY + 8 : 40;
+        const participantes = Array.isArray(evento.participantes)
+            ? evento.participantes
+            : [];
+        const nextY = (doc as any).lastAutoTable?.finalY
+            ? (doc as any).lastAutoTable.finalY + 8
+            : 40;
         if (participantes.length > 0) {
             doc.setFontSize(14);
             doc.text("Participantes", 14, nextY);
-            const participantesRows = participantes.map((p: any, idx: number) => [
-                idx + 1,
-                p.nombre || p.name || "",
-                p.username || p.usuario || p.email || ""
-            ]);
+            const participantesRows = participantes.map(
+                (p: any, idx: number) => [
+                    idx + 1,
+                    p.nombre || p.name || "",
+                    p.username || p.usuario || p.email || "",
+                ]
+            );
             autoTable(doc, {
                 head: [["#", "Nombre", "Usuario/Email"]],
                 body: participantesRows,
@@ -134,7 +142,11 @@ const HistoricoEventos = () => {
             });
         } else {
             doc.setFontSize(12);
-            doc.text("No hay participantes registrados para este evento.", 14, nextY);
+            doc.text(
+                "No hay participantes registrados para este evento.",
+                14,
+                nextY
+            );
         }
 
         doc.save(`reporte_evento_${evento.id}.pdf`);
@@ -191,22 +203,33 @@ const HistoricoEventos = () => {
             <div className="eventos">
                 <h1 style={{ color: "#fff" }}>Histórico de Eventos</h1>
                 <button
+                    className="button"
+                    data-tooltip="Size: 20Mb"
                     onClick={handleDescargarReporte}
-                    style={{
-                        marginBottom: "18px",
-                        padding: "10px 24px",
-                        background: "#2196f3",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "6px",
-                        fontWeight: "bold",
-                        fontSize: "1em",
-                        cursor: "pointer",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
-                        transition: "background 0.2s",
-                    }}
                 >
-                    Descargar reporte
+                    <div className="button-wrapper">
+                        <div className="text">Descargar reporte</div>
+                        <span className="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                aria-hidden="true"
+                                role="img"
+                                width="2em"
+                                height="2em"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"
+                                />
+                            </svg>
+                        </span>
+                    </div>
                 </button>
 
                 {loading && (
@@ -355,22 +378,25 @@ const HistoricoEventos = () => {
                                             </span>
                                         </p>
                                         <button
-                                            onClick={() => handleDescargarReporteEvento(evento)}
-                                            style={{
-                                                marginTop: "10px",
-                                                padding: "8px 18px",
-                                                background: "#43e97b",
-                                                color: "#222",
-                                                border: "none",
-                                                borderRadius: "6px",
-                                                fontWeight: "bold",
-                                                fontSize: "0.95em",
-                                                cursor: "pointer",
-                                                boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-                                                transition: "background 0.2s",
-                                            }}
+                                            className="Btn"
+                                            onClick={() =>
+                                                handleDescargarReporteEvento(
+                                                    evento
+                                                )
+                                            }
                                         >
-                                            Descargar reporte
+                                            <svg
+                                                className="svgIcon"
+                                                viewBox="0 0 384 512"
+                                                height="1em"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+                                            </svg>
+                                            <span className="icon2" />
+                                            <span className="tooltip">
+                                                Descargar
+                                            </span>
                                         </button>
                                     </li>
                                 );
