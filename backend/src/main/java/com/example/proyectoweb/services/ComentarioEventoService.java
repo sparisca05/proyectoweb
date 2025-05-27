@@ -25,13 +25,16 @@ public class ComentarioEventoService {
                 .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public ComentarioEventoDTO agregarComentario(Long eventoId, String contenido, Long usuarioId) {
+    public ComentarioEventoDTO agregarComentario(Long eventoId, String contenido, String username) {
         Evento evento = eventoRepository.findById(eventoId).orElseThrow();
-        Usuario usuario = usuarioId != null ? usuarioRepository.findById(usuarioId).orElse(null) : null;
         ComentarioEvento comentario = new ComentarioEvento();
+        if (!username.equals("anonymousUser")) {
+            Usuario usuario = usuarioRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
+            comentario.setUsuario(usuario);
+        }
         comentario.setEvento(evento);
         comentario.setContenido(contenido);
-        comentario.setUsuario(usuario);
         comentarioEventoRepository.save(comentario);
         return toDTO(comentario);
     }

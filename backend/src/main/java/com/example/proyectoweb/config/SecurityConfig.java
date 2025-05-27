@@ -48,6 +48,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                                                                                                  // sin autenticación
                         .requestMatchers(GET, "/api/v1/hitos", "/api/v1/hitos/**").permitAll() // Permitir ver hitos sin
                                                                                              // autenticación
+                        .requestMatchers("/api/v1/comentarios/**").permitAll() // Permitir agregar comentarios sin autenticación
 
                         .requestMatchers(GET, "/api/v1/organizador/**")
                         .hasAuthority(ADMIN_READ.name())

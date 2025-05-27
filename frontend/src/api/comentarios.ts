@@ -19,7 +19,7 @@ export function useComentariosEvento(eventoId: number) {
         async function fetchComentarios() {
             setLoading(true);
             try {
-                const res = await fetch(`${API_URL}/api/v1/eventos/${eventoId}/comentarios`);
+                const res = await fetch(`${API_URL}/api/v1/comentarios/${eventoId}`);
                 if (res.ok) {
                     setComentarios(await res.json());
                 } else {
@@ -38,7 +38,7 @@ export function useComentariosEvento(eventoId: number) {
 }
 
 export async function agregarComentarioEvento(eventoId: number, contenido: string) {
-    const res = await fetch(`${API_URL}/api/v1/eventos/${eventoId}/comentarios`, {
+    const res = await fetch(`${API_URL}/api/v1/comentarios/${eventoId}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

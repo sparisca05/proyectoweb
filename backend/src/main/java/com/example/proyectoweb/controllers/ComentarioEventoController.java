@@ -5,12 +5,13 @@ import com.example.proyectoweb.services.ComentarioEventoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/eventos/{eventoId}/comentarios")
+@RequestMapping("/api/v1/comentarios/{eventoId}")
 @RequiredArgsConstructor
 public class ComentarioEventoController {
     private final ComentarioEventoService comentarioEventoService;
@@ -23,18 +24,16 @@ public class ComentarioEventoController {
     @PostMapping
     public ResponseEntity<ComentarioEventoDTO> agregarComentario(
             @PathVariable Long eventoId,
-            @RequestBody ComentarioRequest request,
-            Authentication authentication
+            @RequestBody ComentarioRequest request
     ) {
-        Long usuarioId = null;
-        if (authentication != null && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User user) {
-            // Aquí deberías mapear el username a tu entidad Usuario
-            // Por simplicidad, se asume que el username es el ID (ajusta según tu modelo)
-            try {
-                usuarioId = Long.parseLong(user.getUsername());
-            } catch (NumberFormatException ignored) {}
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username;
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build(); // Unauthorized
+        } else {
+            username = authentication.getName();
         }
-        ComentarioEventoDTO dto = comentarioEventoService.agregarComentario(eventoId, request.getContenido(), usuarioId);
+        ComentarioEventoDTO dto = comentarioEventoService.agregarComentario(eventoId, request.getContenido(), username);
         return ResponseEntity.ok(dto);
     }
 

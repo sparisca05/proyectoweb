@@ -47,13 +47,17 @@ const EventoList: React.FC = () => {
             try {
                 setLoading(true);
 
-                const rol = usuario?.usuario?.rol;
-                if (rol === "ADMIN") {
-                    setEventos(await getEventos());
-                } else if (rol === "PARTICIPANTE") {
+                if (!usuario?.usuario) {
                     setEventos(await getEventosActivos());
                 } else {
-                    setEventos([]);
+                    const rol = usuario?.usuario?.rol;
+                    if (rol === "ADMIN") {
+                        setEventos(await getEventos());
+                    } else if (rol === "PARTICIPANTE") {
+                        setEventos(await getEventosActivos());
+                    } else {
+                        setEventos([]);
+                    }
                 }
 
                 setError("");
