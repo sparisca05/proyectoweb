@@ -102,6 +102,7 @@ function PanelUsuarios({
             setTimeout(() => setError(""), 3000);
         }
     };
+
     return (
         <>
             <h1>Panel de Usuarios</h1>
@@ -109,191 +110,168 @@ function PanelUsuarios({
             {successMessage ? (
                 <div className="alert alert-success">{successMessage}</div>
             ) : null}
-            <div
-                className="table-responsive"
-                style={{
-                    overflowX: "auto",
-                    width: "100%",
-                    border: "1px solid #dee2e6",
-                    borderRadius: "0.375rem",
-                }}
-            >
-                <table
-                    className="custom-table"
-                    style={{
-                        minWidth: "800px",
-                        width: "100%",
-                        marginBottom: 0,
-                    }}
-                >
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Usuario</th>
-                            <th>Email</th>
-                            <th>Rol</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {usuarios?.map((user) => (
-                            <tr
-                                key={user.id}
-                                onClick={() =>
-                                    editingUserId !== user.id &&
-                                    handleEditClick(user)
-                                }
-                                style={{
-                                    cursor:
-                                        editingUserId === user.id
-                                            ? "default"
-                                            : "pointer",
-                                    backgroundColor:
-                                        editingUserId === user.id
-                                            ? "rgba(0, 123, 255, 0.1)"
-                                            : "",
-                                }}
-                            >
-                                {" "}
-                                <td>
-                                    {editingUserId === user.id ? (
-                                        <input
-                                            type="text"
-                                            value={editedUser?.nombre || ""}
-                                            onChange={(e) =>
-                                                handleInputChange(e, "nombre")
-                                            }
-                                            className="form-control"
-                                            onClick={(e) => e.stopPropagation()}
-                                            style={{ minWidth: "120px" }}
-                                        />
-                                    ) : (
-                                        user.nombre
-                                    )}
-                                </td>
-                                <td>
-                                    {editingUserId === user.id ? (
-                                        <input
-                                            type="text"
-                                            value={editedUser?.apellido || ""}
-                                            onChange={(e) =>
-                                                handleInputChange(e, "apellido")
-                                            }
-                                            className="form-control"
-                                            onClick={(e) => e.stopPropagation()}
-                                            style={{ minWidth: "120px" }}
-                                        />
-                                    ) : (
-                                        user.apellido
-                                    )}
-                                </td>
-                                <td>
-                                    {editingUserId === user.id ? (
-                                        <input
-                                            type="text"
-                                            value={editedUser?.username || ""}
-                                            onChange={(e) =>
-                                                handleInputChange(e, "username")
-                                            }
-                                            className="form-control"
-                                            onClick={(e) => e.stopPropagation()}
-                                            style={{ minWidth: "120px" }}
-                                        />
-                                    ) : (
-                                        user.username
-                                    )}
-                                </td>
-                                <td>
-                                    {editingUserId === user.id ? (
-                                        <input
-                                            type="email"
-                                            value={editedUser?.correo || ""}
-                                            onChange={(e) =>
-                                                handleInputChange(e, "correo")
-                                            }
-                                            className="form-control"
-                                            onClick={(e) => e.stopPropagation()}
-                                            style={{ minWidth: "180px" }}
-                                        />
-                                    ) : (
-                                        user.correo
-                                    )}
-                                </td>
-                                <td>
-                                    {editingUserId === user.id ? (
-                                        <select
-                                            value={editedUser?.rol || ""}
-                                            onChange={(e) =>
-                                                handleInputChange(e, "rol")
-                                            }
-                                            className="form-control"
-                                            onClick={(e) => e.stopPropagation()}
-                                            style={{ minWidth: "120px" }}
+            <table className="custom-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {usuarios?.map((user) => (
+                        <tr
+                            key={user.id}
+                            onClick={() =>
+                                editingUserId !== user.id &&
+                                handleEditClick(user)
+                            }
+                            style={{
+                                cursor:
+                                    editingUserId === user.id
+                                        ? "default"
+                                        : "pointer",
+                                backgroundColor:
+                                    editingUserId === user.id
+                                        ? "rgba(0, 123, 255, 0.1)"
+                                        : "",
+                            }}
+                        >
+                            <td>
+                                {editingUserId === user.id ? (
+                                    <input
+                                        type="text"
+                                        value={editedUser?.nombre || ""}
+                                        onChange={(e) =>
+                                            handleInputChange(e, "nombre")
+                                        }
+                                        className="form-control"
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                ) : (
+                                    user.nombre
+                                )}
+                            </td>
+                            <td>
+                                {editingUserId === user.id ? (
+                                    <input
+                                        type="text"
+                                        value={editedUser?.apellido || ""}
+                                        onChange={(e) =>
+                                            handleInputChange(e, "apellido")
+                                        }
+                                        className="form-control"
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                ) : (
+                                    user.apellido
+                                )}
+                            </td>
+                            <td>
+                                {editingUserId === user.id ? (
+                                    <input
+                                        type="text"
+                                        value={editedUser?.username || ""}
+                                        onChange={(e) =>
+                                            handleInputChange(e, "username")
+                                        }
+                                        className="form-control"
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                ) : (
+                                    user.username
+                                )}
+                            </td>
+                            <td>
+                                {editingUserId === user.id ? (
+                                    <input
+                                        type="email"
+                                        value={editedUser?.correo || ""}
+                                        onChange={(e) =>
+                                            handleInputChange(e, "correo")
+                                        }
+                                        className="form-control"
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                ) : (
+                                    user.correo
+                                )}
+                            </td>
+                            <td>
+                                {editingUserId === user.id ? (
+                                    <select
+                                        value={editedUser?.rol || ""}
+                                        onChange={(e) =>
+                                            handleInputChange(e, "rol")
+                                        }
+                                        className="form-control"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <option value="ADMIN">ADMIN</option>
+                                        <option value="USER">
+                                            PARTICIPANTE
+                                        </option>
+                                    </select>
+                                ) : (
+                                    user.rol
+                                )}
+                            </td>
+                            <td>
+                                {editingUserId === user.id ? (
+                                    <div className="btn-group">
+                                        <button
+                                            className="btn btn-sm btn-success"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleSaveClick(user.id);
+                                            }}
+                                            title="Guardar cambios"
                                         >
-                                            <option value="ADMIN">ADMIN</option>
-                                            <option value="USER">
-                                                PARTICIPANTE
-                                            </option>
-                                        </select>
-                                    ) : (
-                                        user.rol
-                                    )}
-                                </td>
-                                <td style={{ minWidth: "120px" }}>
-                                    {editingUserId === user.id ? (
-                                        <div className="btn-group">
-                                            <button
-                                                className="btn btn-sm btn-success"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleSaveClick(user.id);
-                                                }}
-                                                title="Guardar cambios"
-                                            >
-                                                <FaSave />
-                                            </button>
-                                            <button
-                                                className="btn btn-sm btn-secondary"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleCancelEdit();
-                                                }}
-                                                title="Cancelar"
-                                            >
-                                                <FaTimes />
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div className="btn-group">
-                                            <button
-                                                className="btn btn-sm submit-button"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleEditClick(user);
-                                                }}
-                                                title="Editar usuario"
-                                            >
-                                                <FaEdit />
-                                            </button>
-                                            <button
-                                                className="btn btn-sm btn-danger"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleDeleteClick(user.id);
-                                                }}
-                                                title="Eliminar usuario"
-                                            >
-                                                <FaTrash />
-                                            </button>
-                                        </div>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}{" "}
-                    </tbody>
-                </table>
-            </div>
+                                            <FaSave />
+                                        </button>
+                                        <button
+                                            className="btn btn-sm btn-secondary"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleCancelEdit();
+                                            }}
+                                            title="Cancelar"
+                                        >
+                                            <FaTimes />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="btn-group">
+                                        <button
+                                            className="btn btn-sm submit-button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEditClick(user);
+                                            }}
+                                            title="Editar usuario"
+                                        >
+                                            <FaEdit />
+                                        </button>
+                                        <button
+                                            className="btn btn-sm btn-danger"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteClick(user.id);
+                                            }}
+                                            title="Eliminar usuario"
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </div>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </>
     );
 }

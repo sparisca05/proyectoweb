@@ -9,7 +9,6 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,7 +19,6 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     // Replace this with a secure key in a real application, ideally fetched from environment variables
-    Dotenv dotenv = Dotenv.load();
     private static final String SECRET_KEY = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
     private static final long EXPIRATION_TIME = 1000 * 60 * 120; // 120 minutes
 

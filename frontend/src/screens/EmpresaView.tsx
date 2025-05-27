@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { API_URL } from "../main";
 import { getToken } from "./Home";
@@ -86,22 +86,17 @@ const EmpresaView = () => {
         } catch (e) {
             alert("Error de conexión");
         }
-    }; // Guardar cambios de empresa
+    };
+
+    // Guardar cambios de empresa
     const handleGuardarEdicion = async () => {
         if (!editEmpresa) return;
         setEditLoading(true);
         setEditError("");
         try {
-            // Filtrar solo los campos editables (sin la lista de eventos)
-            const empresaData = {
-                nombre: editEmpresa.nombre,
-                descripcion: editEmpresa.descripcion,
-                logoUrl: editEmpresa.logoUrl,
-            };
-
             await axios.put(
                 `${API_URL}/api/v1/empresas/${editEmpresa.id}`,
-                empresaData,
+                editEmpresa,
                 {
                     headers: {
                         Authorization: "Bearer " + getToken(),
@@ -243,7 +238,7 @@ const EmpresaView = () => {
                                     {usuario?.usuario?.rol === "ADMIN" && (
                                         <>
                                             <button
-                                                className="btn btn-outline-success"
+                                                className="btn btn-outline-secondary"
                                                 onClick={() =>
                                                     handleEditarEmpresa(empresa)
                                                 }
@@ -251,7 +246,7 @@ const EmpresaView = () => {
                                                 Editar
                                             </button>
                                             <button
-                                                className="btn btn-outline-danger"
+                                                className="btn btn-danger"
                                                 onClick={() =>
                                                     handleEliminarEmpresa(
                                                         empresa
@@ -327,6 +322,7 @@ const EmpresaView = () => {
                                         maxHeight: 300, // <-- más alto para mejor visualización
                                         objectFit: "contain",
                                         borderRadius: 8,
+                                        background: "#fff",
                                         marginBottom: 12,
                                     }}
                                 />
@@ -405,8 +401,9 @@ const EmpresaView = () => {
                                     <label className="form-label">
                                         Descripción
                                     </label>
-                                    <textarea
+                                    <input
                                         className="form-control"
+                                        type="text"
                                         value={editEmpresa.descripcion}
                                         onChange={(e) =>
                                             setEditEmpresa({
@@ -428,6 +425,20 @@ const EmpresaView = () => {
                                             })
                                         }
                                     />
+                                    {editEmpresa.logoUrl && (
+                                        <img
+                                            src={editEmpresa.logoUrl}
+                                            alt="Logo preview"
+                                            style={{
+                                                width: 120,
+                                                height: 120,
+                                                objectFit: "contain",
+                                                marginTop: 8,
+                                                background: "#fff",
+                                                borderRadius: 8,
+                                            }}
+                                        />
+                                    )}
                                 </div>
                                 {editError && (
                                     <div style={{ color: "#ff5252" }}>
