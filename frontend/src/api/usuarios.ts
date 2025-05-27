@@ -42,3 +42,20 @@ export const getEventosUsuario = async (): Promise<Evento[]> => {
     );
     return response.data;
 }
+
+export const updateUsuario = async (usuario: Usuario): Promise<Usuario> => {
+    const response = await axios.put(`${API_URL}/api/v1/usuario/${usuario.id}`, usuario, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    });
+    return response.data;
+}
+
+export const deleteUsuario = async (id: number): Promise<void> => {
+    await axios.delete(`${API_URL}/api/v1/usuario/${id}`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    });
+}

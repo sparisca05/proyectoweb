@@ -118,6 +118,7 @@ const EmpresaView = () => {
             <div className="main-container">
                 <Navbar />
                 <div className="eventos">
+                    <h1>Empresas Patrocinadoras</h1>
                     <h4 style={{ color: "#fff" }}>Cargando empresas...</h4>
                 </div>
             </div>
@@ -139,7 +140,7 @@ const EmpresaView = () => {
         <div className="main-container">
             <Navbar />
             <div className="eventos">
-                <h1 style={{ color: "#fff" }}>Empresas Patrocinadoras</h1>
+                <h1>Empresas Patrocinadoras</h1>
                 <ul style={{ listStyle: "none", padding: 0 }}>
                     {empresas.map((empresa) => (
                         <li
@@ -236,9 +237,11 @@ const EmpresaView = () => {
                                         Ver detalles
                                     </button>
                                     {usuario?.usuario?.rol === "ADMIN" && (
-                                        <>
+                                        <div
+                                            style={{ display: "flex", gap: 8 }}
+                                        >
                                             <button
-                                                className="btn btn-outline-secondary"
+                                                className="btn btn-outline-success"
                                                 onClick={() =>
                                                     handleEditarEmpresa(empresa)
                                                 }
@@ -246,7 +249,7 @@ const EmpresaView = () => {
                                                 Editar
                                             </button>
                                             <button
-                                                className="btn btn-danger"
+                                                className="btn btn-outline-danger"
                                                 onClick={() =>
                                                     handleEliminarEmpresa(
                                                         empresa
@@ -255,7 +258,7 @@ const EmpresaView = () => {
                                             >
                                                 Eliminar
                                             </button>
-                                        </>
+                                        </div>
                                     )}
                                 </div>
                             </div>

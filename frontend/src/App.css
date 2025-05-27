@@ -265,9 +265,6 @@ button {
 .evento div {
     display: flex;
 }
-.evento > p {
-    font-weight: bold;
-}
 .evento div p {
     display: contents;
     font-weight: 500;
@@ -914,7 +911,6 @@ select,
   position: relative;
   text-align: center;
   border-radius: 0.45em;
-  font-family: "Arial";
   transition: background 0.3s;
 }
 

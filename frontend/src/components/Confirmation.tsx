@@ -34,6 +34,7 @@ function Confirmation({
                     boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
                     maxWidth: "400px",
                     width: "100%",
+                    color: "black",
                 }}
             >
                 <h3 style={{ marginTop: 0 }}>{title}</h3>

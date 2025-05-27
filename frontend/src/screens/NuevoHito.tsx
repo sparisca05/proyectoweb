@@ -32,7 +32,6 @@ function NuevoHito() {
         eventoRelevante?.id &&
             getEventParticipants(eventoRelevante?.id).then((participants) => {
                 setParticipants(participants);
-                console.log(participants);
             });
     };
 
@@ -194,12 +193,10 @@ function NuevoHito() {
                                         }
                                     >
                                         {evento.nombre}
-                                        {
-                                            !evento.participantes ||
-                                            evento.participantes.length === 0
-                                                ? " (Sin participantes)"
-                                                : ""
-                                        }
+                                        {!evento.participantes ||
+                                        evento.participantes.length === 0
+                                            ? " (Sin participantes)"
+                                            : ""}
                                     </option>
                                 ))}
                             </select>
@@ -244,7 +241,6 @@ function NuevoHito() {
                             )}
                         </div>
                         {ganadores.length > 0 && (
-                            console.log(ganadores),
                             <div className="mb-3">
                                 <label
                                     htmlFor="ganadores"
@@ -256,22 +252,39 @@ function NuevoHito() {
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th style={{ color: "#fff" }}>Nombre</th>
-                                            <th style={{ color: "#fff" }}>Apellido</th>
-                                            <th style={{ color: "#fff" }}>Username</th>
+                                            <th style={{ color: "#fff" }}>
+                                                Nombre
+                                            </th>
+                                            <th style={{ color: "#fff" }}>
+                                                Apellido
+                                            </th>
+                                            <th style={{ color: "#fff" }}>
+                                                Username
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
                                         {ganadores.map((usuario) => (
                                             <tr key={usuario.username}>
-                                                <td style={{ color: "#fff" }}>
+                                                <td
+                                                    style={{
+                                                        color: "#fff",
+                                                    }}
+                                                >
                                                     {usuario.nombre}
                                                 </td>
-                                                <td style={{ color: "#fff" }}>
+                                                <td
+                                                    style={{
+                                                        color: "#fff",
+                                                    }}
+                                                >
                                                     {usuario.apellido}
                                                 </td>
-                                                <td style={{ color: "#fff" }}>
+                                                <td
+                                                    style={{
+                                                        color: "#fff",
+                                                    }}
+                                                >
                                                     {usuario.username}
                                                 </td>
                                             </tr>

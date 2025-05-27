@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { API_URL } from "../main.tsx";
 import { FaSave, FaTimes, FaEdit, FaTrash } from "react-icons/fa";
-import { getToken } from "./Home.tsx";
+import { deleteUsuario, updateUsuario } from "../api/usuarios.ts";
+import Confirmation from "../components/Confirmation.tsx";
 
 interface Usuario {
     id: number;
@@ -21,41 +20,12 @@ function PanelUsuarios({
     loading?: boolean;
 }) {
     const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [usuariosList, setUsuariosList] = useState<Usuario[]>(usuarios || []);
     const [editingUserId, setEditingUserId] = useState<number | null>(null);
     const [editedUser, setEditedUser] = useState<Usuario | null>(null);
-    const [successMessage, setSuccessMessage] = useState("");
-
-    if (loading) {
-        return (
-            <h4 style={{ textAlign: "center", color: "white" }}>
-                Cargando usuarios...
-            </h4>
-        );
-    }
-
-    const handleDeleteClick = async (userId: number) => {
-        if (
-            window.confirm("¿Estás seguro de que deseas eliminar este usuario?")
-        ) {
-            try {
-                const token = getToken();
-                await axios.delete(`${API_URL}/api/v1/usuario/${userId}`, {
-                    headers: {
-                        Authorization: "Bearer " + token,
-                    },
-                });
-                // Filtrar el usuario eliminado de la lista
-                window.location.reload();
-                setSuccessMessage("Usuario eliminado con éxito");
-                // Quitar el mensaje después de 3 segundos
-                setTimeout(() => setSuccessMessage(""), 3000);
-            } catch (error) {
-                console.error("Error al eliminar el usuario:", error);
-                setError("No se pudo eliminar el usuario");
-                setTimeout(() => setError(""), 3000);
-            }
-        }
-    };
+    const [deletingUserId, setDeletingUserId] = useState<number | null>(null);
 
     const handleEditClick = (user: Usuario) => {
         setEditingUserId(user.id);
@@ -81,20 +51,16 @@ function PanelUsuarios({
         if (!editedUser) return;
 
         try {
-            const token = getToken();
-            await axios.put(`${API_URL}/api/v1/usuario/${userId}`, editedUser, {
-                headers: {
-                    Authorization: "Bearer " + token,
-                },
-            });
+            const usuario = await updateUsuario(editedUser);
 
-            // Actualizar la lista de usuarios con el usuario editado
-            window.location.reload();
+            setUsuariosList((prevUsuarios) =>
+                prevUsuarios.map((user) =>
+                    user.id === userId ? usuario : user
+                )
+            );
             setEditingUserId(null);
             setEditedUser(null);
             setSuccessMessage("Usuario actualizado con éxito");
-
-            // Quitar el mensaje después de 3 segundos
             setTimeout(() => setSuccessMessage(""), 3000);
         } catch (error) {
             console.error("Error al actualizar el usuario:", error);
@@ -103,9 +69,52 @@ function PanelUsuarios({
         }
     };
 
+    const handleDeleteClick = (user: Usuario) => {
+        setDeletingUserId(user.id);
+        setShowConfirmation(true);
+    };
+
+    const confirmDelete = (id: number) => {
+        handleDelete(id);
+        setShowConfirmation(false);
+    };
+
+    const cancelDelete = () => {
+        setShowConfirmation(false);
+    };
+
+    const handleDelete = async (userId: number) => {
+        try {
+            await deleteUsuario(userId);
+            setUsuariosList((prevUsuarios) =>
+                prevUsuarios.filter((user) => user.id !== userId)
+            );
+            setSuccessMessage("Usuario eliminado con éxito");
+            // Quitar el mensaje después de 3 segundos
+            setTimeout(() => setSuccessMessage(""), 3000);
+        } catch (error) {
+            console.error("Error al eliminar el usuario:", error);
+            setError("No se pudo eliminar el usuario");
+            setTimeout(() => setError(""), 3000);
+        }
+    };
+
+    if (loading) {
+        return <h4 style={{ color: "white" }}>Cargando usuarios...</h4>;
+    }
+
     return (
         <>
             <h1>Panel de Usuarios</h1>
+            {showConfirmation && (
+                <Confirmation
+                    title="Eliminar Usuario"
+                    message="¿Estás seguro que deseas eliminar este usuario?"
+                    confirmText="Eliminar"
+                    onConfirm={() => confirmDelete(deletingUserId || 0)}
+                    onCancel={cancelDelete}
+                />
+            )}
             {error ? <div className="alert alert-danger">{error}</div> : null}
             {successMessage ? (
                 <div className="alert alert-success">{successMessage}</div>
@@ -122,18 +131,10 @@ function PanelUsuarios({
                     </tr>
                 </thead>
                 <tbody>
-                    {usuarios?.map((user) => (
+                    {usuariosList?.map((user) => (
                         <tr
                             key={user.id}
-                            onClick={() =>
-                                editingUserId !== user.id &&
-                                handleEditClick(user)
-                            }
                             style={{
-                                cursor:
-                                    editingUserId === user.id
-                                        ? "default"
-                                        : "pointer",
                                 backgroundColor:
                                     editingUserId === user.id
                                         ? "rgba(0, 123, 255, 0.1)"
@@ -207,7 +208,6 @@ function PanelUsuarios({
                                         onChange={(e) =>
                                             handleInputChange(e, "rol")
                                         }
-                                        className="form-control"
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         <option value="ADMIN">ADMIN</option>
@@ -259,7 +259,7 @@ function PanelUsuarios({
                                             className="btn btn-sm btn-danger"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleDeleteClick(user.id);
+                                                handleDeleteClick(user);
                                             }}
                                             title="Eliminar usuario"
                                         >

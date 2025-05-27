@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Evento } from "../screens/Eventos.tsx";
 import { Link } from "react-router-dom";
-import { getToken } from "../screens/Home.tsx";
 import { getEventosUsuario } from "../api/usuarios.ts";
+import { MdLock, MdPublic } from "react-icons/md";
+import { FaCalendarDays } from "react-icons/fa6";
 
 const MisEventos = () => {
     const [eventos, setEventos] = useState<Evento[]>([]); // Estado para almacenar la lista de eventos
@@ -13,11 +14,6 @@ const MisEventos = () => {
         const fetchEventos = async () => {
             try {
                 setLoading(true);
-                const token = getToken();
-                if (!token) {
-                    window.location.href = "/login";
-                    return;
-                }
 
                 const eventos = await getEventosUsuario();
 
@@ -55,13 +51,38 @@ const MisEventos = () => {
                     <Link
                         to={`/eventos/${evento.id}`}
                         key={evento.id}
-                        className="evento evento-profile"
+                        className="evento"
                     >
-                        <p>{evento.nombre}</p>
-                        <div>
+                        {evento.publico ? (
+                            <MdPublic className="visibility-icon" size={30} />
+                        ) : (
+                            <MdLock className="visibility-icon" size={30} />
+                        )}
+                        <h5>{evento.tipo}</h5>
+                        <h4>{evento.nombre}</h4>
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "5px",
+                            }}
+                        >
+                            <FaCalendarDays />
                             <p>Fecha: </p>
                             {evento.fecha}
                         </div>
+                        {evento.imagenUrl && (
+                            <img
+                                src={evento.imagenUrl}
+                                alt={evento.nombre}
+                                style={{
+                                    height: "200px",
+                                    objectFit: "cover",
+                                    borderRadius: "8px",
+                                    marginBottom: "10px",
+                                }}
+                            />
+                        )}
                     </Link>
                 ))}
             </div>

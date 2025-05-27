@@ -152,19 +152,6 @@ const HistoricoEventos = () => {
         doc.save(`reporte_evento_${evento.id}.pdf`);
     };
 
-    if (loading) {
-        return (
-            <div className={"main-container"}>
-                <Navbar />
-                <div className={"eventos"}>
-                    <h4 style={{ textAlign: "center", color: "white" }}>
-                        Cargando historial...
-                    </h4>
-                </div>
-            </div>
-        );
-    }
-
     const parseFecha = (fechaStr: string) => {
         if (!fechaStr) return new Date(0);
 
@@ -197,16 +184,24 @@ const HistoricoEventos = () => {
         return new Date(fechaStr);
     };
 
+    if (loading) {
+        return (
+            <div className={"main-container"}>
+                <Navbar />
+                <div className={"eventos"}>
+                    <h1>Histórico de Eventos</h1>
+                    <h4 style={{ color: "white" }}>Cargando historial...</h4>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="main-container">
             <Navbar />
             <div className="eventos">
-                <h1 style={{ color: "#fff" }}>Histórico de Eventos</h1>
-                <button
-                    className="button"
-                    data-tooltip="Size: 20Mb"
-                    onClick={handleDescargarReporte}
-                >
+                <h1>Histórico de Eventos</h1>
+                <button className="button" onClick={handleDescargarReporte}>
                     <div className="button-wrapper">
                         <div className="text">Descargar reporte</div>
                         <span className="icon">

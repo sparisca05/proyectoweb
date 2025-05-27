@@ -219,7 +219,7 @@ function PanelStats({
     };
 
     if (loading) {
-        return <h3>Cargando estadísticas...</h3>;
+        return <h4>Cargando estadísticas...</h4>;
     }
     return (
         <div>
