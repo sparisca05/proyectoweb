@@ -36,6 +36,15 @@ public class EmpresaService {
     }
     */
 
+    public void updateEmpresa(Long empresaId, Empresa empresa) {
+        Empresa existingEmpresa = getEmpresaById(empresaId);
+        existingEmpresa.setNombre(empresa.getNombre());
+        existingEmpresa.setDescripcion(empresa.getDescripcion());
+        existingEmpresa.setLogo(empresa.getLogo());
+        // Aquí puedes agregar más campos a actualizar según sea necesario
+        empresaRepository.save(existingEmpresa);
+    }
+
     public void deleteEmpresa(Long empresaId) {
         empresaRepository.deleteById(empresaId);
     }
