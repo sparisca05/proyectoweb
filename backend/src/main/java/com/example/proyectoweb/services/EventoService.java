@@ -47,6 +47,8 @@ public class EventoService {
         evento.setTipo(request.getTipo());
         evento.setNombreOrganizador(request.getNombreOrganizador());
         evento.setContactoOrganizador(request.getContactoOrganizador());
+        evento.setImagenUrl(request.getImagenUrl());
+        evento.setPublico(request.isPublico());
         saveEvento(evento);
 
         return evento;

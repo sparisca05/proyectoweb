@@ -5,6 +5,7 @@ import { getToken } from "./Home.tsx";
 import { IoMdClose } from "react-icons/io";
 import { MdPublic, MdLock } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { ImageUpload } from "../components/ImageUpload.tsx";
 
 export interface Empresa {
     id: number;
@@ -23,6 +24,7 @@ function NuevoEvento() {
     const [contactoOrganizador, setContactoOrganizador] = useState<string>("");
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [empresaPatrocinadora, setEmpresaPatrocinadora] = useState<Empresa>();
+    const [imagenUrl, setImagenUrl] = useState<string>("");
     const [isPrivado, setIsPrivado] = useState<boolean>(false);
 
     const tiposEvento = [
@@ -72,6 +74,7 @@ function NuevoEvento() {
         );
         setEmpresaPatrocinadora(selectedEmpresa || undefined);
     };
+
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
@@ -88,6 +91,7 @@ function NuevoEvento() {
             empresaPatrocinadora: {
                 id: empresaPatrocinadora?.id,
             },
+            imagenUrl: imagenUrl,
             publico: !isPrivado,
         };
 
@@ -255,6 +259,9 @@ function NuevoEvento() {
                                 />
                             </div>
                         </div>
+                        <ImageUpload
+                            onImageUpload={(url) => setImagenUrl(url)}
+                        />
                         <div
                             className="mb-3"
                             style={{

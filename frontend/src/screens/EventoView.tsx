@@ -12,6 +12,7 @@ import { Usuario } from "../contexts/UsuarioContext.tsx";
 import PasskeyInput from "../components/PasskeyInput.tsx";
 import { Evento } from "./Eventos.tsx";
 import AddInvitadoInput from "../components/AddInvitadoInput.tsx";
+import { ImageUpload } from "../components/ImageUpload.tsx";
 import "../App.css";
 import Confirmation from "../components/Confirmation.tsx";
 import { addPublicEventParticipant, getEventoById } from "../api/eventos.ts";
@@ -19,15 +20,16 @@ import { getPerfil } from "../api/usuarios.ts";
 
 function EventoView() {
     const token = getToken();
-    const { id } = useParams<{ id: string }>();
-    const [evento, setEvento] = useState<Evento>(); // Estado para almacenar la lista de eventos
+    const [loading, setLoading] = useState<boolean>(true);
     const [usuario, setUsuario] = useState<Usuario | null>(null);
-    const [userHasEvent, setUserHasEvent] = useState<boolean>(false); // Estado para verificar si el usuario tiene el evento
-    const [loading, setLoading] = useState<boolean>(true); // Estado para mostrar una carga
+
+    const { id } = useParams<{ id: string }>();
+    const [evento, setEvento] = useState<Evento>();
+    const [userHasEvent, setUserHasEvent] = useState<boolean>(false);
     const [displayPasskey, setDisplayPasskey] = useState<boolean>(false);
     const [displayInvitado, setDisplayInvitado] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [showClave, setShowClave] = useState<boolean>(false); // Nuevo estado para mostrar/ocultar la clave
+    const [showClave, setShowClave] = useState<boolean>(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [estadoEvento, setEstadoEvento] = useState<string>("");
 
@@ -305,122 +307,169 @@ function EventoView() {
                                                     })
                                                 }
                                             />
+                                            <ImageUpload
+                                                onImageUpload={(url) =>
+                                                    setEvento({
+                                                        ...evento,
+                                                        imagenUrl: url,
+                                                    })
+                                                }
+                                            />
                                         </>
                                     ) : (
-                                        <>
-                                            <h2 style={{ alignSelf: "center" }}>
-                                                {evento.nombre}
-                                            </h2>
-                                            <h5
-                                                style={{
-                                                    color: "#0d6efd",
-                                                    alignSelf: "center",
-                                                }}
-                                            >
-                                                {evento.tipo}
-                                            </h5>
-                                            {usuario?.rol === "ADMIN" &&
-                                                !evento.publico && (
+                                        <div className="row">
+                                            <div className="col">
+                                                <h5
+                                                    style={{
+                                                        color: "#0d6efd",
+                                                        alignSelf: "center",
+                                                    }}
+                                                >
+                                                    {evento.tipo}
+                                                </h5>
+                                                <h2
+                                                    style={{
+                                                        alignSelf: "center",
+                                                    }}
+                                                >
+                                                    {evento.nombre}
+                                                </h2>
+                                                {usuario?.rol === "ADMIN" &&
+                                                    !evento.publico && (
+                                                        <p className="list-item">
+                                                            Clave de acceso:{" "}
+                                                            <strong>
+                                                                {showClave
+                                                                    ? evento.clave
+                                                                    : "●●●●●●●●"}
+                                                                <button
+                                                                    onClick={() =>
+                                                                        setShowClave(
+                                                                            !showClave
+                                                                        )
+                                                                    }
+                                                                    style={{
+                                                                        background:
+                                                                            "none",
+                                                                        border: "none",
+                                                                        cursor: "pointer",
+                                                                        padding: 0,
+                                                                        marginLeft:
+                                                                            "0.5rem",
+                                                                    }}
+                                                                >
+                                                                    {showClave ? (
+                                                                        <FaEyeSlash color="white" />
+                                                                    ) : (
+                                                                        <FaEye color="white" />
+                                                                    )}
+                                                                </button>
+                                                            </strong>
+                                                        </p>
+                                                    )}
+                                                <p className="list-item">
+                                                    Fecha:{" "}
+                                                    <strong>
+                                                        {evento.fecha}
+                                                    </strong>
+                                                </p>
+                                                <p className="list-item">
+                                                    Organiza:{" "}
+                                                    <strong>
+                                                        {
+                                                            evento.nombreOrganizador
+                                                        }
+                                                    </strong>
+                                                </p>
+                                                <p className="list-item">
+                                                    Contacto:{" "}
+                                                    <strong>
+                                                        {
+                                                            evento.contactoOrganizador
+                                                        }
+                                                    </strong>
+                                                </p>
+                                                <p className="list-item">
+                                                    Patrocina:{" "}
+                                                    <strong>
+                                                        {
+                                                            evento
+                                                                .empresaPatrocinadora
+                                                                .nombre
+                                                        }
+                                                    </strong>
+                                                </p>
+                                                {estadoEvento === "Pasado" ? (
                                                     <p className="list-item">
-                                                        Clave de acceso:{" "}
-                                                        <strong>
-                                                            {showClave
-                                                                ? evento.clave
-                                                                : "●●●●●●●●"}
-                                                            <button
-                                                                onClick={() =>
-                                                                    setShowClave(
-                                                                        !showClave
-                                                                    )
-                                                                }
-                                                                style={{
-                                                                    background:
-                                                                        "none",
-                                                                    border: "none",
-                                                                    cursor: "pointer",
-                                                                    padding: 0,
-                                                                    marginLeft:
-                                                                        "0.5rem",
-                                                                }}
-                                                            >
-                                                                {showClave ? (
-                                                                    <FaEyeSlash color="white" />
-                                                                ) : (
-                                                                    <FaEye color="white" />
-                                                                )}
-                                                            </button>
+                                                        Estado:{" "}
+                                                        <strong
+                                                            style={{
+                                                                color: "red",
+                                                            }}
+                                                        >
+                                                            {estadoEvento}
                                                         </strong>
                                                     </p>
+                                                ) : (
+                                                    <>
+                                                        <p className="list-item">
+                                                            Estado:{" "}
+                                                            <strong
+                                                                style={{
+                                                                    color: "green",
+                                                                }}
+                                                            >
+                                                                {estadoEvento}
+                                                            </strong>
+                                                        </p>
+                                                        {userHasEvent ? (
+                                                            <button
+                                                                className={
+                                                                    "btn btn-danger"
+                                                                }
+                                                                onClick={
+                                                                    handleRemoveParticipationClick
+                                                                }
+                                                            >
+                                                                Dejar de
+                                                                participar
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                className={
+                                                                    "btn submit-button"
+                                                                }
+                                                                onClick={() =>
+                                                                    handleParticipar(
+                                                                        evento.id
+                                                                    )
+                                                                }
+                                                            >
+                                                                Participar
+                                                            </button>
+                                                        )}
+                                                    </>
                                                 )}
-                                            <p className="list-item">
-                                                Fecha:{" "}
-                                                <strong>{evento.fecha}</strong>
-                                            </p>
-                                            <p className="list-item">
-                                                Organiza:{" "}
-                                                <strong>
-                                                    {evento.nombreOrganizador}
-                                                </strong>
-                                            </p>
-                                            <p className="list-item">
-                                                Contacto:{" "}
-                                                <strong>
-                                                    {evento.contactoOrganizador}
-                                                </strong>
-                                            </p>
-                                            <p className="list-item">
-                                                Patrocina:{" "}
-                                                <strong>
-                                                    {
-                                                        evento
-                                                            .empresaPatrocinadora
-                                                            .nombre
-                                                    }
-                                                </strong>
-                                            </p>
-                                        </>
-                                    )}
-                                    {estadoEvento === "Pasado" ? (
-                                        <p className="list-item">
-                                            Estado:{" "}
-                                            <strong style={{ color: "red" }}>
-                                                {estadoEvento}
-                                            </strong>
-                                        </p>
-                                    ) : (
-                                        <>
-                                            <p className="list-item">
-                                                Estado:{" "}
-                                                <strong
-                                                    style={{ color: "green" }}
-                                                >
-                                                    {estadoEvento}
-                                                </strong>
-                                            </p>
-                                            {userHasEvent ? (
-                                                <button
-                                                    className={"btn btn-danger"}
-                                                    onClick={
-                                                        handleRemoveParticipationClick
-                                                    }
-                                                >
-                                                    Dejar de participar
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    className={
-                                                        "btn submit-button"
-                                                    }
-                                                    onClick={() =>
-                                                        handleParticipar(
-                                                            evento.id
-                                                        )
-                                                    }
-                                                >
-                                                    Participar
-                                                </button>
+                                            </div>
+                                            {evento.imagenUrl && (
+                                                <div className="col">
+                                                    <img
+                                                        src={evento.imagenUrl}
+                                                        alt={evento.nombre}
+                                                        style={{
+                                                            width: "100%",
+                                                            maxWidth: "400px",
+                                                            height: "auto",
+                                                            borderRadius: "8px",
+                                                            objectFit: "cover",
+                                                            marginBottom:
+                                                                "1rem",
+                                                            alignSelf: "center",
+                                                        }}
+                                                    />
+                                                </div>
                                             )}
-                                        </>
+                                        </div>
                                     )}
                                     <div>
                                         <h4>

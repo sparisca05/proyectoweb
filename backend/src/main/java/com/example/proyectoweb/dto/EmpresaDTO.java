@@ -12,10 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmpresaDTO {
-    private Long id;
-    private String nombre;
+    private Long id;    private String nombre;
     private String descripcion;
-    private String logo;
+    private String logoUrl;
     
     // Referencia simplificada a los eventos
     private List<EventoResumenDTO> eventos;

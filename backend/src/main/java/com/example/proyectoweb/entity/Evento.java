@@ -54,10 +54,11 @@ public class Evento {
             c += caracteres.charAt((int) (Math.random() * caracteres.length()));
         }
         return c;
-    }
-    
-    @Column(name = "clave_evento")
+    }    @Column(name = "clave_evento")
     private String clave = generarClave();
+
+    @Column(name = "imagen_url")
+    private String imagenUrl;
 
     // Tabla de hitos del evento
     @OneToMany(

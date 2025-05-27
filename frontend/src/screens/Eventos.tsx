@@ -27,6 +27,7 @@ export interface Evento {
         id: number;
         nombre: string;
     };
+    imagenUrl?: string;
     publico: boolean;
 }
 
@@ -266,6 +267,18 @@ const EventoList: React.FC = () => {
                                             size={40}
                                         />
                                     )}
+                                {evento.imagenUrl && (
+                                    <img
+                                        src={evento.imagenUrl}
+                                        alt={evento.nombre}
+                                        style={{
+                                            height: "200px",
+                                            objectFit: "cover",
+                                            borderRadius: "8px",
+                                            marginBottom: "10px",
+                                        }}
+                                    />
+                                )}
                             </Link>
                         ))}
                     {usuario && usuario.usuario?.rol === "ADMIN" && (

@@ -28,8 +28,7 @@ public class EventoControllerHelper {
         if (evento == null) {
             return null;
         }
-        
-        // Crear y devolver un nuevo EventoDTO utilizando el builder
+          // Crear y devolver un nuevo EventoDTO utilizando el builder
         return EventoDTO.builder()
                 .id(evento.getId())
                 .nombre(evento.getNombre())
@@ -39,6 +38,7 @@ public class EventoControllerHelper {
                 .contactoOrganizador(evento.getContactoOrganizador())
                 .isPublico(evento.isPublico())
                 .clave(evento.getClave())
+                .imagenUrl(evento.getImagenUrl())
                 .build();
     }
     

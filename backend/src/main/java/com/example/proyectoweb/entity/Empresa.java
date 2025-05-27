@@ -23,12 +23,11 @@ public class Empresa {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String nombre;
-
-    @Column(nullable = false)
+    private String nombre;    @Column(nullable = false)
     private String descripcion;
 
-    private String logo;
+    @Column(name = "logo_url")
+    private String logoUrl;
 
     @OneToMany(
         mappedBy = "empresaPatrocinadora",
