@@ -162,12 +162,19 @@ const EventoList: React.FC = () => {
                 <div
                     className="search-container"
                     style={{
-                        marginBottom: "20px",
+                        margin: "0 auto 32px auto",
                         display: "flex",
-                        maxWidth: "800px",
+                        maxWidth: "1100px",
+                        minWidth: "0",
+                        width: "100%",
                         alignItems: "center",
-                        gap: "10px",
+                        gap: "18px",
                         flexWrap: "wrap",
+                        background: "#23272f",
+                        borderRadius: 12,
+                        boxShadow: "0 2px 12px rgba(0,0,0,0.18)",
+                        padding: "22px 16px",
+                        justifyContent: "center",
                     }}
                 >
                     <div
@@ -175,10 +182,16 @@ const EventoList: React.FC = () => {
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
-                            flex: 1,
+                            flex: 2,
+                            background: "#181c22",
+                            borderRadius: 8,
+                            padding: "10px 12px",
+                            minWidth: 220,
+                            width: "100%",
+                            maxWidth: 500,
                         }}
                     >
-                        <IoSearch size={20} style={{ color: "white" }} />
+                        <IoSearch size={22} style={{ color: "#b3e5fc" }} />
                         <input
                             type="text"
                             placeholder="Buscar eventos por nombre, tipo o organizador..."
@@ -186,43 +199,75 @@ const EventoList: React.FC = () => {
                             style={{
                                 border: "none",
                                 backgroundColor: "transparent",
+                                color: "#fff",
+                                fontSize: 17,
+                                outline: "none",
+                                width: "100%",
+                                minWidth: 120,
                             }}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <select
-                        value={tipoFilter}
-                        onChange={(e) => setTipoFilter(e.target.value)}
-                        style={{
-                            padding: "10px",
-                            borderRadius: "5px",
-                            border: "1px solid #ccc",
-                            fontSize: "16px",
-                            minWidth: "150px",
-                        }}
-                    >
-                        <option value="">Todos los tipos</option>
-                        {uniqueTypes.map((tipo) => (
-                            <option key={tipo} value={tipo}>
-                                {tipo}
-                            </option>
-                        ))}
-                    </select>
-                    <select
-                        value={sortOrder}
-                        onChange={(e) => setSortOrder(e.target.value)}
-                        style={{
-                            padding: "10px",
-                            borderRadius: "5px",
-                            border: "1px solid #ccc",
-                            fontSize: "16px",
-                            minWidth: "150px",
-                        }}
-                    >
-                        <option value="desc">Más recientes</option>
-                        <option value="asc">Más antiguos</option>
-                    </select>
+                    <div style={{ display: "flex", gap: 14, flex: 1, minWidth: 220, width: "100%", maxWidth: 500, justifyContent: "center" }}>
+                        <select
+                            value={tipoFilter}
+                            onChange={(e) => setTipoFilter(e.target.value)}
+                            style={{
+                                padding: "12px 18px",
+                                borderRadius: "8px",
+                                border: "none",
+                                fontSize: "16px",
+                                minWidth: "120px",
+                                background: "#181c22",
+                                color: "#b3e5fc",
+                                fontWeight: 500,
+                                outline: "none",
+                                width: "100%",
+                            }}
+                        >
+                            <option value="">Todos los tipos</option>
+                            {uniqueTypes.map((tipo) => (
+                                <option key={tipo} value={tipo}>
+                                    {tipo}
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            value={sortOrder}
+                            onChange={(e) => setSortOrder(e.target.value)}
+                            style={{
+                                padding: "12px 18px",
+                                borderRadius: "8px",
+                                border: "none",
+                                fontSize: "16px",
+                                minWidth: "120px",
+                                background: "#181c22",
+                                color: "#b3e5fc",
+                                fontWeight: 500,
+                                outline: "none",
+                                width: "100%",
+                            }}
+                        >
+                            <option value="desc">Más recientes</option>
+                            <option value="asc">Más antiguos</option>
+                        </select>
+                    </div>
                 </div>
+                <style>{`
+                @media (max-width: 900px) {
+                    .search-container {
+                        flex-direction: column !important;
+                        gap: 12px !important;
+                        padding: 16px 6vw !important;
+                        max-width: 98vw !important;
+                    }
+                }
+                @media (max-width: 600px) {
+                    .search-container {
+                        padding: 10px 2vw !important;
+                    }
+                }
+                `}</style>
                 {error ? (
                     <div>{error}</div>
                 ) : (
