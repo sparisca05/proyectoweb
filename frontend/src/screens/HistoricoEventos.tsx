@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MdPublic, MdLock } from "react-icons/md";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 import Navbar from "../components/Navbar";
 import { Evento } from "./Eventos";
@@ -43,6 +45,101 @@ const HistoricoEventos = () => {
         const ahora = new Date();
         const fechaEvento = parseFecha(evento.fecha);
         return fechaEvento < ahora ? "Pasado" : "Activo";
+    };
+
+    const handleDescargarReporte = () => {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text("Reporte de Eventos", 14, 18);
+        doc.setFontSize(12);
+        doc.text(
+            `Generado el: ${new Date().toLocaleString()}`,
+            14,
+            26
+        );
+
+        const tableColumn = [
+            "Nombre",
+            "Tipo",
+            "Fecha",
+            "Organizador",
+            "Empresa Patrocinadora",
+            "Público",
+            "Estado"
+        ];
+        const tableRows = eventos.map((evento) => [
+            evento.nombre,
+            evento.tipo,
+            evento.fecha,
+            evento.nombreOrganizador,
+            evento.empresaPatrocinadora && evento.empresaPatrocinadora.nombre
+                ? evento.empresaPatrocinadora.nombre
+                : "Sin patrocinador",
+            evento.publico ? "Sí" : "No",
+            calcularEstadoEvento(evento)
+        ]);
+
+        autoTable(doc, {
+            head: [tableColumn],
+            body: tableRows,
+            startY: 32,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [33, 150, 243] },
+        });
+
+        doc.save("reporte_eventos.pdf");
+    };
+
+    // Helper to generate PDF for a single event
+    const handleDescargarReporteEvento = (evento: Evento) => {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text(`Reporte del Evento: ${evento.nombre}`, 14, 18);
+        doc.setFontSize(12);
+        doc.text(`Generado el: ${new Date().toLocaleString()}`, 14, 26);
+
+        // Event details
+        const detalles = [
+            ["Nombre", evento.nombre],
+            ["Tipo", evento.tipo],
+            ["Fecha", evento.fecha],
+            ["Organizador", evento.nombreOrganizador],
+            ["Empresa Patrocinadora", evento.empresaPatrocinadora && evento.empresaPatrocinadora.nombre ? evento.empresaPatrocinadora.nombre : "Sin patrocinador"],
+            ["Público", evento.publico ? "Sí" : "No"],
+            ["Estado", calcularEstadoEvento(evento)]
+        ];
+        autoTable(doc, {
+            head: [["Campo", "Valor"]],
+            body: detalles,
+            startY: 32,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [33, 150, 243] },
+        });
+
+        // Participants table
+        const participantes = Array.isArray(evento.participantes) ? evento.participantes : [];
+        const nextY = (doc as any).lastAutoTable?.finalY ? (doc as any).lastAutoTable.finalY + 8 : 40;
+        if (participantes.length > 0) {
+            doc.setFontSize(14);
+            doc.text("Participantes", 14, nextY);
+            const participantesRows = participantes.map((p: any, idx: number) => [
+                idx + 1,
+                p.nombre || p.name || "",
+                p.username || p.usuario || p.email || ""
+            ]);
+            autoTable(doc, {
+                head: [["#", "Nombre", "Usuario/Email"]],
+                body: participantesRows,
+                startY: nextY + 4,
+                styles: { fontSize: 10 },
+                headStyles: { fillColor: [76, 175, 80] },
+            });
+        } else {
+            doc.setFontSize(12);
+            doc.text("No hay participantes registrados para este evento.", 14, nextY);
+        }
+
+        doc.save(`reporte_evento_${evento.id}.pdf`);
     };
 
     if (loading) {
@@ -97,6 +194,24 @@ const HistoricoEventos = () => {
             <Navbar />
             <div className="eventos">
                 <h1 style={{ color: "#fff" }}>Histórico de Eventos</h1>
+                <button
+                    onClick={handleDescargarReporte}
+                    style={{
+                        marginBottom: "18px",
+                        padding: "10px 24px",
+                        background: "#2196f3",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold",
+                        fontSize: "1em",
+                        cursor: "pointer",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
+                        transition: "background 0.2s",
+                    }}
+                >
+                    Descargar reporte
+                </button>
 
                 {loading && (
                     <p style={{ color: "#fff" }}>Cargando eventos...</p>
@@ -243,6 +358,24 @@ const HistoricoEventos = () => {
                                                     : "Sin patrocinador"}
                                             </span>
                                         </p>
+                                        <button
+                                            onClick={() => handleDescargarReporteEvento(evento)}
+                                            style={{
+                                                marginTop: "10px",
+                                                padding: "8px 18px",
+                                                background: "#43e97b",
+                                                color: "#222",
+                                                border: "none",
+                                                borderRadius: "6px",
+                                                fontWeight: "bold",
+                                                fontSize: "0.95em",
+                                                cursor: "pointer",
+                                                boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                                                transition: "background 0.2s",
+                                            }}
+                                        >
+                                            Descargar reporte
+                                        </button>
                                     </li>
                                 );
                             })}
