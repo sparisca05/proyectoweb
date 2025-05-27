@@ -116,37 +116,40 @@ const HistoricoEventos = () => {
             headStyles: { fillColor: [33, 150, 243] },
         });
 
-        // Participants table
-        const participantes = Array.isArray(evento.participantes)
-            ? evento.participantes
-            : [];
-        const nextY = (doc as any).lastAutoTable?.finalY
-            ? (doc as any).lastAutoTable.finalY + 8
-            : 40;
-        if (participantes.length > 0) {
-            doc.setFontSize(14);
-            doc.text("Participantes", 14, nextY);
-            const participantesRows = participantes.map(
-                (p: any, idx: number) => [
-                    idx + 1,
-                    p.nombre || p.name || "",
-                    p.username || p.usuario || p.email || "",
-                ]
-            );
-            autoTable(doc, {
-                head: [["#", "Nombre", "Usuario/Email"]],
-                body: participantesRows,
-                startY: nextY + 4,
-                styles: { fontSize: 10 },
-                headStyles: { fillColor: [76, 175, 80] },
-            });
-        } else {
-            doc.setFontSize(12);
-            doc.text(
-                "No hay participantes registrados para este evento.",
-                14,
-                nextY
-            );
+        // Solo mostrar participantes si el usuario NO es PARTICIPANTE
+        const rol = usuarioContext?.usuario?.rol;
+        if (rol !== "PARTICIPANTE") {
+            const participantes = Array.isArray(evento.participantes)
+                ? evento.participantes
+                : [];
+            const nextY = (doc as any).lastAutoTable?.finalY
+                ? (doc as any).lastAutoTable.finalY + 8
+                : 40;
+            if (participantes.length > 0) {
+                doc.setFontSize(14);
+                doc.text("Participantes", 14, nextY);
+                const participantesRows = participantes.map(
+                    (p: any, idx: number) => [
+                        idx + 1,
+                        p.nombre || p.name || "",
+                        p.username || p.usuario || p.email || "",
+                    ]
+                );
+                autoTable(doc, {
+                    head: [["#", "Nombre", "Usuario/Email"]],
+                    body: participantesRows,
+                    startY: nextY + 4,
+                    styles: { fontSize: 10 },
+                    headStyles: { fillColor: [76, 175, 80] },
+                });
+            } else {
+                doc.setFontSize(12);
+                doc.text(
+                    "No hay participantes registrados para este evento.",
+                    14,
+                    nextY
+                );
+            }
         }
 
         doc.save(`reporte_evento_${evento.id}.pdf`);
