@@ -263,7 +263,7 @@ function PanelStats({
                     className="chart-container"
                     style={{
                         height: "400px",
-                        width: "100%",
+                        width: "40%",
                         maxWidth: "800px",
                         margin: "0 auto 40px auto",
                     }}
@@ -274,7 +274,7 @@ function PanelStats({
                     className="chart-container"
                     style={{
                         height: "400px",
-                        width: "100%",
+                        width: "40%",
                         maxWidth: "800px",
                         margin: "0 auto",
                     }}

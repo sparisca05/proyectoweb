@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { isLoggedIn } from "../screens/Home.tsx";
 import ProfileIcon from "./ProfileIcon.tsx";
 import LoginButton from "./LoginButton.tsx";
@@ -10,6 +10,11 @@ import UsuarioContext from "../contexts/UsuarioContext.tsx";
 const Navbar = () => {
     const usuario = useContext(UsuarioContext);
     const location = useLocation();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
 
     const title = () => {
         return (
@@ -21,13 +26,15 @@ const Navbar = () => {
             </Link>
         );
     };
-
     return (
         <nav className={"navbar "} style={{ width: "100%" }}>
             <div className={"container-fluid"}>
                 <>
-                    <div className={"nav-links"}>
-                        {title()}
+                    {/* Logo */}
+                    {title()}
+
+                    {/* Desktop Navigation */}
+                    <div className={"nav-links desktop-nav"}>
                         <Link
                             to={"/eventos"}
                             className={`nav-link ${
@@ -85,29 +92,161 @@ const Navbar = () => {
                             Empresas Patrocinadoras
                         </Link>
                     </div>
-                    {isLoggedIn() ? (
-                        location.pathname !== "/perfil" ? (
-                            <ProfileIcon
-                                username={
-                                    usuario?.usuario?.username ||
-                                    "Iniciar sesión"
-                                }
-                                link={usuario?.usuario ? "/perfil" : "/login"}
-                            />
+
+                    {/* Desktop Auth Section */}
+                    <div className="desktop-auth">
+                        {isLoggedIn() ? (
+                            location.pathname !== "/perfil" ? (
+                                <ProfileIcon
+                                    username={
+                                        usuario?.usuario?.username ||
+                                        "Iniciar sesión"
+                                    }
+                                    link={
+                                        usuario?.usuario ? "/perfil" : "/login"
+                                    }
+                                />
+                            ) : (
+                                <LogoutButton />
+                            )
                         ) : (
-                            <LogoutButton />
-                        )
-                    ) : (
-                        <div style={{ display: "flex", columnGap: "10px" }}>
-                            <LoginButton submit={false} />
+                            <div style={{ display: "flex", columnGap: "10px" }}>
+                                <LoginButton submit={false} />
+                                <Link
+                                    to={"/register"}
+                                    className="btn submit-button"
+                                >
+                                    Registrarse
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <button
+                        className="mobile-menu-btn"
+                        onClick={toggleMobileMenu}
+                        aria-label="Toggle mobile menu"
+                    >
+                        <span
+                            className={`hamburger ${
+                                isMobileMenuOpen ? "open" : ""
+                            }`}
+                        >
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </button>
+
+                    {/* Mobile Menu */}
+                    <div
+                        className={`mobile-menu ${
+                            isMobileMenuOpen ? "open" : ""
+                        }`}
+                    >
+                        <div className="mobile-menu-content">
                             <Link
-                                to={"/register"}
-                                className="btn submit-button"
+                                to={"/eventos"}
+                                className={`mobile-nav-link ${
+                                    window.location.pathname.includes(
+                                        "/eventos"
+                                    )
+                                        ? "active"
+                                        : ""
+                                }`}
+                                onClick={() => setIsMobileMenuOpen(false)}
                             >
-                                Registrarse
+                                Eventos
                             </Link>
+                            <Link
+                                to={"/hitos"}
+                                className={`mobile-nav-link ${
+                                    window.location.pathname.includes("/hitos")
+                                        ? "active"
+                                        : ""
+                                }`}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Hitos
+                            </Link>
+                            {usuario?.usuario?.rol === "ADMIN" && (
+                                <Link
+                                    to={"/panel-admin"}
+                                    className={`mobile-nav-link ${
+                                        window.location.pathname.includes(
+                                            "/panel-admin"
+                                        )
+                                            ? "active"
+                                            : ""
+                                    }`}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    Panel de Administrador
+                                </Link>
+                            )}
+                            <Link
+                                to={"/historico-eventos"}
+                                className={`mobile-nav-link ${
+                                    window.location.pathname.includes(
+                                        "/historico-eventos"
+                                    )
+                                        ? "active"
+                                        : ""
+                                }`}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Histórico de Eventos
+                            </Link>
+                            <Link
+                                to={"/empresas"}
+                                className={`mobile-nav-link ${
+                                    window.location.pathname.includes(
+                                        "/empresas"
+                                    )
+                                        ? "active"
+                                        : ""
+                                }`}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Empresas Patrocinadoras
+                            </Link>
+
+                            {/* Mobile Auth Section */}
+                            <div className="mobile-auth">
+                                {isLoggedIn() ? (
+                                    location.pathname !== "/perfil" ? (
+                                        <ProfileIcon
+                                            username={
+                                                usuario?.usuario?.username ||
+                                                "Iniciar sesión"
+                                            }
+                                            link={
+                                                usuario?.usuario
+                                                    ? "/perfil"
+                                                    : "/login"
+                                            }
+                                        />
+                                    ) : (
+                                        <LogoutButton />
+                                    )
+                                ) : (
+                                    <div className="mobile-auth-buttons">
+                                        <LoginButton submit={false} />
+                                        <Link
+                                            to={"/register"}
+                                            className="btn submit-button"
+                                            onClick={() =>
+                                                setIsMobileMenuOpen(false)
+                                            }
+                                        >
+                                            Registrarse
+                                        </Link>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    )}
+                    </div>
                 </>
             </div>
         </nav>
