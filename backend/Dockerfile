@@ -1,20 +1,24 @@
 FROM openjdk:19-jdk-alpine
 
-WORKDIR /backend
+# Instalar Maven
+RUN apk add --no-cache maven
 
-COPY pom.xml /backend
-COPY .mvn /backend/.mvn
-COPY mvnw /backend
-COPY .env /backend
+WORKDIR /app
 
-RUN chmod +x mvnw
-RUN ./mvnw dependency:go-offline
+# Copiar archivos de configuración de Maven primero para aprovechar cache de Docker
+COPY pom.xml .
 
-# COPIAR EL CODIGO FUENTE DENTRO DEL CONTENEDOR
-COPY src /backend/src
+# Descargar dependencias
+RUN mvn dependency:go-offline -B
 
-# CONSTRUIR NUESTRA APLICACION
-RUN ./mvnw clean install -DskipTests
+# Copiar el código fuente
+COPY src ./src
 
-# EJECUTAR LA APLICACION
+# Construir la aplicación
+RUN mvn clean package -DskipTests
+
+# Exponer el puerto
+EXPOSE 8080
+
+# Ejecutar la aplicación
 CMD ["java", "-jar", "target/proyectoWeb-0.0.1-SNAPSHOT.jar"]
