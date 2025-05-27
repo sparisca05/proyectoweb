@@ -17,6 +17,7 @@ import "../App.css";
 import Confirmation from "../components/Confirmation.tsx";
 import { addPublicEventParticipant, getEventoById } from "../api/eventos.ts";
 import { getPerfil } from "../api/usuarios.ts";
+import { useComentariosEvento, agregarComentarioEvento, ComentarioEvento } from "../api/comentarios";
 
 function EventoView() {
     const token = getToken();
@@ -32,6 +33,10 @@ function EventoView() {
     const [showClave, setShowClave] = useState<boolean>(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [estadoEvento, setEstadoEvento] = useState<string>("");
+
+    const { comentarios, loading: loadingComentarios, error: errorComentarios, setComentarios } = useComentariosEvento(Number(id));
+    const [nuevoComentario, setNuevoComentario] = useState("");
+    const [comentarioLoading, setComentarioLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -557,6 +562,58 @@ function EventoView() {
                                                 + Anadir
                                             </button>
                                         )}
+                                    </div>
+                                    <div style={{ marginTop: 32 }}>
+                                        <h3>Comentarios del evento</h3>
+                                        {loadingComentarios ? (
+                                            <p>Cargando comentarios...</p>
+                                        ) : errorComentarios ? (
+                                            <p style={{ color: "red" }}>{errorComentarios}</p>
+                                        ) : (
+                                            <ul style={{ maxHeight: 250, overflowY: "auto", background: "#222", borderRadius: 8, padding: 16 }}>
+                                                {comentarios.length === 0 ? (
+                                                    <li style={{ color: "#aaa" }}>No hay comentarios aún.</li>
+                                                ) : (
+                                                    comentarios.map((comentario) => (
+                                                        <li key={comentario.id} style={{ marginBottom: 12, borderBottom: "1px solid #333", paddingBottom: 8 }}>
+                                                            <b style={{ color: "#b3e5fc" }}>{comentario.usuarioNombre || "Anónimo"}</b>
+                                                            <span style={{ color: "#bbb", marginLeft: 8, fontSize: 12 }}>{new Date(comentario.fechaCreacion).toLocaleString()}</span>
+                                                            <div style={{ color: "#fff", marginTop: 4 }}>{comentario.contenido}</div>
+                                                        </li>
+                                                    ))
+                                                )}
+                                            </ul>
+                                        )}
+                                        <form
+                                            onSubmit={async (e) => {
+                                                e.preventDefault();
+                                                if (!nuevoComentario.trim()) return;
+                                                setComentarioLoading(true);
+                                                try {
+                                                    const comentario = await agregarComentarioEvento(Number(id), nuevoComentario);
+                                                    setComentarios((prev: ComentarioEvento[]) => [comentario, ...prev]);
+                                                    setNuevoComentario("");
+                                                } catch (e) {
+                                                    alert("No se pudo agregar el comentario");
+                                                } finally {
+                                                    setComentarioLoading(false);
+                                                }
+                                            }}
+                                            style={{ marginTop: 16, display: "flex", gap: 8 }}
+                                        >
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                placeholder="Escribe un comentario..."
+                                                value={nuevoComentario}
+                                                onChange={e => setNuevoComentario(e.target.value)}
+                                                disabled={comentarioLoading}
+                                                style={{ flex: 1 }}
+                                            />
+                                            <button className="btn submit-button" type="submit" disabled={comentarioLoading}>
+                                                Comentar
+                                            </button>
+                                        </form>
                                     </div>
                                 </>
                             )}
