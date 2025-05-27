@@ -72,7 +72,6 @@ const Hitos: React.FC = () => {
             headStyles: { fillColor: [33, 150, 243] },
         });
 
-        // Detalle de ganadores por hito (opcional, más abajo del reporte)
         let nextY = (doc as any).lastAutoTable?.finalY ? (doc as any).lastAutoTable.finalY + 10 : 40;
         doc.setFontSize(14);
         doc.text("Detalle de Ganadores por Hito", 14, nextY);

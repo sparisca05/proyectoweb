@@ -90,7 +90,6 @@ const HistoricoEventos = () => {
         doc.save("reporte_eventos.pdf");
     };
 
-    // Helper to generate PDF for a single event
     const handleDescargarReporteEvento = (evento: Evento) => {
         const doc = new jsPDF();
         doc.setFontSize(18);
@@ -98,7 +97,6 @@ const HistoricoEventos = () => {
         doc.setFontSize(12);
         doc.text(`Generado el: ${new Date().toLocaleString()}`, 14, 26);
 
-        // Event details
         const detalles = [
             ["Nombre", evento.nombre],
             ["Tipo", evento.tipo],
@@ -158,13 +156,11 @@ const HistoricoEventos = () => {
     const parseFecha = (fechaStr: string) => {
         if (!fechaStr) return new Date(0);
 
-        // Handle the format "dd-MM-yyyy HH:mm"
         if (fechaStr.includes(" ") && fechaStr.includes("-")) {
             const [datePart, timePart] = fechaStr.split(" ");
             const [day, month, year] = datePart.split("-");
             const [hours, minutes] = timePart.split(":");
 
-            // Create date with proper format: year, month (0-indexed), day, hours, minutes
             return new Date(
                 parseInt(year),
                 parseInt(month) - 1,
