@@ -40,7 +40,7 @@ public class EmpresaService {
         Empresa existingEmpresa = getEmpresaById(empresaId);
         existingEmpresa.setNombre(empresa.getNombre());
         existingEmpresa.setDescripcion(empresa.getDescripcion());
-        existingEmpresa.setLogo(empresa.getLogo());
+        existingEmpresa.setLogoUrl(empresa.getLogoUrl());
         // Aquí puedes agregar más campos a actualizar según sea necesario
         empresaRepository.save(existingEmpresa);
     }
