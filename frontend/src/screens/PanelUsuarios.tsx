@@ -126,15 +126,14 @@ function PanelUsuarios({
                         marginBottom: 0,
                     }}
                 >
-                    {" "}
                     <thead>
                         <tr>
-                            <th style={{ minWidth: "120px" }}>Nombre</th>
-                            <th style={{ minWidth: "120px" }}>Apellido</th>
-                            <th style={{ minWidth: "120px" }}>Usuario</th>
-                            <th style={{ minWidth: "180px" }}>Email</th>
-                            <th style={{ minWidth: "120px" }}>Rol</th>
-                            <th style={{ minWidth: "120px" }}>Acciones</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
