@@ -21,6 +21,7 @@ public class EventoService {
     private final IEventoRepository eventoRepository;
     private final UsuarioService usuarioService;
     private final InvitadoExternoService invitadoService;
+    private final MailService emailService;
 
     public Evento saveEvento(Evento evento) {
         return eventoRepository.save(evento);
@@ -70,6 +71,10 @@ public class EventoService {
         if (!evento.getParticipantes().contains(usuario)) {
             evento.addParticipante(usuario);
             eventoRepository.save(evento);
+
+            // Enviar correo de confirmación
+            emailService.enviarCorreoRegistroEvento(usuario, evento);
+        
             return "Fuiste agregado con éxito al evento: " + evento.getNombre();
         } else {
             throw new RuntimeException("Usuario ya agregado al evento");
@@ -86,6 +91,10 @@ public class EventoService {
         if (!evento.getParticipantes().contains(usuario)) {
             evento.addParticipante(usuario);
             eventoRepository.save(evento);
+
+            // Enviar correo de confirmación
+            emailService.enviarCorreoRegistroEvento(usuario, evento);
+
             return "Fuiste agregado con éxito al evento: " + evento.getNombre();
         } else {
             throw new RuntimeException("Usuario ya agregado al evento");
