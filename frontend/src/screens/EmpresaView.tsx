@@ -13,6 +13,7 @@ interface Empresa {
     id: number;
     nombre: string;
     descripcion: string;
+    logoUrl?: string;
     eventos: EventoResumen[];
 }
 
@@ -20,6 +21,7 @@ const EmpresaView = () => {
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [selectedEmpresa, setSelectedEmpresa] = useState<Empresa | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -155,9 +157,7 @@ const EmpresaView = () => {
                                 </div>
                                 <button
                                     className="btn submit-button"
-                                    onClick={() =>
-                                        navigate(`/empresas/${empresa.id}`)
-                                    }
+                                    onClick={() => setSelectedEmpresa(empresa)}
                                 >
                                     Ver detalles
                                 </button>
@@ -165,6 +165,70 @@ const EmpresaView = () => {
                         </li>
                     ))}
                 </ul>
+                {/* Modal de detalles de empresa */}
+                {selectedEmpresa && (
+                    <div
+                        style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: "100vw",
+                            height: "100vh",
+                            background: "rgba(0,0,0,0.7)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 1000,
+                        }}
+                        onClick={() => setSelectedEmpresa(null)}
+                    >
+                        <div
+                            style={{
+                                background: "#222",
+                                borderRadius: 12,
+                                padding: 32,
+                                minWidth: 320,
+                                maxWidth: 600, // <-- más ancho
+                                color: "#fff",
+                                position: "relative",
+                                boxShadow: "0 4px 24px rgba(0,0,0,0.5)",
+                            }}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <button
+                                style={{
+                                    position: "absolute",
+                                    top: 12,
+                                    right: 12,
+                                    background: "none",
+                                    border: "none",
+                                    color: "#fff",
+                                    fontSize: 24,
+                                    cursor: "pointer",
+                                }}
+                                onClick={() => setSelectedEmpresa(null)}
+                            >
+                                ×
+                            </button>
+                            <h2 style={{ color: "#b3e5fc" }}>{selectedEmpresa.nombre}</h2>
+                            <p style={{ margin: "16px 0" }}>{selectedEmpresa.descripcion}</p>
+                            {selectedEmpresa.logoUrl && (
+                                <img
+                                    src={selectedEmpresa.logoUrl}
+                                    alt={selectedEmpresa.nombre}
+                                    style={{
+                                        width: "100%",
+                                        maxHeight: 300, // <-- más alto para mejor visualización
+                                        objectFit: "contain",
+                                        borderRadius: 8,
+                                        background: "#fff",
+                                        marginBottom: 12,
+                                    }}
+                                />
+                            )}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

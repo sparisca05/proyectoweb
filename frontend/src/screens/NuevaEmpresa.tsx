@@ -23,7 +23,7 @@ function NuevaEmpresa() {
         const requestBody = {
             nombre: nombre,
             descripcion: descripcion,
-            logo: logoUrl,
+            logoUrl: logoUrl, // <-- corregido de 'logo' a 'logoUrl'
         };
 
         if (!nombre || !descripcion || !logoUrl) {
