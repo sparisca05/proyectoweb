@@ -101,10 +101,41 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public String deleteUser(Long userId) {
-        Usuario user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        userRepository.delete(user);
-        return "Usuario eliminado";
+        try {
+            // Verificar que el usuario existe
+            Usuario user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            
+            // Limpiar todas las relaciones del usuario usando SQL nativo
+            cleanUserRelationsWithSQL(userId);
+            
+            // Ahora eliminar el usuario
+            userRepository.delete(user);
+            userRepository.flush(); // Forzar la ejecución inmediata
+            
+            return "Usuario eliminado exitosamente";
+            
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar usuario: " + e.getMessage(), e);
+        }
+    }
+
+    private void cleanUserRelationsWithSQL(Long userId) {
+        try {
+            // 1. Eliminar comentarios del usuario
+            userRepository.deleteComentariosByUsuario(userId);
+            
+            // 2. Remover usuario de eventos (tabla intermedia evento_usuario)
+            userRepository.removeUserFromEventos(userId);
+            
+            // 3. Remover usuario de hitos ganadores (tabla ganadores)
+            userRepository.removeUserFromHitos(userId);
+            
+            System.out.println("Relaciones del usuario " + userId + " limpiadas exitosamente");
+            
+        } catch (Exception e) {
+            throw new RuntimeException("Error al limpiar relaciones del usuario: " + e.getMessage(), e);
+        }
     }
 
 }
