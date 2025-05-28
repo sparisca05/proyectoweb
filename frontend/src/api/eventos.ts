@@ -48,3 +48,29 @@ export const addPrivateEventParticipant = async (eventId: number, clave: string)
     );
     return response.data;
 }
+
+export const createEvento = async (evento: Evento): Promise<Evento> => {
+    const response = await axios.post(`${API_URL}/api/v1/eventos`, evento, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    });
+    return response.data;
+};
+
+export const updateEvento = async (evento: Evento): Promise<Evento> => {
+    const response = await axios.put(`${API_URL}/api/v1/eventos/${evento.id}`, evento, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    });
+    return response.data;
+};
+
+export const deleteEvento = async (id: number): Promise<void> => {
+    await axios.delete(`${API_URL}/api/v1/eventos/${id}`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    });
+};

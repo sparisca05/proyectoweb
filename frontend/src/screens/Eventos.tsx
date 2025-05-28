@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosAdd } from "react-icons/io";
 import { FaTrash } from "react-icons/fa";
 import { MdPublic, MdLock } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 
-import { API_URL } from "../main.tsx";
 import Navbar from "../components/Navbar.tsx";
-import { getToken } from "./Home.tsx";
 import { useUsuario } from "../contexts/UsuarioContext.tsx";
-import { getEventos, getEventosActivos } from "../api/eventos.ts";
+import { deleteEvento, getEventos, getEventosActivos } from "../api/eventos.ts";
 import { FaCalendarDays } from "react-icons/fa6";
+import Loading from "../components/Loading.tsx";
+import Confirmation from "../components/Confirmation.tsx";
 
 export interface Evento {
     id: number;
@@ -32,9 +31,15 @@ export interface Evento {
 }
 
 const EventoList: React.FC = () => {
-    const [eventos, setEventos] = useState<Evento[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [loading, setLoading] = useState<boolean>(true);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [eventoIdToDelete, setEventoIdToDelete] = useState<number | null>(
+        null
+    );
+    const [eventos, setEventos] = useState<Evento[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [tipoFilter, setTipoFilter] = useState<string>("");
     const [sortOrder, setSortOrder] = useState<string>("desc");
@@ -71,24 +76,27 @@ const EventoList: React.FC = () => {
         fetchEventos();
     }, [usuario]);
 
-    const handleDelete = (id: number) => {
-        if (
-            window.confirm("¿Estás seguro de que deseas eliminar este evento?")
-        ) {
-            axios
-                .delete(`${API_URL}/api/v1/eventos/${id}`, {
-                    headers: {
-                        Authorization: "Bearer " + getToken(),
-                    },
-                })
-                .then(() => {
-                    setEventos(eventos.filter((evento) => evento.id !== id));
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    setError("Error: " + error);
-                });
-        }
+    const handleDelete = async (id: number) => {
+        await deleteEvento(id);
+        setSuccessMessage("Evento eliminado correctamente.");
+        setErrorMsg("");
+        setEventos((prevEventos) =>
+            prevEventos.filter((evento) => evento.id !== id)
+        );
+    };
+
+    const handleDeleteClick = (eventoId: number) => {
+        setEventoIdToDelete(eventoId);
+        setShowConfirmation(true);
+    };
+
+    const confirmDelete = (id: number) => {
+        handleDelete(id);
+        setShowConfirmation(false);
+    };
+
+    const cancelDelete = () => {
+        setShowConfirmation(false);
     };
 
     const filteredEventos = eventos
@@ -144,11 +152,7 @@ const EventoList: React.FC = () => {
                 <Navbar />
                 <div className={"eventos"}>
                     <h1>Eventos</h1>
-                    <div>
-                        <h4 style={{ textAlign: "center", color: "white" }}>
-                            Cargando eventos...
-                        </h4>
-                    </div>
+                    <Loading />
                 </div>
             </div>
         );
@@ -159,6 +163,15 @@ const EventoList: React.FC = () => {
             <Navbar />
             <div className={"eventos"}>
                 <h1>Eventos</h1>
+                {showConfirmation && (
+                    <Confirmation
+                        title="Eliminar Evento"
+                        message="¿Estás seguro que deseas eliminar este evento?"
+                        confirmText="Eliminar"
+                        onConfirm={() => confirmDelete(eventoIdToDelete || 0)}
+                        onCancel={cancelDelete}
+                    />
+                )}
                 <div
                     className="search-container"
                     style={{
@@ -208,7 +221,17 @@ const EventoList: React.FC = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <div style={{ display: "flex", gap: 14, flex: 1, minWidth: 220, width: "100%", maxWidth: 500, justifyContent: "center" }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            gap: 14,
+                            flex: 1,
+                            minWidth: 220,
+                            width: "100%",
+                            maxWidth: 500,
+                            justifyContent: "center",
+                        }}
+                    >
                         <select
                             value={tipoFilter}
                             onChange={(e) => setTipoFilter(e.target.value)}
@@ -252,22 +275,37 @@ const EventoList: React.FC = () => {
                             <option value="asc">Más antiguos</option>
                         </select>
                     </div>
+                    <button
+                        type="button"
+                        className="add-btn"
+                        onClick={() => navigate("/eventos/nuevo-evento")}
+                    >
+                        <span className="add-btn__text">Nuevo evento</span>
+                        <span className="add-btn__icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width={24}
+                                viewBox="0 0 24 24"
+                                strokeWidth={2}
+                                strokeLinejoin="round"
+                                strokeLinecap="round"
+                                stroke="currentColor"
+                                height={24}
+                                fill="none"
+                                className="svg"
+                            >
+                                <line y2={19} y1={5} x2={12} x1={12} />
+                                <line y2={12} y1={12} x2={19} x1={5} />
+                            </svg>
+                        </span>
+                    </button>
                 </div>
-                <style>{`
-                @media (max-width: 900px) {
-                    .search-container {
-                        flex-direction: column !important;
-                        gap: 12px !important;
-                        padding: 16px 6vw !important;
-                        max-width: 98vw !important;
-                    }
-                }
-                @media (max-width: 600px) {
-                    .search-container {
-                        padding: 10px 2vw !important;
-                    }
-                }
-                `}</style>
+                {errorMsg ? (
+                    <div className="alert alert-danger">{errorMsg}</div>
+                ) : null}
+                {successMessage ? (
+                    <div className="alert alert-success">{successMessage}</div>
+                ) : null}
                 {error ? (
                     <div>{error}</div>
                 ) : (
@@ -310,7 +348,7 @@ const EventoList: React.FC = () => {
                                         <FaTrash
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                handleDelete(evento.id);
+                                                handleDeleteClick(evento.id);
                                             }}
                                             className="delete-icon"
                                             size={40}

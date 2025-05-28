@@ -26,6 +26,8 @@ import {
 function EventoView() {
     const token = getToken();
     const [loading, setLoading] = useState<boolean>(true);
+    const [loadingParticipacion, setLoadingParticipation] =
+        useState<boolean>(false);
     const [usuario, setUsuario] = useState<Usuario | null>(null);
 
     const { id } = useParams<{ id: string }>();
@@ -99,12 +101,15 @@ function EventoView() {
                 setDisplayPasskey(true);
                 return;
             }
+            setLoadingParticipation(true);
             const message = await addPublicEventParticipant(eventId);
             alert(message);
             window.location.reload();
         } catch (error) {
             console.error("Error al agregar participante:", error);
             alert("Error al agregar participante al evento.");
+        } finally {
+            setLoadingParticipation(false);
         }
     };
 
@@ -227,6 +232,12 @@ function EventoView() {
                     onCancel={handleCancel}
                 />
             )}
+            {loadingParticipacion && (
+                <div className={"loading-container"}>
+                    <h4>Procesando participación...</h4>
+                </div>
+            )}
+
             <Navbar />
             <div className={"welcome"}>
                 <div className={"auth-container"}>

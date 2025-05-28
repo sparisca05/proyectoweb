@@ -8,6 +8,7 @@ import { deleteHito, getHitos, updateHito } from "../api/hitos.ts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Confirmation from "../components/Confirmation.tsx";
+import Loading from "../components/Loading.tsx";
 
 export interface Hito {
     id: number;
@@ -207,7 +208,7 @@ const Hitos: React.FC = () => {
                 <Navbar />
                 <div className={"eventos"}>
                     <h1>Hitos</h1>
-                    <h4 style={{ color: "white" }}>Cargando hitos...</h4>
+                    <Loading />
                 </div>
             </div>
         );

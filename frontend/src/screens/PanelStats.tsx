@@ -10,6 +10,7 @@ import {
     Legend,
 } from "chart.js";
 import { Bar, Doughnut } from "react-chartjs-2";
+import Loading from "../components/Loading";
 
 ChartJS.register(
     CategoryScale,
@@ -219,7 +220,7 @@ function PanelStats({
     };
 
     if (loading) {
-        return <h4>Cargando estadísticas...</h4>;
+        return <Loading />;
     }
     return (
         <div>

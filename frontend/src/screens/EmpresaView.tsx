@@ -6,6 +6,7 @@ import { getToken } from "./Home";
 import { useUsuario } from "../contexts/UsuarioContext";
 import { ImageUpload } from "../components/ImageUpload"; // Asegúrate de que la ruta sea correcta
 import axios from "axios";
+import Loading from "../components/Loading";
 
 interface EventoResumen {
     id: number;
@@ -119,7 +120,7 @@ const EmpresaView = () => {
                 <Navbar />
                 <div className="eventos">
                     <h1>Empresas Patrocinadoras</h1>
-                    <h4 style={{ color: "#fff" }}>Cargando empresas...</h4>
+                    <Loading />
                 </div>
             </div>
         );

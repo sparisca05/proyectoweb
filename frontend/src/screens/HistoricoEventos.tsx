@@ -9,6 +9,7 @@ import { Evento } from "./Eventos";
 import { useUsuario } from "../contexts/UsuarioContext";
 import { getEventos } from "../api/eventos";
 import { getEventosUsuario } from "../api/usuarios";
+import Loading from "../components/Loading";
 
 const HistoricoEventos = () => {
     const [eventos, setEventos] = useState<Evento[]>([]);
@@ -193,7 +194,7 @@ const HistoricoEventos = () => {
                 <Navbar />
                 <div className={"eventos"}>
                     <h1>Histórico de Eventos</h1>
-                    <h4 style={{ color: "white" }}>Cargando historial...</h4>
+                    <Loading />
                 </div>
             </div>
         );

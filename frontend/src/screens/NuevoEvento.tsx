@@ -264,7 +264,7 @@ function NuevoEvento() {
                             endpoint="evento-imagen"
                         />
                         <div
-                            className="mb-3"
+                            className="mb-3 mt-3"
                             style={{
                                 display: "flex",
                                 flexDirection: "column",
@@ -276,7 +276,7 @@ function NuevoEvento() {
                                     display: "flex",
                                     alignItems: "center",
                                     gap: "5px",
-                                    marginBottom: "10px",
+                                    marginBottom: "5px",
                                 }}
                             >
                                 {!isPrivado ? (

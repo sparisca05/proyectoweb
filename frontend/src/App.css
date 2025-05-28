@@ -16,6 +16,108 @@ button {
     background-color: #282c34; /* Color de respaldo */
     font-family: 'Rubik', sans-serif;
 }
+.loading-container {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.089), rgb(0, 0, 0));
+    z-index: 9999;
+}
+/* From Uiverse.io by mobinkakei */ 
+.wrapper {
+  width: 200px;
+  height: 60px;
+  margin-top: 70px;
+  position: relative;
+  z-index: 1;
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  border-radius: 50%;
+  background-color: #fff;
+  left: 15%;
+  transform-origin: 50%;
+  animation: circle7124 .5s alternate infinite ease;
+}
+
+@keyframes circle7124 {
+  0% {
+    top: 60px;
+    height: 5px;
+    border-radius: 50px 50px 25px 25px;
+    transform: scaleX(1.7);
+  }
+
+  40% {
+    height: 20px;
+    border-radius: 50%;
+    transform: scaleX(1);
+  }
+
+  100% {
+    top: 0%;
+  }
+}
+
+.circle:nth-child(2) {
+  left: 45%;
+  animation-delay: .2s;
+}
+
+.circle:nth-child(3) {
+  left: auto;
+  right: 15%;
+  animation-delay: .3s;
+}
+
+.shadow {
+  width: 20px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.9);
+  position: absolute;
+  top: 62px;
+  transform-origin: 50%;
+  z-index: -1;
+  left: 15%;
+  filter: blur(1px);
+  animation: shadow046 .5s alternate infinite ease;
+}
+
+@keyframes shadow046 {
+  0% {
+    transform: scaleX(1.5);
+  }
+
+  40% {
+    transform: scaleX(1);
+    opacity: .7;
+  }
+
+  100% {
+    transform: scaleX(.2);
+    opacity: .4;
+  }
+}
+
+.shadow:nth-child(4) {
+  left: 45%;
+  animation-delay: .2s
+}
+
+.shadow:nth-child(5) {
+  left: auto;
+  right: 15%;
+  animation-delay: .3s;
+}
+
 .navbar {
     align-items: center;
     padding-right:30px;
@@ -573,7 +675,7 @@ button {
 }
 
 /* Forzar fondo y color en select multiple */
-.form-select[multiple], select[multiple] {
+.form-select[multiple] {
   background-color: #232323 !important;
   color: #fff !important;
   border: 1px solid #444 !important;
@@ -584,7 +686,6 @@ button {
   min-height: 100px !important;
 }
 .form-select,
-select,
 .ganadores-select {
   background-color: #232323 !important;
   color: #b3e5fc !important;
@@ -1051,6 +1152,58 @@ select,
   animation: slide-in-top 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
+/* From Uiverse.io by andrew-demchenk0 */ 
+.add-btn {
+  position: relative;
+  width: 165px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background-color: #ac54dfd8;
+  border-radius: 5px;
+}
+
+.add-btn, .add-btn__icon, .add-btn__text {
+  transition: all 0.3s;
+}
+
+.add-btn .add-btn__text {
+  transform: translateX(5px);
+  color: #fff;
+}
+
+.add-btn .add-btn__icon {
+  position: absolute;
+  transform: translateX(120px);
+  height: 100%;
+  width: 39px;
+  background-color: #901ad4d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+.add-btn .svg {
+  width: 30px;
+  stroke: #fff;
+}
+
+.add-btn:hover {
+  background: #901ad4d8;
+  padding: 0;
+}
+
+.add-btn:hover .add-btn__text {
+  color: transparent;
+}
+
+.add-btn:hover .add-btn__icon {
+  width: 163px;
+  transform: translateX(0);
+}
+
 @keyframes slide-in-top {
   0% {
     transform: translateY(-10px);
@@ -1103,6 +1256,14 @@ select,
         margin-bottom: 20px !important;
     }
 }
+@media (max-width: 1060px) {
+    .search-container {
+        flex-direction: column !important;
+        gap: 12px !important;
+        padding: 16px 6vw !important;
+        max-width: 98vw !important;
+    }
+}
 
 @media (max-width: 768px) {
     .navbar {
@@ -1125,10 +1286,14 @@ select,
         padding: 15px;
         gap: 12px;
     }
-}
-@media (max-width: 768px) {
     .eventos > div {
         justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .search-container {
+        padding: 10px 2vw !important;
     }
 }
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaSave, FaTimes, FaEdit, FaTrash } from "react-icons/fa";
 import { deleteUsuario, updateUsuario } from "../api/usuarios.ts";
 import Confirmation from "../components/Confirmation.tsx";
+import Loading from "../components/Loading.tsx";
 
 interface Usuario {
     id: number;
@@ -100,7 +101,7 @@ function PanelUsuarios({
     };
 
     if (loading) {
-        return <h4 style={{ color: "white" }}>Cargando usuarios...</h4>;
+        return <Loading />;
     }
 
     return (
