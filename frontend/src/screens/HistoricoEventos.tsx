@@ -252,35 +252,37 @@ const HistoricoEventos = () => {
                         flexWrap: "wrap",
                     }}
                 >
-                    <button
-                        className="button"
-                        onClick={handleDescargarReporte}
-                        style={{ height: 56, minWidth: 220, fontSize: 20 }}
-                    >
-                        <div className="button-wrapper">
-                            <div className="text">Descargar reporte</div>
-                            <span className="icon">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    aria-hidden="true"
-                                    role="img"
-                                    width="2.5em"
-                                    height="2.5em"
-                                    preserveAspectRatio="xMidYMid meet"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
-                    </button>
+                    {eventos.length > 0 && (
+                        <button
+                            className="button"
+                            onClick={handleDescargarReporte}
+                            style={{ height: 56, minWidth: 220, fontSize: 20 }}
+                        >
+                            <div className="button-wrapper">
+                                <div className="text">Descargar reporte</div>
+                                <span className="icon">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        aria-hidden="true"
+                                        role="img"
+                                        width="2.5em"
+                                        height="2.5em"
+                                        preserveAspectRatio="xMidYMid meet"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"
+                                        />
+                                    </svg>
+                                </span>
+                            </div>
+                        </button>
+                    )}
                     <div
                         className="search-container"
                         style={{
@@ -291,28 +293,42 @@ const HistoricoEventos = () => {
                             borderRadius: 14,
                             padding: "18px 28px",
                             maxWidth: 1200,
-                            minWidth: 600,
                             minHeight: 64,
                             width: "100%",
                         }}
                     >
-                        <IoSearch size={28} style={{ color: "#b3e5fc" }} />
-                        <input
-                            type="text"
-                            placeholder="Buscar eventos por nombre, tipo u organizador..."
-                            value={searchTerm}
+                        <div
                             style={{
-                                border: "none",
-                                backgroundColor: "transparent",
-                                color: "#fff",
-                                fontSize: 16,
-                                outline: "none",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                flex: 2,
+                                background: "#181c22",
+                                borderRadius: 8,
+                                padding: "10px 12px",
+                                minWidth: 220,
                                 width: "100%",
-                                minWidth: 120,
-                                height: 36,
+                                maxWidth: 500,
                             }}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
+                        >
+                            <IoSearch size={28} style={{ color: "#b3e5fc" }} />
+                            <input
+                                type="text"
+                                placeholder="Buscar eventos por nombre, tipo u organizador..."
+                                value={searchTerm}
+                                style={{
+                                    border: "none",
+                                    backgroundColor: "transparent",
+                                    color: "#fff",
+                                    fontSize: 16,
+                                    outline: "none",
+                                    width: "100%",
+                                    minWidth: 120,
+                                    height: 36,
+                                }}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
                         <select
                             value={tipoFilter}
                             onChange={(e) => setTipoFilter(e.target.value)}

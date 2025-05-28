@@ -177,15 +177,18 @@ function EventoView() {
 
     const handleSaveClick = async () => {
         // Combine date and time, then format to "dd-MM-yyyy HH:mm"
-        const [year, month, day] = fecha.split("-");
-        const formattedFecha = `${day}-${month}-${year} ${hora}`;
+        let formattedFecha = "";
+        if (!fecha || !hora) {
+            formattedFecha = evento?.fecha || "";
+        } else {
+            const [year, month, day] = fecha.split("-");
+            formattedFecha = `${day}-${month}-${year} ${hora}`;
+        }
 
         const requestBody = {
             ...evento,
             fecha: formattedFecha,
         };
-
-        console.log("Request body:", requestBody);
 
         await fetch(`${API_URL}/api/v1/eventos/${id}`, {
             method: "PUT",

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,9 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    // Replace this with a secure key in a real application, ideally fetched from environment variables
-    private static final String SECRET_KEY = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    @Value("${jwt.secret}")
+    private String secretKey;
+    
     private static final long EXPIRATION_TIME = 1000 * 60 * 120; // 120 minutes
 
     public String getToken(UserDetails user) {
@@ -38,7 +40,7 @@ public class JwtService {
     }
 
     private Key getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
