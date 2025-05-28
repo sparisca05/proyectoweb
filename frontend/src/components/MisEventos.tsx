@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Evento } from "../screens/Eventos.tsx";
 import { Link } from "react-router-dom";
-import { getEventosUsuario } from "../api/usuarios.ts";
 import { MdLock, MdPublic } from "react-icons/md";
 import { FaCalendarDays } from "react-icons/fa6";
+
+import { Evento } from "../screens/Eventos.tsx";
+import { getEventosUsuario } from "../api/usuarios.ts";
+import Loading from "./Loading.tsx";
 
 const MisEventos = () => {
     const [eventos, setEventos] = useState<Evento[]>([]); // Estado para almacenar la lista de eventos
@@ -31,11 +33,7 @@ const MisEventos = () => {
     }, []);
 
     if (loading) {
-        return (
-            <div>
-                <div>Cargando eventos...</div>
-            </div>
-        );
+        return <Loading />;
     }
 
     const noEventosMessage = eventos.length === 0 && (

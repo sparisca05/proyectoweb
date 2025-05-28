@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { IoMdClose } from "react-icons/io";
+
 import { API_URL } from "../main";
 import { getToken } from "../screens/Home";
-import { IoMdClose } from "react-icons/io";
 
 function PasskeyInput({
     evento,

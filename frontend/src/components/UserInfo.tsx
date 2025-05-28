@@ -6,6 +6,8 @@ import { useUsuario } from "../contexts/UsuarioContext";
 import { getToken } from "../screens/Home";
 import { API_URL } from "../main";
 import { handleLogout } from "../screens/Home";
+import { deleteAccount } from "../api/usuarios";
+import Confirmation from "./Confirmation";
 
 const UserInfo = () => {
     let user = useUsuario();
@@ -21,6 +23,7 @@ const UserInfo = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
     useEffect(() => {
         if (user && user.usuario) {
@@ -81,9 +84,42 @@ const UserInfo = () => {
         }
     };
 
+    const handleDelete = async () => {
+        try {
+            await deleteAccount();
+            handleLogout(navigate, setUsuario);
+            window.location.reload();
+        } catch (err) {
+            console.error("Error al eliminar la cuenta:", err);
+            setError(
+                "Error al eliminar la cuenta. Por favor, inténtelo de nuevo."
+            );
+        }
+    };
+
+    const handleDeleteClick = () => {
+        setShowDeleteConfirmation(true);
+    };
+    const confirmDelete = () => {
+        handleDelete();
+        setShowDeleteConfirmation(false);
+    };
+    const cancelDelete = () => {
+        setShowDeleteConfirmation(false);
+    };
+
     return (
         <>
             <h2>Perfil</h2>
+            {showDeleteConfirmation && (
+                <Confirmation
+                    title="Eliminar Cuenta"
+                    message="¿Estás seguro que deseas eliminar tu cuenta?"
+                    confirmText="Eliminar"
+                    onConfirm={confirmDelete}
+                    onCancel={cancelDelete}
+                />
+            )}
             <div>
                 {user ? (
                     <div>
@@ -102,19 +138,26 @@ const UserInfo = () => {
                                     <p>{user.usuario?.username}</p>
                                 </div>
                                 <p>Rol: {user.usuario?.rol}</p>
-                                <button
-                                    onClick={handleEditToggle}
+                                <div
                                     style={{
-                                        padding: "8px 16px",
-                                        backgroundColor: "#4CAF50",
-                                        color: "white",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        cursor: "pointer",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "10px",
                                     }}
                                 >
-                                    Editar
-                                </button>
+                                    <button
+                                        onClick={handleEditToggle}
+                                        className="btn btn-success"
+                                    >
+                                        Editar
+                                    </button>
+                                    <button
+                                        className="btn btn-outline-danger"
+                                        onClick={handleDeleteClick}
+                                    >
+                                        Eliminar cuenta
+                                    </button>
+                                </div>
                             </>
                         ) : (
                             <form onSubmit={handleSubmit}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaSave, FaTimes, FaEdit, FaTrash } from "react-icons/fa";
-import { deleteUsuario, updateUsuario } from "../api/usuarios.ts";
+import { deleteUsuarioById, updateUsuario } from "../api/usuarios.ts";
 import Confirmation from "../components/Confirmation.tsx";
 import Loading from "../components/Loading.tsx";
 import { useUsuario } from "../contexts/UsuarioContext.tsx";
@@ -97,7 +97,7 @@ function PanelUsuarios({
 
     const handleDelete = async (userId: number) => {
         try {
-            await deleteUsuario(userId);
+            await deleteUsuarioById(userId);
             setUsuariosList((prevUsuarios) =>
                 prevUsuarios.filter((user) => user.id !== userId)
             );

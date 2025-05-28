@@ -52,7 +52,15 @@ export const updateUsuario = async (usuario: Usuario): Promise<Usuario> => {
     return response.data;
 }
 
-export const deleteUsuario = async (id: number): Promise<void> => {
+export const deleteAccount = async (): Promise<void> => {
+    await axios.delete(`${API_URL}/api/v1/usuario/perfil`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    });
+}
+
+export const deleteUsuarioById = async (id: number): Promise<void> => {
     await axios.delete(`${API_URL}/api/v1/usuario/${id}`, {
         headers: {
             Authorization: `Bearer ${getToken()}`,

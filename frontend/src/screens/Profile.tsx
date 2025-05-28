@@ -13,7 +13,7 @@ function Profile() {
             <Navbar />
             <div className={"welcome"}>
                 <div className={"profile-container"}>
-                    <div className={"content-container"} style={{ flex: 0.2 }}>
+                    <div className={"content-container user-info"}>
                         <UserInfo />
                     </div>
                     <div
