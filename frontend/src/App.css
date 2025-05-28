@@ -1204,6 +1204,15 @@ button {
   transform: translateX(0);
 }
 
+/* Estilos para el icono del calendario */
+.form-control::-webkit-calendar-picker-indicator {
+    /* Opción 1: Cambiar color usando filter (más compatible) */
+    filter: invert(1);
+    
+    cursor: pointer;
+    background-color: transparent;
+}
+
 @keyframes slide-in-top {
   0% {
     transform: translateY(-10px);

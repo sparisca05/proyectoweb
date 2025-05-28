@@ -32,6 +32,8 @@ function EventoView() {
 
     const { id } = useParams<{ id: string }>();
     const [evento, setEvento] = useState<Evento>();
+    const [fecha, setFecha] = useState<string>("");
+    const [hora, setHora] = useState<string>("");
     const [userHasEvent, setUserHasEvent] = useState<boolean>(false);
     const [displayPasskey, setDisplayPasskey] = useState<boolean>(false);
     const [displayInvitado, setDisplayInvitado] = useState<boolean>(false);
@@ -174,13 +176,24 @@ function EventoView() {
     };
 
     const handleSaveClick = async () => {
+        // Combine date and time, then format to "dd-MM-yyyy HH:mm"
+        const [year, month, day] = fecha.split("-");
+        const formattedFecha = `${day}-${month}-${year} ${hora}`;
+
+        const requestBody = {
+            ...evento,
+            fecha: formattedFecha,
+        };
+
+        console.log("Request body:", requestBody);
+
         await fetch(`${API_URL}/api/v1/eventos/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + token,
             },
-            body: JSON.stringify(evento),
+            body: JSON.stringify(requestBody),
         }).then((response) => {
             if (response.ok) {
                 alert("Evento actualizado");
@@ -313,17 +326,27 @@ function EventoView() {
                                                     })
                                                 }
                                             />
-                                            <input
-                                                className="form-control"
-                                                type="date"
-                                                value={evento.fecha}
-                                                onChange={(e) =>
-                                                    setEvento({
-                                                        ...evento,
-                                                        fecha: e.target.value,
-                                                    })
-                                                }
-                                            />
+                                            <div
+                                                className="d-flex gap-2"
+                                                style={{ width: "100%" }}
+                                            >
+                                                <input
+                                                    className="form-control flex-grow-1"
+                                                    type="date"
+                                                    value={fecha}
+                                                    onChange={(e) =>
+                                                        setFecha(e.target.value)
+                                                    }
+                                                />
+                                                <input
+                                                    className="form-control flex-grow-1"
+                                                    type="time"
+                                                    value={hora}
+                                                    onChange={(e) =>
+                                                        setHora(e.target.value)
+                                                    }
+                                                />
+                                            </div>
                                             <input
                                                 className="form-control"
                                                 type="text"
