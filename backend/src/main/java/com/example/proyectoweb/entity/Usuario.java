@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
@@ -43,4 +45,17 @@ public class Usuario implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return rol.getAuthorities();
     }
+
+    // Agregar relaciones para manejar eliminación en cascada
+    @ManyToMany(mappedBy = "participantes", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Evento> eventosParticipante = new ArrayList<>();
+    
+    @ManyToMany(mappedBy = "ganadores", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Hito> hitosGanados = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<ComentarioEvento> comentarios = new ArrayList<>();
 }
