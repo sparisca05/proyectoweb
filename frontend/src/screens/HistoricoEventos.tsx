@@ -197,17 +197,27 @@ const HistoricoEventos = () => {
     const filteredEventos = eventos
         .filter((evento) => {
             const matchesSearch =
-                evento.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                evento.nombre
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) ||
                 evento.tipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                evento.nombreOrganizador.toLowerCase().includes(searchTerm.toLowerCase());
+                evento.nombreOrganizador
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase());
             const matchesType = tipoFilter === "" || evento.tipo === tipoFilter;
             const estado = calcularEstadoEvento(evento);
-            const matchesEstado = estadoFilter === "" || estado === estadoFilter;
+            const matchesEstado =
+                estadoFilter === "" || estado === estadoFilter;
             const matchesPrivacidad =
                 privacidadFilter === "" ||
                 (privacidadFilter === "publico" && evento.publico) ||
                 (privacidadFilter === "privado" && !evento.publico);
-            return matchesSearch && matchesType && matchesEstado && matchesPrivacidad;
+            return (
+                matchesSearch &&
+                matchesType &&
+                matchesEstado &&
+                matchesPrivacidad
+            );
         })
         .sort((a, b) => {
             const dateA = parseFecha(a.fecha);
@@ -233,8 +243,20 @@ const HistoricoEventos = () => {
             <Navbar />
             <div className="eventos">
                 <h1>Histórico de Eventos</h1>
-                <div style={{ display: 'flex', gap: 24, alignItems: 'center', marginBottom: 32, flexWrap: 'wrap' }}>
-                    <button className="button" onClick={handleDescargarReporte} style={{ height: 56, minWidth: 220, fontSize: 20 }}>
+                <div
+                    style={{
+                        display: "flex",
+                        gap: 24,
+                        alignItems: "center",
+                        marginBottom: 32,
+                        flexWrap: "wrap",
+                    }}
+                >
+                    <button
+                        className="button"
+                        onClick={handleDescargarReporte}
+                        style={{ height: 56, minWidth: 220, fontSize: 20 }}
+                    >
                         <div className="button-wrapper">
                             <div className="text">Descargar reporte</div>
                             <span className="icon">
@@ -301,7 +323,6 @@ const HistoricoEventos = () => {
                                 color: "#b3e5fc",
                                 border: "1.5px solid #444",
                                 fontSize: 18,
-                                height: 44,
                             }}
                         >
                             <option value="">Todos los tipos</option>
@@ -321,7 +342,6 @@ const HistoricoEventos = () => {
                                 color: "#b3e5fc",
                                 border: "1.5px solid #444",
                                 fontSize: 18,
-                                height: 44,
                             }}
                         >
                             <option value="">Todos los Estados</option>
@@ -330,7 +350,9 @@ const HistoricoEventos = () => {
                         </select>
                         <select
                             value={privacidadFilter}
-                            onChange={(e) => setPrivacidadFilter(e.target.value)}
+                            onChange={(e) =>
+                                setPrivacidadFilter(e.target.value)
+                            }
                             style={{
                                 padding: "12px 22px",
                                 borderRadius: "10px",
@@ -338,10 +360,9 @@ const HistoricoEventos = () => {
                                 color: "#b3e5fc",
                                 border: "1.5px solid #444",
                                 fontSize: 18,
-                                height: 44,
                             }}
                         >
-                            <option value="">Todas las Privacidades</option>
+                            <option value="">Visibilidad</option>
                             <option value="publico">Público</option>
                             <option value="privado">Privado</option>
                         </select>
@@ -361,158 +382,157 @@ const HistoricoEventos = () => {
                 ) : (
                     <>
                         <ul style={{ listStyle: "none", padding: 0 }}>
-                            {filteredEventos
-                                .map((evento) => {
-                                    const estado = calcularEstadoEvento(evento);
-                                    return (
-                                        <li
-                                            key={evento.id}
+                            {filteredEventos.map((evento) => {
+                                const estado = calcularEstadoEvento(evento);
+                                return (
+                                    <li
+                                        key={evento.id}
+                                        style={{
+                                            background: "#333",
+                                            margin: "16px 0",
+                                            borderRadius: "8px",
+                                            padding: "18px",
+                                            boxShadow:
+                                                "0 2px 8px rgba(0,0,0,0.25)",
+                                        }}
+                                    >
+                                        <div
                                             style={{
-                                                background: "#333",
-                                                margin: "16px 0",
-                                                borderRadius: "8px",
-                                                padding: "18px",
-                                                boxShadow:
-                                                    "0 2px 8px rgba(0,0,0,0.25)",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
                                             }}
                                         >
                                             <div
                                                 style={{
                                                     display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "space-between",
+                                                    gap: "10px",
                                                 }}
                                             >
-                                                <div
+                                                <Link
+                                                    to={`/eventos/${evento.id}`}
                                                     style={{
-                                                        display: "flex",
-                                                        gap: "10px",
-                                                    }}
-                                                >
-                                                    <Link
-                                                        to={`/eventos/${evento.id}`}
-                                                        style={{
-                                                            color: "#2196f3",
-                                                            textDecoration:
-                                                                "underline",
-                                                            fontWeight: "bold",
-                                                            fontSize: "1.25em",
-                                                            cursor: "pointer",
-                                                        }}
-                                                    >
-                                                        {evento.nombre}
-                                                    </Link>
-                                                    {evento.publico ? (
-                                                        <MdPublic
-                                                            size={30}
-                                                            color="white"
-                                                        />
-                                                    ) : (
-                                                        <MdLock
-                                                            size={30}
-                                                            color="white"
-                                                        />
-                                                    )}
-                                                </div>
-                                                <span
-                                                    style={{
-                                                        padding: "4px 14px",
-                                                        borderRadius: "12px",
-                                                        color: "#fff",
-                                                        background:
-                                                            estado === "Activo"
-                                                                ? "#43e97b"
-                                                                : "#e53935",
+                                                        color: "#2196f3",
+                                                        textDecoration:
+                                                            "underline",
                                                         fontWeight: "bold",
-                                                        fontSize: "1em",
-                                                        marginLeft: "16px",
+                                                        fontSize: "1.25em",
+                                                        cursor: "pointer",
                                                     }}
                                                 >
-                                                    {estado}
-                                                </span>
+                                                    {evento.nombre}
+                                                </Link>
+                                                {evento.publico ? (
+                                                    <MdPublic
+                                                        size={30}
+                                                        color="white"
+                                                    />
+                                                ) : (
+                                                    <MdLock
+                                                        size={30}
+                                                        color="white"
+                                                    />
+                                                )}
                                             </div>
-                                            <p
+                                            <span
                                                 style={{
-                                                    margin: "10px 0 0 0",
+                                                    padding: "4px 14px",
+                                                    borderRadius: "12px",
                                                     color: "#fff",
+                                                    background:
+                                                        estado === "Activo"
+                                                            ? "#43e97b"
+                                                            : "#e53935",
+                                                    fontWeight: "bold",
+                                                    fontSize: "1em",
+                                                    marginLeft: "16px",
                                                 }}
                                             >
-                                                <b style={{ color: "#ffffff" }}>
-                                                    Tipo:
-                                                </b>{" "}
-                                                <span style={{ color: "#b3e5fc" }}>
-                                                    {evento.tipo}
-                                                </span>
-                                            </p>
-                                            <p
-                                                style={{
-                                                    margin: "4px 0",
-                                                    color: "#fff",
-                                                }}
+                                                {estado}
+                                            </span>
+                                        </div>
+                                        <p
+                                            style={{
+                                                margin: "10px 0 0 0",
+                                                color: "#fff",
+                                            }}
+                                        >
+                                            <b style={{ color: "#ffffff" }}>
+                                                Tipo:
+                                            </b>{" "}
+                                            <span style={{ color: "#b3e5fc" }}>
+                                                {evento.tipo}
+                                            </span>
+                                        </p>
+                                        <p
+                                            style={{
+                                                margin: "4px 0",
+                                                color: "#fff",
+                                            }}
+                                        >
+                                            <b style={{ color: "#ffffff" }}>
+                                                Fecha:
+                                            </b>{" "}
+                                            <span style={{ color: "#b3e5fc" }}>
+                                                {evento.fecha}
+                                            </span>
+                                        </p>
+                                        <p
+                                            style={{
+                                                margin: "4px 0",
+                                                color: "#fff",
+                                            }}
+                                        >
+                                            <b style={{ color: "#ffffff" }}>
+                                                Organizador:
+                                            </b>{" "}
+                                            <span style={{ color: "#b3e5fc" }}>
+                                                {evento.nombreOrganizador}
+                                            </span>
+                                        </p>
+                                        <p
+                                            style={{
+                                                margin: "4px 0",
+                                                color: "#fff",
+                                            }}
+                                        >
+                                            <b style={{ color: "#ffffff" }}>
+                                                Empresa Patrocinadora:
+                                            </b>{" "}
+                                            <span style={{ color: "#b3e5fc" }}>
+                                                {evento.empresaPatrocinadora &&
+                                                evento.empresaPatrocinadora
+                                                    .nombre
+                                                    ? evento
+                                                          .empresaPatrocinadora
+                                                          .nombre
+                                                    : "Sin patrocinador"}
+                                            </span>
+                                        </p>
+                                        <button
+                                            className="Btn"
+                                            onClick={() =>
+                                                handleDescargarReporteEvento(
+                                                    evento
+                                                )
+                                            }
+                                        >
+                                            <svg
+                                                className="svgIcon"
+                                                viewBox="0 0 384 512"
+                                                height="1em"
+                                                xmlns="http://www.w3.org/2000/svg"
                                             >
-                                                <b style={{ color: "#ffffff" }}>
-                                                    Fecha:
-                                                </b>{" "}
-                                                <span style={{ color: "#b3e5fc" }}>
-                                                    {evento.fecha}
-                                                </span>
-                                            </p>
-                                            <p
-                                                style={{
-                                                    margin: "4px 0",
-                                                    color: "#fff",
-                                                }}
-                                            >
-                                                <b style={{ color: "#ffffff" }}>
-                                                    Organizador:
-                                                </b>{" "}
-                                                <span style={{ color: "#b3e5fc" }}>
-                                                    {evento.nombreOrganizador}
-                                                </span>
-                                            </p>
-                                            <p
-                                                style={{
-                                                    margin: "4px 0",
-                                                    color: "#fff",
-                                                }}
-                                            >
-                                                <b style={{ color: "#ffffff" }}>
-                                                    Empresa Patrocinadora:
-                                                </b>{" "}
-                                                <span style={{ color: "#b3e5fc" }}>
-                                                    {evento.empresaPatrocinadora &&
-                                                    evento.empresaPatrocinadora
-                                                        .nombre
-                                                        ? evento
-                                                              .empresaPatrocinadora
-                                                              .nombre
-                                                        : "Sin patrocinador"}
-                                                </span>
-                                            </p>
-                                            <button
-                                                className="Btn"
-                                                onClick={() =>
-                                                    handleDescargarReporteEvento(
-                                                        evento
-                                                    )
-                                                }
-                                            >
-                                                <svg
-                                                    className="svgIcon"
-                                                    viewBox="0 0 384 512"
-                                                    height="1em"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
-                                                </svg>
-                                                <span className="icon2" />
-                                                <span className="tooltip">
-                                                    Descargar
-                                                </span>
-                                            </button>
-                                        </li>
-                                    );
-                                })}
+                                                <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+                                            </svg>
+                                            <span className="icon2" />
+                                            <span className="tooltip">
+                                                Descargar
+                                            </span>
+                                        </button>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </>
                 )}
