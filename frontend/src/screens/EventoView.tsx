@@ -625,7 +625,7 @@ function EventoView() {
                                         )}
                                     </div>
                                     <div style={{ marginTop: 32 }}>
-                                        <h3>Comentarios del evento</h3>
+                                        <h4>Comentarios del evento</h4>
                                         {loadingComentarios ? (
                                             <p>Cargando comentarios...</p>
                                         ) : errorComentarios ? (

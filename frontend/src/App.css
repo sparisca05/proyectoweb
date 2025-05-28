@@ -641,12 +641,9 @@ button {
 /* esta chimbada es de hitos */
 .custom-table {
     width: 100%;
-    border-collapse: collapse;
     background-color: #222; 
     color: white; 
     text-align: left;
-    border-radius: 10px;
-    overflow: hidden;
 }
 
 .custom-table thead {
@@ -657,6 +654,7 @@ button {
     padding: 12px;
     border-bottom: 2px solid #666;
     text-transform: uppercase;
+    min-width: 120px;
 }
 
 .custom-table td {
@@ -1279,6 +1277,16 @@ button {
         padding-right: 15px;
         padding-left: 15px;
         min-height: 80px;
+    }
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
+    .col {
+        margin-bottom: 20px;
+    }
+    .auth-container {
+        align-items: stretch;
     }
     
     .mobile-menu {

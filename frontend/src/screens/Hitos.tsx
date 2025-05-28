@@ -253,156 +253,188 @@ const Hitos: React.FC = () => {
                 {successMessage ? (
                     <div className="alert alert-success">{successMessage}</div>
                 ) : null}
-                <table className="custom-table">
-                    {error && (
-                        <div style={{ textAlign: "center", color: "white" }}>
-                            {error}
-                        </div>
-                    )}
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Evento Relevante</th>
-                            <th>Ganador</th>
-                            {usuario && usuario.usuario?.rol === "ADMIN" && (
-                                <th>Acciones</th>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {hitos &&
-                            hitos.map((hito) => (
-                                <>
-                                    <tr key={hito.id}>
-                                        <td>
-                                            {editingId === hito.id ? (
-                                                <input
-                                                    type="text"
-                                                    value={editForm.nombre}
-                                                    onChange={(e) =>
-                                                        setEditForm({
-                                                            ...editForm,
-                                                            nombre: e.target
-                                                                .value,
-                                                        })
-                                                    }
-                                                    className="form-control"
-                                                />
-                                            ) : (
-                                                hito.nombre
-                                            )}
-                                        </td>
-                                        <td>
-                                            {editingId === hito.id ? (
-                                                <input
-                                                    type="text"
-                                                    value={editForm.categoria}
-                                                    onChange={(e) =>
-                                                        setEditForm({
-                                                            ...editForm,
-                                                            categoria:
-                                                                e.target.value,
-                                                        })
-                                                    }
-                                                    className="form-control"
-                                                />
-                                            ) : (
-                                                hito.categoria
-                                            )}
-                                        </td>
-                                        <td>{hito.eventoRelevante.nombre}</td>
-                                        <td>
-                                            {hito.ganadores.length > 0 ? (
-                                                hito.ganadores.map(
-                                                    (ganador) => (
-                                                        <div key={ganador.id}>
-                                                            {ganador.nombre}{" "}
-                                                            {ganador.apellido}
-                                                        </div>
-                                                    )
-                                                )
-                                            ) : (
-                                                <div>No hay ganadores</div>
-                                            )}
-                                        </td>
-                                        {usuario &&
-                                            usuario.usuario?.rol ===
-                                                "ADMIN" && (
-                                                <td>
-                                                    {showConfirmation && (
-                                                        <Confirmation
-                                                            title="Eliminar Hito"
-                                                            message="¿Estás seguro que deseas eliminar este hito?"
-                                                            confirmText="Eliminar"
-                                                            onConfirm={() =>
-                                                                confirmDelete(
-                                                                    hito.id
-                                                                )
-                                                            }
-                                                            onCancel={
-                                                                cancelDelete
-                                                            }
-                                                        />
-                                                    )}
-                                                    {editingId === hito.id ? (
-                                                        <div className="btn-group">
-                                                            <button
-                                                                className="btn btn-sm btn-success"
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.stopPropagation();
-                                                                    handleSaveEdit();
-                                                                }}
-                                                                title="Guardar cambios"
+                <div
+                    className="table-responsive"
+                    style={{
+                        overflowX: "auto",
+                        width: "100%",
+                        border: "1px solid #dee2e6",
+                        borderRadius: "0.375rem",
+                    }}
+                >
+                    <table
+                        className="custom-table"
+                        style={{
+                            width: "100%",
+                            marginBottom: 0,
+                        }}
+                    >
+                        {error && (
+                            <div
+                                style={{ textAlign: "center", color: "white" }}
+                            >
+                                {error}
+                            </div>
+                        )}
+                        <thead>
+                            <tr>
+                                <th style={{ minWidth: "50px" }}>Nombre</th>
+                                <th style={{ minWidth: "50px" }}>Categoría</th>
+                                <th style={{ minWidth: "50px" }}>
+                                    Evento Relevante
+                                </th>
+                                <th style={{ minWidth: "50px" }}>Ganador</th>
+                                {usuario &&
+                                    usuario.usuario?.rol === "ADMIN" && (
+                                        <th>Acciones</th>
+                                    )}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {hitos &&
+                                hitos.map((hito) => (
+                                    <>
+                                        <tr key={hito.id}>
+                                            <td>
+                                                {editingId === hito.id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={editForm.nombre}
+                                                        onChange={(e) =>
+                                                            setEditForm({
+                                                                ...editForm,
+                                                                nombre: e.target
+                                                                    .value,
+                                                            })
+                                                        }
+                                                        className="form-control"
+                                                    />
+                                                ) : (
+                                                    hito.nombre
+                                                )}
+                                            </td>
+                                            <td>
+                                                {editingId === hito.id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={
+                                                            editForm.categoria
+                                                        }
+                                                        onChange={(e) =>
+                                                            setEditForm({
+                                                                ...editForm,
+                                                                categoria:
+                                                                    e.target
+                                                                        .value,
+                                                            })
+                                                        }
+                                                        className="form-control"
+                                                    />
+                                                ) : (
+                                                    hito.categoria
+                                                )}
+                                            </td>
+                                            <td>
+                                                {hito.eventoRelevante.nombre}
+                                            </td>
+                                            <td>
+                                                {hito.ganadores.length > 0 ? (
+                                                    hito.ganadores.map(
+                                                        (ganador) => (
+                                                            <div
+                                                                key={ganador.id}
                                                             >
-                                                                <FaSave />
-                                                            </button>
-                                                            <button
-                                                                className="btn btn-sm btn-secondary"
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.stopPropagation();
-                                                                    handleCancelEdit();
-                                                                }}
-                                                                title="Cancelar"
-                                                            >
-                                                                <FaTimes />
-                                                            </button>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="btn-group">
-                                                            <button
-                                                                className="btn btn-sm submit-button"
-                                                                onClick={() => {
-                                                                    handleEdit(
-                                                                        hito
-                                                                    );
-                                                                }}
-                                                                title="Editar hito"
-                                                            >
-                                                                <FaEdit />
-                                                            </button>
-                                                            <button
-                                                                className="btn btn-sm btn-danger"
-                                                                onClick={
-                                                                    handleDeleteClick
+                                                                {ganador.nombre}{" "}
+                                                                {
+                                                                    ganador.apellido
                                                                 }
-                                                                title="Eliminar hito"
-                                                            >
-                                                                <FaTrash />
-                                                            </button>
-                                                        </div>
-                                                    )}
-                                                </td>
-                                            )}
-                                    </tr>
-                                </>
-                            ))}
-                    </tbody>
-                </table>
+                                                            </div>
+                                                        )
+                                                    )
+                                                ) : (
+                                                    <div>No hay ganadores</div>
+                                                )}
+                                            </td>
+                                            {usuario &&
+                                                usuario.usuario?.rol ===
+                                                    "ADMIN" && (
+                                                    <td>
+                                                        {showConfirmation && (
+                                                            <Confirmation
+                                                                title="Eliminar Hito"
+                                                                message="¿Estás seguro que deseas eliminar este hito?"
+                                                                confirmText="Eliminar"
+                                                                onConfirm={() =>
+                                                                    confirmDelete(
+                                                                        hito.id
+                                                                    )
+                                                                }
+                                                                onCancel={
+                                                                    cancelDelete
+                                                                }
+                                                            />
+                                                        )}
+                                                        {editingId ===
+                                                        hito.id ? (
+                                                            <div className="btn-group">
+                                                                <button
+                                                                    className="btn btn-sm btn-success"
+                                                                    onClick={(
+                                                                        e
+                                                                    ) => {
+                                                                        e.stopPropagation();
+                                                                        handleSaveEdit();
+                                                                    }}
+                                                                    title="Guardar cambios"
+                                                                >
+                                                                    <FaSave />
+                                                                </button>
+                                                                <button
+                                                                    className="btn btn-sm btn-secondary"
+                                                                    onClick={(
+                                                                        e
+                                                                    ) => {
+                                                                        e.stopPropagation();
+                                                                        handleCancelEdit();
+                                                                    }}
+                                                                    title="Cancelar"
+                                                                >
+                                                                    <FaTimes />
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="btn-group">
+                                                                <button
+                                                                    className="btn btn-sm submit-button"
+                                                                    onClick={() => {
+                                                                        handleEdit(
+                                                                            hito
+                                                                        );
+                                                                    }}
+                                                                    title="Editar hito"
+                                                                >
+                                                                    <FaEdit />
+                                                                </button>
+                                                                <button
+                                                                    className="btn btn-sm btn-danger"
+                                                                    onClick={
+                                                                        handleDeleteClick
+                                                                    }
+                                                                    title="Eliminar hito"
+                                                                >
+                                                                    <FaTrash />
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </td>
+                                                )}
+                                        </tr>
+                                    </>
+                                ))}
+                        </tbody>
+                    </table>
+                </div>
+
                 {usuario && usuario.usuario?.rol === "ADMIN" && (
                     <div className="add">
                         <IoIosAdd

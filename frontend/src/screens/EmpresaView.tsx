@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { API_URL } from "../main";
-import { getToken } from "./Home";
 import { useUsuario } from "../contexts/UsuarioContext";
-import { ImageUpload } from "../components/ImageUpload"; // Asegúrate de que la ruta sea correcta
-import axios from "axios";
+import { ImageUpload } from "../components/ImageUpload";
 import Loading from "../components/Loading";
+import { deleteEmpresa, getEmpresas, updateEmpresa } from "../api/empresas";
+import Confirmation from "../components/Confirmation";
 
 interface EventoResumen {
     id: number;
     nombre: string;
 }
 
-interface Empresa {
+export interface Empresa {
     id: number;
     nombre: string;
     descripcion: string;
@@ -25,32 +24,29 @@ const EmpresaView = () => {
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [showConfirmation, setShowConfirmation] = useState(false);
     const [selectedEmpresa, setSelectedEmpresa] = useState<Empresa | null>(
         null
     );
     const [editEmpresa, setEditEmpresa] = useState<Empresa | null>(null);
     const [editLoading, setEditLoading] = useState(false);
     const [editError, setEditError] = useState("");
+    const [deletingEmpresaId, setDeletingEmpresaId] = useState<number | null>(
+        null
+    );
+
     const navigate = useNavigate();
     const usuario = useUsuario();
 
     useEffect(() => {
         const fetchEmpresas = async () => {
             try {
-                const response = await fetch(`${API_URL}/api/v1/empresas`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer " + getToken(),
-                    },
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setEmpresas(data);
-                } else {
-                    setError("Error al cargar las empresas.");
-                }
+                const empresas = await getEmpresas();
+                setEmpresas(empresas);
             } catch (err) {
-                setError("Error de conexión.");
+                setError("Error al cargar las empresas.");
+                setTimeout(() => setError(""), 3000);
             } finally {
                 setLoading(false);
             }
@@ -62,31 +58,31 @@ const EmpresaView = () => {
         console.log("Editando empresa:", empresa);
         setEditEmpresa(empresa);
     };
-    const handleEliminarEmpresa = async (empresa: Empresa) => {
-        if (
-            !window.confirm(
-                `¿Seguro que deseas eliminar la empresa "${empresa.nombre}"?`
-            )
-        )
-            return;
+
+    const handleDeleteEmpresa = async (empresaId: number) => {
         try {
-            const res = await fetch(
-                `${API_URL}/api/v1/empresas/${empresa.id}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: "Bearer " + getToken(),
-                    },
-                }
-            );
-            if (res.ok) {
-                setEmpresas(empresas.filter((e) => e.id !== empresa.id));
-            } else {
-                alert("Error al eliminar la empresa");
-            }
+            await deleteEmpresa(empresaId);
+            setEmpresas(empresas.filter((e) => e.id !== empresaId));
+            setSuccessMessage("Empresa eliminada correctamente.");
+            setTimeout(() => setSuccessMessage(""), 3000);
         } catch (e) {
-            alert("Error de conexión");
+            console.error("Error al eliminar la empresa:", e);
+            setError("Error al eliminar la empresa.");
+            setTimeout(() => setError(""), 3000);
         }
+    };
+
+    const handleDeleteClick = (empresaId: number) => {
+        setDeletingEmpresaId(empresaId);
+        setShowConfirmation(true);
+    };
+
+    const confirmDelete = (id: number) => {
+        handleDeleteEmpresa(id);
+        setShowConfirmation(false);
+    };
+    const cancelDelete = () => {
+        setShowConfirmation(false);
     };
 
     // Guardar cambios de empresa
@@ -95,16 +91,13 @@ const EmpresaView = () => {
         setEditLoading(true);
         setEditError("");
         try {
-            await axios.put(
-                `${API_URL}/api/v1/empresas/${editEmpresa.id}`,
-                editEmpresa,
-                {
-                    headers: {
-                        Authorization: "Bearer " + getToken(),
-                    },
-                }
-            );
-
+            const requestBody = {
+                id: editEmpresa.id,
+                nombre: editEmpresa.nombre,
+                descripcion: editEmpresa.descripcion,
+                logoUrl: editEmpresa.logoUrl,
+            };
+            await updateEmpresa(requestBody);
             // Actualizar la lista de empresas con la empresa editada
             window.location.reload();
         } catch (e) {
@@ -126,22 +119,26 @@ const EmpresaView = () => {
         );
     }
 
-    if (error) {
-        return (
-            <div className="main-container">
-                <Navbar />
-                <div className="eventos">
-                    <h4 style={{ color: "#ff5252" }}>{error}</h4>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="main-container">
             <Navbar />
             <div className="eventos">
                 <h1>Empresas Patrocinadoras</h1>
+                {error ? (
+                    <div className="alert alert-danger">{error}</div>
+                ) : null}
+                {successMessage ? (
+                    <div className="alert alert-success">{successMessage}</div>
+                ) : null}
+                {showConfirmation && (
+                    <Confirmation
+                        title="Eliminar Hito"
+                        message="¿Estás seguro que deseas eliminar este hito?"
+                        confirmText="Eliminar"
+                        onConfirm={() => confirmDelete(deletingEmpresaId!)}
+                        onCancel={cancelDelete}
+                    />
+                )}
                 <ul style={{ listStyle: "none", padding: 0 }}>
                     {empresas.map((empresa) => (
                         <li
@@ -251,11 +248,12 @@ const EmpresaView = () => {
                                             </button>
                                             <button
                                                 className="btn btn-outline-danger"
-                                                onClick={() =>
-                                                    handleEliminarEmpresa(
-                                                        empresa
-                                                    )
-                                                }
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleDeleteClick(
+                                                        empresa.id
+                                                    );
+                                                }}
                                             >
                                                 Eliminar
                                             </button>
