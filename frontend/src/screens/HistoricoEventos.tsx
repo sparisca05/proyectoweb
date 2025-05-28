@@ -89,7 +89,7 @@ const HistoricoEventos = () => {
             headStyles: { fillColor: [33, 150, 243] },
         });
 
-        doc.save("reporte_eventos.pdf");
+        doc.save("reporte_eventosEIA.pdf");
     };
 
     const handleDescargarReporteEvento = (evento: Evento) => {
